@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Extensions\HouseExporter;
 use App\Housings;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\HasResourceActions;
@@ -103,6 +104,7 @@ class HouseController extends Controller
         $grid->created_at(trans('admin.created_at'));
        // $grid->updated_at(trans('admin.updated_at'));
         //$grid->disableExport();//禁用导出
+        $grid->exporter(new HouseExporter());
         $grid->actions(function ($actions) {
             $actions->disableView();
         });
