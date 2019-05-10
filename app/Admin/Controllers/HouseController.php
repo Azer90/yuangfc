@@ -211,6 +211,8 @@ class HouseController extends Controller
         $form->latlong('latitude', 'longitude', 'Position');
         $form->textarea('desc', '描述');
         $form->textarea('remark', '备注');
+        // 多图
+        $form->multipleImage('pictures','图片')->removable()->sortable()->uniqueName();
         $form->radio('setup', '设置')->options([0=>'不设置',1 => '热门']);
         $form->footer(function ($footer) {
 

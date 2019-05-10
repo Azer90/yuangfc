@@ -62,6 +62,23 @@ return [
             'region' => env('AWS_REGION'),
             'bucket' => env('AWS_BUCKET'),
         ],
+        'admin' => [
+            'driver'     => 'local',
+            'root'       => public_path('upload'),
+            'visibility' => 'public',
+            'url' => env('APP_URL').'/upload/',
+        ],
+        'oss' => [
+            'driver' => 'oss',
+            'access_id' =>'LTAIy8EZpHzDCvl0', // 这里是你的 OSS 的 accessId,
+            'access_key' =>'2vpuGRpfF9jZL1XH4GH5dFionqQxeD', // 这里是你的 OSS 的 accessKey,
+            'bucket' => 'yuangfc',// 这里是你的 OSS 自定义的存储空间名称,
+            'endpoint' => 'oss-cn-hangzhou.aliyuncs.com', // 这里以杭州为例
+            'cdnDomain' => '', // 使用 cdn 时才需要写, https://加上 Bucket 域名
+            'ssl' => true, // true 使用 'https://' false 使用 'http://'. 默认 false,
+            'isCName' => false, // 是否使用自定义域名，true: Storage.url() 会使用自定义的 cdn 或域名生成文件 url，false: 使用外部节点生成url
+            'debug' => false,
+        ],
 
     ],
 
