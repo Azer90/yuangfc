@@ -3,8 +3,10 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Extensions\HouseExporter;
+use App\Admin\Extensions\Tools\ImportTool;
 use App\Housings;
 use App\Http\Controllers\Controller;
+use App\Imports\HouseImport;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -85,8 +87,7 @@ class HouseController extends Controller
 
         $grid->id('ID')->sortable();
         $grid->title('标题')->modal('更多', function ($model) {
-
-            $comments = $model->take(1)->get()->map(function ($comment) {
+            $comments = $model->where("id",$model->id)->take(1)->get()->map(function ($comment) {
                 return $comment->only(['address','desc', 'remark']);
             });
 
@@ -101,6 +102,7 @@ class HouseController extends Controller
                 case 2:
                     $str= '出租';
                     break;
+                default : $str='';
             }
             return $str;
         });
@@ -118,6 +120,7 @@ class HouseController extends Controller
                 case 4:
                     $str= '写字楼';
                     break;
+                default:$str="";
             }
             return $str;
         });
@@ -129,6 +132,7 @@ class HouseController extends Controller
                 case 2:
                     $str= '二手房';
                     break;
+                default:$str='';
             }
             return $str;
         });
@@ -153,6 +157,7 @@ class HouseController extends Controller
                 case 3:
                     $str= '清水房';
                     break;
+                default:$str='';
             }
             return $str;
         });
@@ -165,6 +170,12 @@ class HouseController extends Controller
         $grid->actions(function ($actions) {
             $actions->disableView();
         });
+
+        $grid->tools(function ($tools) {
+            $tools->append(new ImportTool(route('import')));
+        });
+
+
         return $grid;
     }
 
