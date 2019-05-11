@@ -27,7 +27,7 @@ class HouseController extends Controller
     public function index(Content $content)
     {
         return $content
-            ->header('房源管理')
+            ->header('新房管理')
             ->description('列表')
             ->body($this->grid());
     }
@@ -84,7 +84,7 @@ class HouseController extends Controller
     protected function grid()
     {
         $grid = new Grid(new Housings);
-
+        $grid->model()->where('type',1);
         $grid->id('ID')->sortable();
         $grid->title('标题')->modal('更多', function ($model) {
             $comments = $model->where("id",$model->id)->take(1)->get()->map(function ($comment) {
