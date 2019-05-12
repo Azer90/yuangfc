@@ -48,6 +48,7 @@ class ImportTool extends AbstractTool
                            contentType: false, //必须
                            beforeSend:function(XMLHttpRequest){
                                 $(".speed").css("display","block");
+                                $(".file_name").text(file.name);
                            }, 
                            success: function (result) {
                            if(result.code==1){

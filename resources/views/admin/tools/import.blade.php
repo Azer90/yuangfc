@@ -30,7 +30,7 @@
                 <h4 class="modal-title">导入数据</h4>
             </div>
             <div class="modal-body">
-                <p><span>商铺.xls</span><span class="state" style="margin-left: 50px">正在导入...</span></p>
+                <p><span class="file_name"></span><span class="state" style="margin-left: 50px">正在导入...</span></p>
             </div>
         </div>
     </div>
