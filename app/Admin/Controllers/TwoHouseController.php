@@ -6,7 +6,6 @@ use App\Admin\Extensions\HouseExporter;
 use App\Admin\Extensions\Tools\ImportTool;
 use App\Housings;
 use App\Http\Controllers\Controller;
-use App\Imports\HouseImport;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -85,6 +84,42 @@ class TwoHouseController extends Controller
     {
         $grid = new Grid(new Housings);
         $grid->model()->where('type',2);
+        // 在这里添加字段过滤器
+        $grid->filter(function($filter){
+
+            $filter->column(1/2, function ($filter) {
+                $filter->equal('owner', '业主');
+                $filter->equal('phone', '联系方式')->mobile();
+                $filter->year('years', '修建年份');
+                $filter->equal('direction', '朝向');
+            });
+
+            $filter->column(1/2, function ($filter) {
+                $filter->equal('room', '房')->integer();
+                $filter->equal('hall', '厅')->integer();
+                $filter->equal('toilet', '卫')->integer();
+                $filter->equal('type','租售类型')->radio([
+                    0 => 'All',
+                    1 => '出租',
+                    2 => '出售',
+                ]);
+                $filter->equal('purpose','用途')->radio([
+                    0 => 'All',
+                    1 => '住宅',
+                    2 => '别墅',
+                    3 => '商铺',
+                    4 => '写字楼'
+                ]);
+                $filter->equal('renovation','装修类型')->radio([
+                    0 => 'All',
+                    1 => '精装修',
+                    2 => '简装',
+                    3 => '清水房'
+                ]);
+            });
+
+
+        });
         $grid->id('ID')->sortable();
         $grid->title('标题')->modal('更多', function ($model) {
             $comments = $model->where("id",$model->id)->take(1)->get()->map(function ($comment) {
@@ -225,18 +260,6 @@ class TwoHouseController extends Controller
         // 多图
         $form->multipleImage('pictures','图片')->removable()->sortable()->uniqueName();
         $form->radio('setup', '设置')->options([0=>'不设置',1 => '热门']);
-        $form->footer(function ($footer) {
-
-            // 去掉`查看`checkbox
-            $footer->disableViewCheck();
-
-            // 去掉`继续编辑`checkbox
-            $footer->disableEditingCheck();
-
-            // 去掉`继续创建`checkbox
-            $footer->disableCreatingCheck();
-
-        });
         return $form;
     }
 }

@@ -13,7 +13,7 @@ use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
 
-class HouseController extends Controller
+class RentingController extends Controller
 {
     use HasResourceActions;
 
@@ -26,7 +26,7 @@ class HouseController extends Controller
     public function index(Content $content)
     {
         return $content
-            ->header('新房管理')
+            ->header('租房管理')
             ->description('列表')
             ->body($this->grid());
     }
@@ -83,8 +83,7 @@ class HouseController extends Controller
     protected function grid()
     {
         $grid = new Grid(new Housings);
-        $grid->model()->where('type',1);
-
+        $grid->model()->where('rentsale',2);
         // 在这里添加字段过滤器
         $grid->filter(function($filter){
 
@@ -99,11 +98,6 @@ class HouseController extends Controller
                 $filter->equal('room', '房')->integer();
                 $filter->equal('hall', '厅')->integer();
                 $filter->equal('toilet', '卫')->integer();
-                $filter->equal('type','租售类型')->radio([
-                    0 => 'All',
-                    1 => '出租',
-                    2 => '出售',
-                ]);
                 $filter->equal('purpose','用途')->radio([
                     0 => 'All',
                     1 => '住宅',
@@ -200,7 +194,7 @@ class HouseController extends Controller
         $grid->floor('楼层');
         $grid->t_floor('总楼层');
         $grid->created_at(trans('admin.created_at'));
-       // $grid->updated_at(trans('admin.updated_at'));
+        // $grid->updated_at(trans('admin.updated_at'));
         //$grid->disableExport();//禁用导出
         $grid->exporter(new HouseExporter());
         $grid->actions(function ($actions) {

@@ -18,7 +18,26 @@
  *
  */
 
+use Encore\Admin\Grid;
+use Encore\Admin\Form;
 Encore\Admin\Form::forget(['map', 'editor']);
 
 // 覆盖`admin`命名空间下的视图
 app('view')->prependNamespace('admin', resource_path('views/admin'));
+
+
+Grid::init(function (Grid $grid) {
+
+    $grid->actions(function (Grid\Displayers\Actions $actions) {
+        $actions->disableView();
+    });
+});
+Form::init(function (Form $form) {
+
+    $form->disableEditingCheck();
+
+    $form->disableCreatingCheck();
+
+    $form->disableViewCheck();
+
+});

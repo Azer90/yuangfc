@@ -11,8 +11,9 @@ Route::group([
 ], function (Router $router) {
     $router->get('/', 'HomeController@index')->name('admin.home');
     $router->resource('house', 'HouseController')->names('admin.house');//hkz
-
     $router->resource('twohouse', 'TwoHouseController')->names('admin.twohouse');//hkz
+    $router->resource('renting', 'RentingController')->names('admin.renting');//hkz
+    $router->resource('circle', 'CircleController')->names('admin.circle');//hkz
 
     $router->post('import', 'ImportController@import')->name('import');
 

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
-
+use Illuminate\Routing\Router;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -15,4 +15,13 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+
+});
+$attributes = [
+    'namespace'     => 'Api',
+];
+Route::group($attributes, function (Router $router) {
+
+    $router->get('province', 'DistrictController@province')->name('province');
+    $router->get('city', 'DistrictController@city')->name('city');
 });
