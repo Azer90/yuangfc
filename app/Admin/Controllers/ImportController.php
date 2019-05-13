@@ -38,7 +38,24 @@ class ImportController extends Controller
 
         $import->onlySheets(0);
         $res = Excel::import($import,$filePath);
-        dump($res);
-        return response()->json(['code' => 1, 'state' => 'CA']);
+        $success_cont = session("success_cont");
+        $error_cont = session("error_cont");
+        $error_info = session("error_info");
+        session()->forget('success_cont');
+        session()->forget('error_cont');
+        session()->forget('error_info');
+        $res_info=[];
+        foreach ($error_info as $k=>$v){
+            if($k!=0){
+                $res_info[] =$error_info[$k];
+            }
+        }
+       $data =[
+           "success_cont"=>$success_cont?$success_cont:0,
+           "error_cont"=>$error_cont?$error_cont:0,
+           "error_info"=>$res_info,
+       ];
+
+        return response()->json(['code' => 1,'message' =>'导入完成', 'data' => $data]);
     }
 }
