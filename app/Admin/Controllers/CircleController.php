@@ -94,8 +94,8 @@ class CircleController extends Controller
             $filter->column(1/2, function ($filter) {
                 if(Admin::user()->isAdministrator()){
                     $filter->equal('province_id', '省')->select('/api/province')->load('city_id', '/api/city');
-                    $filter->equal('city_id', '市')->select('/api/province')->load('district_id', '/api/city');
-                    $filter->equal('district_id', '区')->select('/api/province');
+                    $filter->equal('city_id', '市')->select()->load('district_id', '/api/city');
+                    $filter->equal('district_id', '区')->select();
                 }
 
                 $filter->equal('name', '商圈名');

@@ -243,7 +243,20 @@ class TwoHouseController extends Controller
     protected function form()
     {
         $form = new Form(new Housings);
+        if(Admin::user()->isAdministrator()){
 
+            $form->select('province_id','省')->options('/api/province')->load('city_id', '/api/city');
+            $form->select('city_id','市')->load('district_id', '/api/city');
+            $form->select('district_id','区')->load('circle_id', '/api/circle');
+            $form->select('circle_id','商圈')->load('floor_id', '/api/floor');
+            $form->select('floor_id','楼盘');
+        }else{
+            $form->hidden('province_id')->default(Admin::user()->province_id);
+            $form->hidden('city_id')->default(Admin::user()->city_id);
+            $form->hidden('district_id')->default(Admin::user()->district_id);
+            $form->select('circle_id','商圈')->options('/api/circle',['q'=>Admin::user()->district_id])->load('floor_id', '/api/floor')->rules('required');
+            $form->select('floor_id','楼盘')->rules('required');
+        }
         $form->text('title', '标题')->rules('required|min:3');
         $form->radio('rentsale', '租售类型')->options([1 => '出售', 2 => '出租'])->rules('required');
         $form->radio('type', '房源类型')->options([1 => '新房', 2 => '二手房'])->rules('required');
@@ -268,6 +281,12 @@ class TwoHouseController extends Controller
         // 多图
         $form->multipleImage('pictures','图片')->removable()->sortable()->uniqueName();
         $form->radio('setup', '设置')->options([0=>'不设置',1 => '热门']);
+        $states = [
+            'on'  => ['value' => 1, 'text' => '打开', 'color' => 'success'],
+            'off' => ['value' => 0, 'text' => '关闭', 'color' => 'danger'],
+        ];
+
+        $form->switch('is_display','是否显示')->states($states);
         return $form;
     }
 }

@@ -15,6 +15,7 @@ Route::group([
     $router->resource('twohouse', 'TwoHouseController')->names('admin.twohouse');//hkz
     $router->resource('renting', 'RentingController')->names('admin.renting');//hkz
     $router->resource('circle', 'CircleController')->names('admin.circle');//hkz
+    $router->resource('floor', 'FloorController')->names('admin.floor');//hkz
 
     $router->post('import', 'ImportController@import')->name('import');
 

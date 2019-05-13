@@ -1,7 +1,9 @@
 <?php
 namespace App\Http\Controllers\Api;
 
+use App\Circle;
 use App\District;
+use App\Floor;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,5 +20,18 @@ class DistrictController extends Controller{
         $provinceId = $request->get('q');
 
         return District::where('parent_id', $provinceId)->get(['id', DB::raw('name as text')]);
+    }
+    public function circle(Request $request)
+    {
+        $districtId = $request->get('q');
+
+        return Circle::where('district_id', $districtId)->get(['id', DB::raw('name as text')]);
+    }
+
+    public function floor(Request $request)
+    {
+        $circleId = $request->get('q');
+
+        return Floor::where('circle_id', $circleId)->get(['id', DB::raw('name as text')]);
     }
 }
