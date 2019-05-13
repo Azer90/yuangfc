@@ -48,13 +48,20 @@ class ImportTool extends AbstractTool
                            contentType: false, //必须
                            beforeSend:function(XMLHttpRequest){
                                 $(".speed").css("display","block");
+                                $(".file_name").text(file.name);
                            }, 
                            success: function (result) {
-                           if(result.code==1){
-                             $(".state").text("导入成功").css("color","green");
-                           }
+                               if(result.code==1){
+                                     var res_data = result.data;
+                                     $(".state").text(result.message).css("color","green");
+                                     $(".success_count").text(res_data.success_cont);
+                                     $(".error_count").text(res_data.error_cont);
+                               }
                               
 //                              $.pjax({container:'#pjax-container', url: '$url' });
+                           },
+                           error:function(){
+                                    $(".state").text("导入失败")
                            }
                        })
                    }           
@@ -68,6 +75,13 @@ EOT;
     public function render()
     {
         Admin::script($this->script());
-        return view('admin.tools.import');
+
+        $url = $this->get_host()."/template/房源模板.xls";
+        return view('admin.tools.import',compact('url'));
+    }
+    function get_host(){
+        $scheme = empty($_SERVER['HTTPS']) ? 'http://' : 'https://';
+        $url = $scheme.$_SERVER['HTTP_HOST'];
+        return $url;
     }
 }
