@@ -10,6 +10,7 @@ Route::group([
     'middleware'    => config('admin.route.middleware'),
 ], function (Router $router) {
     $router->get('/', 'HomeController@index')->name('admin.home');
+    $router->resource('users', 'UserController')->names('admin.users');//hkz
     $router->resource('house', 'HouseController')->names('admin.house');//hkz
     $router->resource('twohouse', 'TwoHouseController')->names('admin.twohouse');//hkz
     $router->resource('renting', 'RentingController')->names('admin.renting');//hkz

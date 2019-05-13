@@ -7,6 +7,7 @@ use App\Admin\Extensions\Tools\ImportTool;
 use App\Housings;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\HasResourceActions;
+use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
@@ -83,7 +84,14 @@ class TwoHouseController extends Controller
     protected function grid()
     {
         $grid = new Grid(new Housings);
-        $grid->model()->where('type',2);
+        if(Admin::user()->isAdministrator()){
+            $where=['type'=>2];
+        }else{
+            $district_id=Admin::user()->district_id;
+            $where=['type'=>2,'district_id'=>$district_id];
+        }
+
+        $grid->model()->where($where);
         // 在这里添加字段过滤器
         $grid->filter(function($filter){
 
