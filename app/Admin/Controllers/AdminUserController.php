@@ -10,7 +10,7 @@ use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use Illuminate\Routing\Controller;
 
-class UserController extends Controller
+class AdminUserController extends Controller
 {
     use HasResourceActions;
 

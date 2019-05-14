@@ -250,12 +250,14 @@ class TwoHouseController extends Controller
             $form->select('district_id','区')->load('circle_id', '/api/circle');
             $form->select('circle_id','商圈')->load('floor_id', '/api/floor');
             $form->select('floor_id','楼盘');
+            $form->select('agent_id','经纪人')->options('/api/agent')->rules('required');
         }else{
             $form->hidden('province_id')->default(Admin::user()->province_id);
             $form->hidden('city_id')->default(Admin::user()->city_id);
             $form->hidden('district_id')->default(Admin::user()->district_id);
             $form->select('circle_id','商圈')->options('/api/circle',['q'=>Admin::user()->district_id])->load('floor_id', '/api/floor')->rules('required');
             $form->select('floor_id','楼盘')->rules('required');
+            $form->select('agent_id','经纪人')->options('/api/agent');
         }
         $form->text('title', '标题')->rules('required|min:3');
         $form->radio('rentsale', '租售类型')->options([1 => '出售', 2 => '出租'])->rules('required');
@@ -287,6 +289,13 @@ class TwoHouseController extends Controller
         ];
 
         $form->switch('is_display','是否显示')->states($states);
+        $form->saving(function (Form $form) {
+
+            if(empty($form->agent_id)){
+                $form->agent_id=Admin::user()->id;
+            }
+
+        });
         return $form;
     }
 }
