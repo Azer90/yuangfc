@@ -15,7 +15,7 @@ class ImportTool extends AbstractTool
     protected function script()
     {
         $url = Request::getRequestUri();
-
+        $dowload=route("export");
         return <<<EOT
         
         $(".close").on("click",function(){
@@ -56,6 +56,9 @@ class ImportTool extends AbstractTool
                                      $(".state").text(result.message).css("color","green");
                                      $(".success_count").text(res_data.success_cont);
                                      $(".error_count").text(res_data.error_cont);
+                                     if(res_data.error_cont>0){
+                                      $(".fail_info").html('<a target="_blank" href="$dowload">导出失败数据</a>'); 
+                                     }
                                }
                               
 //                              $.pjax({container:'#pjax-container', url: '$url' });
@@ -77,6 +80,7 @@ EOT;
         Admin::script($this->script());
 
         $url = $this->get_host()."/template/房源模板.xls";
+
         return view('admin.tools.import',compact('url'));
     }
     function get_host(){

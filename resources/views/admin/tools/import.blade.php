@@ -39,7 +39,7 @@
             <div class="modal-body">
                 <p><span class="file_name"></span><span class="state" style="margin-left: 50px">正在导入...</span></p>
                 <p><span style="margin-right: 20px">成功导入：<span class="success_count">0</span>条</span><span>导入失败：<span class="error_count">0</span>条</span></p>
-                <p class="error_table"></p>
+                <p class="fail_info"></p>
             </div>
         </div>
     </div>

@@ -19,5 +19,6 @@ Route::group([
     $router->resource('users', 'UsersController')->names('admin.users');//hkz
 
     $router->post('import', 'ImportController@import')->name('import');
+    $router->get('export', 'ImportController@export')->name('export');
 
 });
