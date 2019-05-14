@@ -10,6 +10,7 @@ namespace App\Admin\Controllers;
 
 
 
+use App\Exports\InvoicesExport;
 use App\Http\Controllers\Controller;
 use App\Imports\HouseImport;
 
@@ -41,14 +42,14 @@ class ImportController extends Controller
         $success_cont = session("success_cont");
         $error_cont = session("error_cont");
         $error_info = session("error_info");
+        session(["error_info_live"=>$error_info]);
         session()->forget('success_cont');
         session()->forget('error_cont');
         session()->forget('error_info');
+
         $res_info=[];
         foreach ($error_info as $k=>$v){
-            if($k!=0){
-                $res_info[] =$error_info[$k];
-            }
+            $res_info[] =$error_info[$k];
         }
        $data =[
            "success_cont"=>$success_cont?$success_cont:0,
@@ -57,5 +58,31 @@ class ImportController extends Controller
        ];
 
         return response()->json(['code' => 1,'message' =>'导入完成', 'data' => $data]);
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * 导出
+     */
+    public function export()
+    {
+        $data=[];
+        $error_info=session("error_info_live");
+        foreach ($error_info as $key => $value){
+            foreach ($value as $k=>$val){
+                if($k==="error_info_tips"){
+                    $str = "";
+                        foreach ($val as $v){
+                            $str.=$v[0]." ";
+                        }
+                        $data[$key][]=$str;
+                }else{
+                    $data[$key][]=$val;
+                }
+            }
+        }
+        $export = new InvoicesExport($data);
+
+        return Excel::download($export, '失败数据.xlsx');
     }
 }
