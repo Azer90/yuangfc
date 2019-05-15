@@ -19,6 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 $attributes = [
     'namespace'     => 'Api',
+    //'domain'     => '{api}.yuangfc.com',
 ];
 Route::group($attributes, function (Router $router) {
 
