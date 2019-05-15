@@ -32,7 +32,7 @@ Route::group($attributes, function (Router $router) {
 
 $attributes = [
     'namespace'     => 'Api',
-    'domain'     => '{api}.yuangfc.com',
+    'domain'     => 'api.yuangfc.com',
 ];
 Route::group($attributes, function (Router $router) {
     $router->get('test', 'HouseTestController@test')->name('test');
