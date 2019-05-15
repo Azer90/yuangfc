@@ -20,6 +20,10 @@ class ImportTool extends AbstractTool
         
         $(".close").on("click",function(){
               $(".speed").css("display","none");  
+              $(".success_count").text(0);
+              $(".error_count").text(0);
+              $(".fail_info").text("");
+              $(".state").text("正在导入...");
         })
     $('input:file.import').change(function () {
            var file= this.files[0];

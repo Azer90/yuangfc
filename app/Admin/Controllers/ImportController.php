@@ -39,6 +39,7 @@ class ImportController extends Controller
 
         $import->onlySheets(0);
         $res = Excel::import($import,$filePath);
+        $all_cont = session("all_cont");
         $success_cont = session("success_cont");
         $error_cont = session("error_cont");
         $error_info = session("error_info");
@@ -46,17 +47,22 @@ class ImportController extends Controller
         session()->forget('success_cont');
         session()->forget('error_cont');
         session()->forget('error_info');
+        session()->forget('all_cont');
 
         $res_info=[];
-        foreach ($error_info as $k=>$v){
-            $res_info[] =$error_info[$k];
+        if(!empty($error_info)){
+            foreach ($error_info as $k=>$v){
+                $res_info[] =$error_info[$k];
+            }
         }
+
        $data =[
+           "all_cont"=>$all_cont?$all_cont:0,
            "success_cont"=>$success_cont?$success_cont:0,
            "error_cont"=>$error_cont?$error_cont:0,
            "error_info"=>$res_info,
        ];
-
+        unlink($filePath);
         return response()->json(['code' => 1,'message' =>'导入完成', 'data' => $data]);
     }
 
@@ -68,16 +74,22 @@ class ImportController extends Controller
     {
         $data=[];
         $error_info=session("error_info_live");
-        foreach ($error_info as $key => $value){
-            foreach ($value as $k=>$val){
-                if($k==="error_info_tips"){
-                    $str = "";
-                        foreach ($val as $v){
-                            $str.=$v[0]." ";
+        if(!empty($error_info)){
+            foreach ($error_info as $key => $value){
+                foreach ($value as $k=>$val){
+                    if($k==="error_info_tips"){
+                        $str = "";
+                        if(is_array($val)){
+                            foreach ($val as $v){
+                                $str.=$v[0]." ";
+                            }
+                        }else{
+                            $str=$val;
                         }
-                        $data[$key][]=$str;
-                }else{
-                    $data[$key][]=$val;
+                            $data[$key][]=$str;
+                    }else{
+                        $data[$key][]=$val;
+                    }
                 }
             }
         }

@@ -21,67 +21,100 @@ use Maatwebsite\Excel\Concerns\WithStartRow;
 class FirstSheetImport implements ToModel,WithBatchInserts,WithStartRow
 {
     private $housings_model;
+    private $all_cont=0;
     private $success_cont=0;
     private $error_cont=0;
     private $user_info=0;
+    private $agen_id=0;
     private $rules;
     private $messages;
     public function __construct()
     {
         $this->housings_model = new Housings();
         $this->user_info = Admin::user();
-
+//        $this->agen_id = DB::name("users")->where("mobile",$this->user_info["mobile"])->value("id");
     }
     public function model(array $row)
     {
-        $error_info=[];
+        $this->all_cont++;
+        session(["all_cont"=>$this->all_cont]);
+        $arr["title"]=$row[0];
+        $arr["rentsale"]=$row[1];
+        $arr["type"]=$row[2];
+        $arr["owner"]=$row[3];
+        $arr["phone"]=$row[4];
+        $arr["years"]=$row[5];
+        $arr["purpose"]=$row[6];
+        $arr["direction"]=$row[7];
+        $arr["room"]=$row[8];
+        $arr["hall"]=$row[9];
+        $arr["toilet"]=$row[10];
+        $arr["area"]=$row[11];
+        $arr["price"]=$row[12];
+        $arr["renovation"]=$row[13];
+        $arr["floor"]=$row[14];
+        $arr["t_floor"]=$row[15];
+        $arr["address"]=$row[16];
+        $arr["desc"]=$row[17];
+        $arr["creat_at"]=$row[18];
+        $arr["remark"]=$row[19];
+        $arr["circle_id"]=$row[20];
+        $arr["floor_id"]=$row[21];
+        $arr["agent_id"]=$row[22];
         $rules=[
-            "0"=>'required',
-            "1"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
-            "2"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
-            "3"=>'required|string',
-            "4"=>'required|regex:/^1[3-9]\d{9}$/',
-            "5"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
-            "6"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
-            "8"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
-            "9"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
-            "10"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
-            "11"=>'regex:/^[0-9]+(.[0-9]{1,2})?$/',
-            "12"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
-            "13"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
-            "14"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
-            "15"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
-            "16"=>'required',
-            "17"=>'required',
-            "18"=>'required',
-            "19"=>'required',
-            "20"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
-            "21"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
-            "22"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
+            "title"=>'required',
+            "rentsale"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
+            "type"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
+            "owner"=>'required|string',
+            "phone"=>'required|regex:/^1[3-9]\d{9}$/',
+            "years"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
+            "purpose"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
+            "direction"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
+            "room"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
+            "hall"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
+            "toilet"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
+            "area"=>'regex:/^[0-9]+(.[0-9]{1,2})?$/',
+            "price"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
+            "renovation"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
+            "floor"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
+            "t_floor"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
+            "address"=>'required',
+            "desc"=>'required',
+
+//            "remark"=>'required',
+            "circle_id"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
+            "floor_id"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
+            "agent_id"=>'nullable|regex:/^[0-9]+(.[0-9]{1,2})?$/',
         ];
         $messages=[
-            "0"=>"标题必填",
-            "1"=>"租售类型必须为数字",
-            "2"=>"房源类型必须为数字",
-            "4"=>"电话号码格式不正确",
-            "5"=>"年份为数字",
-            "6"=>"用途必须为数字",
-            "8"=>"房必须为数字",
-            "9"=>"厅必须为数字",
-            "10"=>"卫必须为数字",
-            "11"=>"面积为数字",
-            "12"=>"价格为小数",
-            "13"=>"装修档次必须为数字",
-            "14"=>"楼层为数字",
-            "15"=>"总楼层为数字",
-            "20"=>"商圈必须为数字",
-            "21"=>"楼盘必须为数字",
-            "22"=>"经纪人必须为数字",
+            "title"=>"标题必填",
+            "rentsale"=>"租售类型必须为数字",
+            "type"=>"房源类型必须为数字",
+            "owner"=>"缺少房主",
+            "phone"=>"电话号码格式不正确",
+            "years"=>"年份为数字",
+            "purpose"=>"用途必须为数字",
+            "direction"=>"房必须为数字",
+            "room"=>"厅必须为数字",
+            "hall"=>"卫必须为数字",
+            "toilet"=>"面积为数字",
+            "price"=>"价格为小数",
+            "renovation"=>"装修档次必须为数字",
+            "floor"=>"楼层为数字",
+            "t_floor"=>"总楼层为数字",
+            "address"=>"地址为必填",
+            "desc"=>"房屋描述为必填",
+
+//            "remark"=>"备注为数字",
+            "circle_id"=>"商圈必须为数字",
+            "floor_id.required"=>"楼盘不能为空",
+            "floor_id"=>"楼盘必须为数字",
+            "agent_id"=>"经纪人必须为数字",
 //            "16"=>'地址为必填',
 //            "17"=>'房屋描述为必填'
         ];
 
-        $validator = Validator::make($row, $rules, $messages);
+        $validator = Validator::make($arr, $rules, $messages);
 
         if($validator->fails()){
             $row["error_info_tips"] = $validator->errors()->getMessages();
@@ -97,11 +130,12 @@ class FirstSheetImport implements ToModel,WithBatchInserts,WithStartRow
 
         $insert_data = [$province_id,$city_id,$district_id,$row[0],$row[1],$row[2],$row[6],$row[3],$row[4],$row[5],$row[7],$row[8],
             $row[9],$row[10],$row[11],$row[12],$row[13],$row[14],$row[15],$row[16],$row[17],
-            $row[19],$row[18]?$row[18]:date("Y-m-d H:i:s",time()),$row[20]?intval($row[20]):0,$row[21]?intval($row[21]):0,$row[22]?intval($row[22]):0,$row[0]];
-       $sql = 'insert INTO housings (province_id,city_id,district_id,title,rentsale,`type`,purpose,owner,phone,years,direction,room,hall,toilet,area,
+            $row[19],date("Y-m-d H:i:s",time()),$row[20]?intval($row[20]):0,$row[21]?intval($row[21]):0,$row[22]?intval($row[22]):(!empty($this->agen_id)?$this->agen_id:0),$row[0]];
+
+       $sql = 'insert INTO yuangfc_housings (province_id,city_id,district_id,title,rentsale,`type`,purpose,owner,phone,years,direction,room,hall,toilet,area,
         price,renovation,floor,t_floor,address,`desc`,remark,created_at,circle_id,floor_id,agent_id)
-        SELECT ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? FROM DUAL WHERE NOT EXISTS (
-        SELECT 1 FROM housings WHERE title= ?
+        SELECT ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? FROM DUAL WHERE NOT EXISTS (
+        SELECT 1 FROM yuangfc_housings WHERE title= ?
 )';
 
        try{
@@ -116,7 +150,7 @@ class FirstSheetImport implements ToModel,WithBatchInserts,WithStartRow
            $this->error_cont++;
            session(['error_cont'=>$this->error_cont]);//失败条数
        }
-//        return new Housings($data);
+//        return new Housings($arr);
     }
 
     public function batchSize(): int
