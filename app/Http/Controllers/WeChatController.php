@@ -17,7 +17,7 @@ class WeChatController extends Controller
         $this->app->server->push(function ($message) {
             return "您好！欢迎关注";
         });
-
+        $this->menu();
         $response = $this->app->server->serve();
 
 // 将响应输出
