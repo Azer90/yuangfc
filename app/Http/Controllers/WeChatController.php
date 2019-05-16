@@ -18,6 +18,7 @@ class WeChatController extends Controller
             return "您好！欢迎关注";
         });
         $list = $this->app->menu->list();
+        dd($list);
         $response = $this->app->server->serve();
 
 // 将响应输出
