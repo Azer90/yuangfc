@@ -82,19 +82,21 @@ class UsersController extends Controller
         $grid = new Grid(new User);
 
         $grid->id('Id');
-        $grid->name('Name');
-        $grid->mobile('Mobile');
-        $grid->email('Email');
-        $grid->password('Password');
-        $grid->remember_token('Remember token');
-        $grid->open_id('Open id');
-        $grid->avatar('Avatar');
-        $grid->wchat_name('Wchat name');
-        $grid->type('Type');
-        $grid->sex('Sex');
-        $grid->created_at('Created at');
-        $grid->updated_at('Updated at');
-
+        $grid->name('姓名(昵称)');
+        $grid->mobile('电话号码');
+        $grid->email('邮箱');
+        $grid->open_id('微信openId');
+        $grid->avatar('头像');
+        $grid->wchat_name('微信名称');
+        $grid->type('用户类型');
+        $grid->sex('性别');
+        $grid->created_at('创建时间');
+        $grid->disableExport();//禁用导出
+        $grid->disableCreateButton();
+        $grid->actions(function ($actions) {
+            $actions->disableEdit();
+            $actions->disableView();
+        });
         return $grid;
     }
 

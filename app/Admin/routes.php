@@ -16,7 +16,7 @@ Route::group([
     $router->resource('renting', 'RentingController')->names('admin.renting');//hkz
     $router->resource('circle', 'CircleController')->names('admin.circle');//hkz
     $router->resource('floor', 'FloorController')->names('admin.floor');//hkz
-    $router->resource('users', 'UsersController')->names('admin.users');//hkz
+    $router->resource('users', 'UsersController',['only' => ['index']])->names('admin.users');//hkz
 
     $router->post('import', 'ImportController@import')->name('import');
     $router->get('export', 'ImportController@export')->name('export');
