@@ -13,6 +13,6 @@ class HouseTestController extends Controller
     public function test()
     {
         $res = Housings::get(['id','title'])->toArray();
-        return json_encode($res);
+        return Api_Success($res);
     }
 }
