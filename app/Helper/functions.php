@@ -3,7 +3,7 @@
  function Api_Success( $message = '', $data = array()) {
 
     $result = array(
-        'code' => 1000,
+        'code' => 200,
         'message' => $message,
         'data' => $data
     );
@@ -14,7 +14,7 @@
 function Api_error($message = '', $data = array()) {
 
     $result = array(
-        'code' => 1001,
+        'code' => 100,
         'message' => $message,
         'data' => $data
     );
