@@ -22,6 +22,6 @@ class HouseController extends Controller
     public function indexHotHouse()
     {
         $res = Housings::get(['id','title'])->toArray();
-        return json_encode($res);
+        return Api_Success($res);
     }
 }
