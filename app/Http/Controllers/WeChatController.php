@@ -2,12 +2,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use EasyWeChat\Factory;
+use EasyWeChat;
 class WeChatController extends Controller
 {
     public function serve(){
 
-        $app = Factory::officialAccount();
+        $app = EasyWeChat::officialAccount();
 
         $response = $app->server->serve();
 
