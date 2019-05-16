@@ -8,9 +8,18 @@ use App\Housings;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
-class HouseTestController extends Controller
+class HouseController extends Controller
 {
-    public function test()
+    private $houseModel;
+    public function __construct()
+    {
+
+    }
+    /**
+     * @return false|string
+     * 主页热门房源
+     */
+    public function indexHotHouse()
     {
         $res = Housings::get(['id','title'])->toArray();
         return json_encode($res);

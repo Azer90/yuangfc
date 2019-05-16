@@ -24,6 +24,7 @@ class ImportTool extends AbstractTool
               $(".error_count").text(0);
               $(".fail_info").text("");
               $(".state").text("正在导入...");
+             $.pjax({container:'#pjax-container', url: '$url' });
         })
     $('input:file.import').change(function () {
            var file= this.files[0];
