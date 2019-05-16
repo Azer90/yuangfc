@@ -20,6 +20,7 @@ $attributes = [
 ];
 Route::group($attributes, function (Router $router) {
     $router->any('/', 'WeChatController@serve');
+    $router->any('/menu', 'WeChatController@menu');
 
 });
 
