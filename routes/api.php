@@ -34,5 +34,5 @@ $attributes = [
 //    'domain'     => 'api.yuang.com',
 ];
 Route::group($attributes,function (Router $router) {
-    $router->get('login', "LoginController@login")->name('login');
+    $router->get('api_login', "LoginController@login")->name('api_login');
 });
