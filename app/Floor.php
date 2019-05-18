@@ -12,4 +12,9 @@ class Floor extends Model
     {
         return $this->belongsTo(Circle::class);
     }
+
+    public function housings()
+    {
+        return $this->hasMany(Housings::class);
+    }
 }

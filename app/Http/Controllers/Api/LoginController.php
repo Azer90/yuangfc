@@ -60,12 +60,9 @@ class LoginController extends Controller
     public function register(Request $request)
     {
         $data = $request->input();
-//        $data["userInfo"] = json_decode($data["userInfo"],true);
 
         if($request->isMethod("post")){
 
-//            "userInfo" =>  "{"nickName":"路途","gender":1,"language":"zh_CN","city":"Nanchong","province":"Sichuan","country":"China","avatarUrl":"https://wx.qlogo.cn/mmopen/vi_32/guzbZrvrSA9OXQy5YGcFwUgJ90WdrOL9wiaVqVbnyjrqXajWuxINHl0HaSzB0ibFxojWxnnkcBcrLXccf8vQyHTw/132"}
-//  "openid" => "oNGBH426aQ4_4xNHRqVn_jNWPx90"
 
             if(empty($data["openid"])||empty($data["userInfo"])){
                 return Api_error("缺少参数");
