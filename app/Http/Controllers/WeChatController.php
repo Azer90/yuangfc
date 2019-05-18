@@ -20,6 +20,9 @@ class WeChatController extends Controller
             $monolog->popHandler();
             Log::useFiles(storage_path('logs/wechat_ts.log'));
             Log::info($message);
+            if($message['MsgType']=='SCAN'&&$message['EventKey']=='validate_logon'){
+                return "登录成功";
+            }
             return "您好！欢迎关注";
         });
         //$this->menu();
@@ -63,7 +66,7 @@ class WeChatController extends Controller
 
 
     public function wechat_auth(){
-        $result =  $this->app->qrcode->temporary('foo', 6 * 24 * 3600);
+        $result =  $this->app->qrcode->temporary('validate_logon', 6 * 24 * 3600);
      return $result;
     }
 
