@@ -21,4 +21,10 @@ class Housings extends Model
     {
         return json_decode($pictures, true);
     }
+
+
+    public function floors()
+    {
+      return  $this->belongsTo(Floor::class,'floor_id');
+    }
 }
