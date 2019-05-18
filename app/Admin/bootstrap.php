@@ -20,8 +20,9 @@
 
 use Encore\Admin\Grid;
 use Encore\Admin\Form;
+use App\Admin\Extensions\Tools\Address;
 Encore\Admin\Form::forget(['map', 'editor']);
-
+Form::extend('address', Address::class);
 // 覆盖`admin`命名空间下的视图
 app('view')->prependNamespace('admin', resource_path('views/admin'));
 

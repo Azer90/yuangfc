@@ -1,6 +1,6 @@
 <?php
 
- function Api_Success( $message = '', $data = array()) {
+ function Api_success( $message = '', $data = array()) {
 
     $result = array(
         'code' => 200,
