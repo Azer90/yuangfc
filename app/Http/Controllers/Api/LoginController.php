@@ -60,7 +60,7 @@ class LoginController extends Controller
     public function register(Request $request)
     {
         $data = $request->input();
-        $data["userInfo"] = json_decode($data["userInfo"],true);
+//        $data["userInfo"] = json_decode($data["userInfo"],true);
 
         if($request->isMethod("post")){
 
