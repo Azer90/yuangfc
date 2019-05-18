@@ -276,8 +276,7 @@ class TwoHouseController extends Controller
         $form->radio('renovation', '装修类型')->options([1 => '精装修', 2 => '简装', 3 => '清水房'])->rules('required');
         $form->number('floor', '楼层')->min(1)->max(100)->rules('required');
         $form->number('t_floor', '总楼层')->min(1)->max(100)->rules('required');
-        $form->text('address', '地址')->rules('required');
-        $form->latlong('latitude', 'longitude', 'Position');
+        $form->address('latitude', 'longitude','地址','address');
         $form->textarea('desc', '描述');
         $form->textarea('remark', '备注');
         // 多图
