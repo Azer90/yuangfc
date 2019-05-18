@@ -14,7 +14,7 @@ class Address extends Field
     protected $column = [];
 
     protected static $js = [
-        '//map.qq.com/api/js?v=2.exp&key=QCMBZ-GJEC4-4WEUU-XLYLU-STYF5-XFBSV',
+        '//map.qq.com/api/js?v=2.exp&key=QCMBZ-GJEC4-4WEUU-XLYLU-STYF5-XFBSV&libraries=place',
     ];
 
     /**
@@ -49,69 +49,76 @@ class Address extends Field
     {  $id=$this->id;
         $this->script =  <<<EOT
         (function() {
-        var geocoder,map,marker,citylocation = null;
+            var geocoder,map,marker,citylocation = null;
             function init(name) {
                 var lat = $('#{$id['lat']}');
                 var lng = $('#{$id['lng']}');
+                var ads = $('#{$id['address']}');
 
                 var center = new qq.maps.LatLng(lat.val(), lng.val());
 
                 var container = document.getElementById("map_"+name);
-                 map = new qq.maps.Map(container, {
+                map = new qq.maps.Map(container, {
                     center: center,
                     zoom: 13
                 });
-                 marker = new qq.maps.Marker({
+                marker = new qq.maps.Marker({
                     position: center,
                     draggable: true,
                     map: map
                 });
-                 //调用地址解析类
+                //调用地址解析类
                 geocoder = new qq.maps.Geocoder({
                     complete : function(result){
-                     lat.val(result.detail.location.lat);
-                    lng.val(result.detail.location.lng);
+                        lat.val(result.detail.location.lat);
+                        lng.val(result.detail.location.lng);
                         map.setCenter(result.detail.location);
-                          marker.setPosition(result.detail.location);
-                    
+                        marker.setPosition(result.detail.location);
+
                     }
                 });
-            
+
                 if( ! lat.val() || ! lng.val()) {
-                     citylocation = new qq.maps.CityService({
+                    citylocation = new qq.maps.CityService({
                         complete : function(result){
-                        map.setCenter(result.detail.latLng);
-                        //设置marker标记
-                     
-                       marker.setPosition(result.detail.latLng);
-                    }
+                            map.setCenter(result.detail.latLng);
+                //设置marker标记
+
+                            marker.setPosition(result.detail.latLng);
+                        }
                     });
 
                     citylocation.searchLocalCity();
                 }
                 //添加点击事情
                 qq.maps.event.addListener(map, 'click', function(event) {
-                console.log( event.latLng);
+
                     marker.setPosition(event.latLng);
                 });
-                
-               qq.maps.event.addListener(marker, 'position_changed', function(event) {
-              
+
+                qq.maps.event.addListener(marker, 'position_changed', function(event) {
+
                     var position = marker.getPosition();
-                  
-              
+
+                    var    geocoder = new qq.maps.Geocoder({
+                        complete : function(result){
+                            ads.val(result.detail.address);
+                        }
+                    });
+                    geocoder.getAddress(position);
                     lat.val(position.getLat());
                     lng.val(position.getLng());
                 });
-                
+
             }
-           $('#search').click(function () {
-            var address = document.getElementById("address").value;
+            $('#search').click(function () {
+                var address = document.getElementById("address").value;
             //通过getLocation();方法获取位置信息值
-            geocoder.getLocation(address);
-        })
+                geocoder.getLocation(address);
+            })
             init('{$id['address']}');
         })();
+
 EOT;
 
         return parent::render()->with(['height' =>300]);
