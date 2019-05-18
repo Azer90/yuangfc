@@ -20,10 +20,13 @@ class WeChatController extends Controller
             $monolog->popHandler();
             Log::useFiles(storage_path('logs/wechat_ts.log'));
             Log::info($message);
-            if($message['MsgType']=='SCAN'&&$message['EventKey']=='validate_logon'){
+            if($message['MsgType']=='SCAN'){
                 return "登录成功";
             }
-            return "您好！欢迎关注";
+
+                return "您好！欢迎关注";
+
+
         });
         //$this->menu();
         $response = $this->app->server->serve();
