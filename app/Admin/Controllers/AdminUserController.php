@@ -96,8 +96,13 @@ class AdminUserController extends Controller
             return $str;
         });
         $grid->roles(trans('admin.roles'))->pluck('name')->label();
+        $grid->wechat_id('是否绑定微信(请前往微信管理用户绑定)')->display(function ($released) {
+
+            return $released > 0 ? '<span style="color: green">已绑定</span>' : '<span style="color: red">未绑定</span>';
+        });
+
         $grid->created_at(trans('admin.created_at'));
-        $grid->updated_at(trans('admin.updated_at'));
+        //$grid->updated_at(trans('admin.updated_at'));
 
         $grid->actions(function (Grid\Displayers\Actions $actions) {
             if ($actions->getKey() == 1) {
@@ -154,6 +159,7 @@ class AdminUserController extends Controller
         $roleModel = config('admin.database.roles_model');
 
         $form = new Form(new $userModel());
+        //$admin_user=request()->route()->parameters();
 
         $form->display('id', 'ID');
 
@@ -163,7 +169,6 @@ class AdminUserController extends Controller
         } else {
             $userNameRules = 'required';
         }
-
         $form->text('username', trans('admin.username'))->rules($userNameRules);
         $form->text('name', trans('admin.name'))->rules('required');
         $form->text('mobile','手机号')->rules('required');

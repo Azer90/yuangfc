@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Extensions\Binding;
 use App\WeChatUser;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\HasResourceActions;
@@ -11,6 +12,7 @@ use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use EasyWeChat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class WeChatUserController extends Controller
 {
@@ -95,19 +97,24 @@ class WeChatUserController extends Controller
                 default : $str='未知';
             }
             return $str;
-        });;
+        });
         $grid->headimgurl('头像')->image(50, 50);
         $grid->country('国家');
         $grid->province('省份');
         $grid->city('城市');
         $grid->remark('备注');
+        $grid->admin_uid('是否绑定管理员')->display(function ($released) {
 
+            return $released > 0 ? '<span style="color: green">已绑定</span>' : '<span style="color: red">未绑定</span>';
+        });
 
         $grid->disableExport();//禁用导出
         $grid->disableCreateButton();
+
         $grid->actions(function ($actions) {
             $actions->disableEdit();
             $actions->disableView();
+            $actions->prepend(new Binding($actions->getKey()));
         });
         $grid->tools(function ($tools) {
             $tools->append(new \App\Admin\Extensions\Tools\WeChatUser());
@@ -199,5 +206,24 @@ class WeChatUserController extends Controller
         }
 
         return 'success';
+    }
+
+    /**
+     * 绑定管理员
+     */
+    public function bind_admin_user(Request $request){
+        $data=$request->all();
+        $id=$data['id'];
+        $admin_uid=$data['admin_uid'];
+        WeChatUser::where('id',$id)->update(['admin_uid'=>$admin_uid]);
+        $wechat_id=DB::table('admin_users')->where('wechat_id',$id)->value('wechat_id');
+        if(!empty($wechat_id)){
+            DB::table('admin_users')->where(['wechat_id'=>$id])->update(['wechat_id'=>0]);
+        }
+        DB::table('admin_users')->where(['id'=>$admin_uid])->update(['wechat_id'=>$id]);
+        $msg['code'] = 1000;
+        $msg['message'] = '绑定成功';
+
+        return response()->json($msg);
     }
 }

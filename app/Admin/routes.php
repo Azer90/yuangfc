@@ -23,5 +23,6 @@ Route::group([
     $router->get('export', 'ImportController@export')->name('export');
     $router->get('user_insert', 'WeChatUserController@user_insert')->name('user_insert');
     $router->get('user_info_insert', 'WeChatUserController@user_info_insert')->name('user_info_insert');
+    $router->post('bind_admin_user', 'WeChatUserController@bind_admin_user')->name('bind_admin_user');
 
 });
