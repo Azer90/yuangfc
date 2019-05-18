@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use EasyWeChat;
+use Illuminate\Support\Facades\Log;
 class WeChatController extends Controller
 {
     private $app;
@@ -15,6 +16,10 @@ class WeChatController extends Controller
 
 
         $this->app->server->push(function ($message) {
+            $monolog = Log::getMonolog();
+            $monolog->popHandler();
+            Log::useFiles(storage_path('logs/wechat_ts.log'));
+            Log::info($message);
             return "您好！欢迎关注";
         });
         //$this->menu();
@@ -54,6 +59,17 @@ class WeChatController extends Controller
             ],
         ];
         $this->app->menu->create($buttons);
+    }
+
+
+    public function wechat_auth(){
+        $result =  $this->app->qrcode->temporary('foo', 6 * 24 * 3600);
+     return $result;
+    }
+
+    private function get_aa(){
+        $oauth =  $this->app->oauth;
+        return $oauth->redirect();
     }
 
 }
