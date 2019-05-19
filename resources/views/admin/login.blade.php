@@ -228,7 +228,8 @@
 <script src="{{ asset("js/admin/jquery.qrcode.js")}}"></script>
 <script src="{{ asset("js/admin/qrcode.js")}}"></script>
 <script>
- var url= '{{ $shortUrl }}';
+
+ var url= '{{ isset($shortUrl) ? $shortUrl : ''  }}';
   $(function () {
     $('input').iCheck({
       checkboxClass: 'icheckbox_square-blue',
