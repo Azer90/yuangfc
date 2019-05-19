@@ -242,16 +242,23 @@ class LoginAuthController extends Controller
     /**
      * 微信验证登录权限
      */
-    public function wechat_check($admin_id,$remember){
+    public function wechat_check(Request $request,$admin_id,$remember){
         $app = EasyWeChat::officialAccount();
         $user = $app->oauth->user();
         //$weixin_data=$user->getOriginal();
         $openid=$user->getId();
         $admin_uid=WeChatUser::where('openid',$openid)->value('admin_uid');
-         dd($openid,$admin_uid,$admin_id,$remember);
-       /* if ($this->guard()->login($admin_user, $remember)) {
+        if(empty($admin_uid)){
+            return '你还没有绑定成为管理员,请联系管理员';
+        }
+        if((int)$admin_uid!=(int)$admin_id){
+            return '授权错误,你不能授权该账户';
+        }
+
+        $admin_user=Administrator::where('id',$admin_id)->first();
+        if ($this->guard()->login($admin_user, (int)$remember)) {
 
             return $this->sendLoginResponse($request);
-        }*/
+        }
     }
 }
