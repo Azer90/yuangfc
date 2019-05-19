@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\WeChatUser;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Layout\Content;
@@ -244,9 +245,10 @@ class LoginAuthController extends Controller
     public function wechat_check($admin_id,$remember){
         $app = EasyWeChat::officialAccount();
         $user = $app->oauth->user();
-        $user_data=$user->getOriginal();
-
-         dd($user_data,$admin_id,$remember);
+        //$weixin_data=$user->getOriginal();
+        $openid=$user->getId();
+        $admin_uid=WeChatUser::where('openid',$openid)->value('admin_uid');
+         dd($openid,$admin_uid,$admin_id,$remember);
        /* if ($this->guard()->login($admin_user, $remember)) {
 
             return $this->sendLoginResponse($request);
