@@ -157,7 +157,9 @@ class HouseController extends Controller
                 $where[] = ["purpose","=",$search_data["purpose"]];
             }
 
-            $res = Housings::where($where)->paginate(10,["id","title","type","purpose","rentsale","room","hall","toilet","floor_id","district_id","circle_id","area","direction","price",DB::raw('price/area AS unit_price'),"pictures"]);
+            $res = Housings::where($where)
+                ->orderByDesc("created_at")
+                ->paginate(10,["id","title","type","purpose","rentsale","room","hall","toilet","floor_id","district_id","circle_id","area","direction","price",DB::raw('price/area AS unit_price'),"pictures"]);
 
             foreach ($res as $item){
                 $item["thumd"] = "https://".config("filesystems.disks.oss.bucket").".".config("filesystems.disks.oss.endpoint")."/".$item["pictures"][0]."?x-oss-process=image/resize,w_500";
