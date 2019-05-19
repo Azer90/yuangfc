@@ -132,9 +132,13 @@ class HouseController extends Controller
                 default:$where=[];
             }
 
-            if(isset($search_data["floor_id"])&&$search_data["floor_id"]){
+            if(isset($search_data["rentsale"])&&$search_data["rentsale"]){
+                $where[]=["rentsale","=",$search_data["rentsale"]];
+            }
 
-                $where[]=["floor_id","=",$search_data["floor_id"]];
+            if(isset($search_data["circle_id"])&&$search_data["circle_id"]){
+
+                $where[]=["circle_id","=",$search_data["circle_id"]];
             }
             if(isset($search_data["min_price"])&&$search_data["min_price"]&&$search_data["max_price"]){
 
@@ -143,8 +147,8 @@ class HouseController extends Controller
             }
             if(isset($search_data["min_area"])&&$search_data["min_area"]&&$search_data["max_area"]){
 
-                $where[]=["price",">=",$search_data["min_area"]];
-                $where[]=["price","<=",$search_data["max_area"]];
+                $where[]=["area",">=",$search_data["min_area"]];
+                $where[]=["area","<=",$search_data["max_area"]];
             }
             if(isset($search_data["room"])&&$search_data["room"]){
                 $where[] = ["room","=",$search_data["room"]];
@@ -153,13 +157,17 @@ class HouseController extends Controller
                 $where[] = ["purpose","=",$search_data["purpose"]];
             }
 
-            $res = Housings::where($where)->paginate(10,["id","title","type","purpose","room","hall","toilet","floor_id","district_id","circle_id","area","direction","price",DB::raw('price/area AS unit_price'),"pictures"]);
+            $res = Housings::where($where)->paginate(10,["id","title","type","purpose","rentsale","room","hall","toilet","floor_id","district_id","circle_id","area","direction","price",DB::raw('price/area AS unit_price'),"pictures"]);
 
             foreach ($res as $item){
                 $item["thumd"] = "https://".config("filesystems.disks.oss.bucket").".".config("filesystems.disks.oss.endpoint")."/".$item["pictures"][0]."?x-oss-process=image/resize,w_500";
                 if($search_data["list_type"]!=3){
                     $item["unit_price"] = $item["unit_price"]*10000;
+                    $item["price_unit"] = "万";
+                }else{
+                    $item["price_unit"] = "元/月";
                 }
+
                 //小区
                 $floors = $item->floors;
                 if($floors){
