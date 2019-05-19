@@ -27,4 +27,14 @@ class Housings extends Model
     {
       return  $this->belongsTo(Floor::class,'floor_id');
     }
+
+    public function district()
+    {
+        return  $this->belongsTo(District::class);
+    }
+
+    public function circle()
+    {
+        return $this->belongsTo(Circle::class);
+    }
 }
