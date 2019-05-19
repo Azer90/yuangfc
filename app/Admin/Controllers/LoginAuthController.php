@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Events\Event;
 use App\WeChatUser;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
@@ -255,9 +256,11 @@ class LoginAuthController extends Controller
         }
 
         $admin_user=Administrator::where('id',2)->first();
-
+        event(new Event());
         $this->guard()->login($admin_user, (int)$remember);
 
         return $this->sendLoginResponse($request);
     }
+
+
 }
