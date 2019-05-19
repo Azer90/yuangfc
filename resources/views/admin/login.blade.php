@@ -130,7 +130,6 @@
 
 
   </style>
-  <script src="http://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
 </head>
 <body class="hold-transition login-page" @if(config('admin.login_background_image'))style="background: url({{config('admin.login_background_image')}}) no-repeat;background-size: cover;"@endif>
 <div class="login-box">
@@ -235,16 +234,6 @@
         $('.login_pc').show();
 
       }
-    });
-
-    var obj = new WxLogin({
-      id:"qrcode",//div的id
-      appid: "你的appid",
-      scope: "snsapi_login",//写死
-      redirect_uri:encodeURI("你的处理扫码事件的方法") ,
-      state: "",
-      style: "black",//二维码黑白风格
-      href: "https://某个域名下的css文件"
     });
   });
 

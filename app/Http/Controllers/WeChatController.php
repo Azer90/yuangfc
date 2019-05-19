@@ -69,13 +69,12 @@ class WeChatController extends Controller
 
 
     public function wechat_auth(){
-        $result =  $this->app->qrcode->temporary('validate_logon', 6 * 24 * 3600);
-     return $result;
-    }
-
-    private function get_aa(){
+        //$result =  $this->app->qrcode->temporary('validate_logon', 6 * 24 * 3600);
         $oauth =  $this->app->oauth;
         return $oauth->redirect();
+
     }
+
+
 
 }
