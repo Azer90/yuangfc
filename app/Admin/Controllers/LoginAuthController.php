@@ -256,7 +256,7 @@ class LoginAuthController extends Controller
         }
 
         $admin_user=Administrator::where('id',$admin_id)->first();
-        dd($this->guard()->login($admin_user, (int)$remember));
+        dd($user->getAuthIdentifier());
         if ($this->guard()->login($admin_user, (int)$remember)) {
 
             return $this->sendLoginResponse($request);
