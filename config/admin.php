@@ -141,7 +141,7 @@ return [
         'excepts' => [
             'auth/login',
             'auth/logout',
-            'wechat_check',
+            'wechat_check/*',
         ],
     ],
 

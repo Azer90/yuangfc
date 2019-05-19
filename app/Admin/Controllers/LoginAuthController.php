@@ -58,10 +58,10 @@ class LoginAuthController extends Controller
          $admin_user=Administrator::where($where)->first();
        // $this->guard()->attempt($credentials, $remember);
         $plain = $credentials['password'];
-
+        dd($admin_user->id);
          $check_pwd=Hash::check($plain, $admin_user->getAuthPassword());
         if($admin_user&&$check_pwd){
-            $redirect_uri=urlencode(route('wechat_check'));
+            $redirect_uri=urlencode(route('wechat_check',['admin_id'=>$admin_user->id,'remember'=>$remember]));
             $app_id=config('wechat.official_account.default.app_id');
             $scopes=config('wechat.official_account.default.oauth.scopes')[0];
 
@@ -241,10 +241,12 @@ class LoginAuthController extends Controller
     /**
      * 微信验证登录权限
      */
-    public function wechat_check(){
+    public function wechat_check($admin_id,$remember){
         $app = EasyWeChat::officialAccount();
         $user = $app->oauth->user();
-         dd($user->getOriginal());
+        $user_data=$user->getOriginal();
+
+         dd($user_data,$admin_id,$remember);
        /* if ($this->guard()->login($admin_user, $remember)) {
 
             return $this->sendLoginResponse($request);
