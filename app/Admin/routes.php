@@ -25,4 +25,6 @@ Route::group([
     $router->get('user_info_insert', 'WeChatUserController@user_info_insert')->name('user_info_insert');
     $router->post('bind_admin_user', 'WeChatUserController@bind_admin_user')->name('bind_admin_user');
 
+    $router->post('wechat_check', 'LoginAuthController@wechat_check')->name('wechat_check');
+
 });

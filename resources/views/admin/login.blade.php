@@ -36,7 +36,7 @@
 
     @media screen and (max-width: 640px) {
       .scanCode {
-        display: none;
+        /*display: none;*/
       }
       .bg_img {
         display: none;
@@ -138,73 +138,81 @@
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
-    <div class="scanCode" style="display: none">
-      <div class="titles">
-            <span>扫码登录</span>
-      </div>
-      <div class="qrCode" id="qrcode">
-        <img width="160" src="data:image/png;base64,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" />
-      </div>
-      <div class="scanTip">
-        <div class="list_scan">
-          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAEtElEQVR4nO3dzW4bVRgG4Pcbt27igvAChMSCnj2IGiEku5s6cAHMNnWrNGzZhCsguQLCFdghdrLEiD2xN4klhEgkWHfCAomfRbrBqannsBg3tT0/nhn/cIjfR8oiZ8aTo3lz5syM7fkAIiIiIpo9mXYDqlrI49bqXQCAlvLUPXrBcvec9Y4zs+0NUfvFMizr/sw2KLoFAHjWPXM2Ty+m2dSNNC9S1UIe2dUNaNgQKUNP04UQz9EGMJdAYFllAF/MbHt68H+dzUHVSy0Imuh199KEYyV9gaoXN3Az9wSQXcgMR8R1IVIGZBfZ1Z9UvbiR9OWxR8hgVFQBsZP+keUkCiI11SjZ6HU3446WWCPECyN3xDDSEBvZ3JGqFvKx1o6zkqqXjsIPT7oN6Bp6l81pJ7T/K3VYVOiLDYENSPDJgtYt5+HJ2qRtTQxENe5tI2gC1DiDdrecR51WjD4vDdUoPgZkF5DXAhbvOJXj7ajXRwaiDosKrvUkYNG36P39eFlHxCTeiLGaENwdWaBxgYz7ftTpfPQc0hd/mhpnDCOas95xkHFtQD8dWSDIB+7TIRMmdfnE15RxbYYxmbPeceDqgJOggH06JDQQdVCyIRg/M9iZ19XzdeTNr7o90ijIq/1i6PVb+AjRUvCv7dam6N+S0v595t0pCJTgSl2fc3Sk0LtsJlk9IhA9niLDSMGbb8cmd/++vZLkXtZpyj5Rgn2XIBDhmdUCJL7bS/PFQAzDQAzDQAzDQAzDQAzDQAzDQAzDQAzDQAzDQAzDQAzDQAzDQAzDQAzDQAwT9WHrU4x8z0DzLdz0xvYl330lIiIiIiKiEIFfaXv74MN3rH7mjUV3Zpm4mf6fvz744Zfx9pFA3vz6vdsrmVe+E2Dit0Vpehr4/rxy/PFw28jNxVtW7lOGsTgCfHSnXvpsuM0a/UVuL7ZLJMCrw7+PBPI8i31A/77YLi0xjT+07u0NN/km9bcOPng927/57uJ6tbx6mX9+/u3Bj3/91/0gIiIiIqLlFvoAM9UotUYfV6fbTuWETyFNIcm+5CcXDcNADMNADMNADMNADMNADMNADMNADMNADMNADMNADMNADMNADMNADMNADMNADMNADMNADBMRiLDY18wEFggLlORh/Pfj1uKjl9RhUQEYL44T+qyTiEBc/8NmsissLJmUi4APM4RXmggPJLAyjMyuoO/SCNxnoVV3QgNxNk8voHE2tnGl6qWt1H1bMl5RTlGjrfrcqRynOWQBEHfX3yZfRlUZI49X8TOoRLhEFlaLUXp1/ENeL7ibTqXDqm0BvDCsqn+JPncqJ8rf/lKMsyzZ8he1AgCrqhqlbwZnEQRANe4VVL10FBwGAMHEw328atGhiV85BdAE9AVkRo+ve9Y9m1dFUXVYVNByZyYb0yhAQw2qaftrP16tpz93Hp74p4AxsQrcO5VOTTWKiAil4P3I2KMFp3BjZQ3AfC5OXSvk+J7S5H/rnThhAAkuDJ1KpwbXXQs+fFEw/dSba6NLdg9LdC/LedRpoddVAHYYzCT6K/S6KumJT6xD1rDBcX0bwLY6KNlwYUMwuD0Q/57N9aPb3hW420TvssmK2kREREQm+RdN1VmzIpYfDgAAAABJRU5ErkJggg=="/>
-          <span> 打开 <a class="btlink" href="javascript:;"> 微信 </a> </span> <span> 扫一扫登录 </span>
+
+    @if (isset($shortUrl))
+      <div class="scanCode">
+        <div class="titles">
+          <span>扫码授权登录</span>
         </div>
-      </div>
-    </div>
+        <div class="qrCode" id="qrcode">
 
-    <div class="entrance">
-      <div class="bg_img"> </div>
-      <div class="tips">
-        <span> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACjklEQVRYhe2XTVLbQBBGX4ufCt7gG2RyArTE3mBuYLY4KcwJ8E0iTmBTQckS5wSIDWYX5wQoN7A3pgoKdRZjbGyNLCkmq6RXqpqe+d50T4964F83KeJkvuw38LwDVKuAb2fK/BuGqI5m3yIjRKP4eHDzxwBT0ROUJkI17aG/gPjFHeR92oURQp8kuYg/3UWFAExY90GvQMwroT5ChEoct26Hq3ZkwrqPqEFpAM05mMYgR8vzHQC1COQA1QtEgjzBPDNh3Ue1g8gJ6E3cGjRyJtQiE9Z1HdEMELWbWzTP7a7jtwbIMgeAHABrhd1teoPKXgGA9c182zem66crx1FNbw5gwrrPs/eD7UqviP+bAtgTzzVCFdFCAJt/RZzkND6+6xeZVzgCzpxmibfuCu2+MIAJ6322Kvf2llxHPF3eDgBHuYj2EKoo168hyom7y9sdgaVyiY8HfUhOX0OsE/YcABlBOudWYA5RRny+loyWx1wRsGHafJfK9wJEmZ3P1yqSgsT+40VSADOIJDkkSQ4Lh322VhIvD6XvAY+IBBBpAIETIqO5WAHQmK29POTyN2EtRmWXp8mH+HSYylsZM12/ylblHtFx3BqY5fGMe0Bs2W1XPq8jDsDWTjA9uM5oZveEl/Uhwt46JWbC/TZ4XZSf8cdb55nKvgk3kqa9ubyuCWtnpcUvax3wuqBju5bbVrbl0wY1AtlFNeLp4SjvTNic71zZg6djkMaqvjL3XWC6fpXtnb5tVBkhBDxOzpdBrF/lDKUzvUm/8zhp5wEXepjASz4lsNFgBNpjQ88BeJYzkLYV1jFop+i5KQwAs112QDsgu4ujOgYJeJwEZUq3FMACzNdaE5W2XUV79of138rbb3pjLc503PZxAAAAAElFTkSuQmCC" /> <span v-text="type=='qrCode' ? '点击密码登录' : '扫码登录更安全'">扫码登录更安全</span>  </span> <em> </em>
-      </div>
-    </div>
-    <div class="login_pc">
-    <p class="login-box-msg">密码{{ trans('admin.login') }}</p>
-
-    <form action="{{ admin_base_path('auth/login') }}" method="post">
-      <div class="form-group has-feedback {!! !$errors->has('username') ?: 'has-error' !!}">
-
-        @if($errors->has('username'))
-          @foreach($errors->get('username') as $message)
-            <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>{{$message}}</label><br>
-          @endforeach
-        @endif
-
-        <input type="text" class="form-control" placeholder="{{ trans('admin.username') }}" name="username" value="{{ old('username') }}">
-        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-      </div>
-      <div class="form-group has-feedback {!! !$errors->has('password') ?: 'has-error' !!}">
-
-        @if($errors->has('password'))
-          @foreach($errors->get('password') as $message)
-            <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>{{$message}}</label><br>
-          @endforeach
-        @endif
-
-        <input type="password" class="form-control" placeholder="{{ trans('admin.password') }}" name="password">
-        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-      </div>
-      <div class="row">
-        <div class="col-xs-8">
-          @if(config('admin.auth.remember'))
-          <div class="checkbox icheck">
-            <label>
-              <input type="checkbox" name="remember" value="1" {{ (!old('username') || old('remember')) ? 'checked' : '' }}>
-              {{ trans('admin.remember_me') }}
-            </label>
+        </div>
+        <div class="scanTip">
+          <div class="list_scan">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAEtElEQVR4nO3dzW4bVRgG4Pcbt27igvAChMSCnj2IGiEku5s6cAHMNnWrNGzZhCsguQLCFdghdrLEiD2xN4klhEgkWHfCAomfRbrBqannsBg3tT0/nhn/cIjfR8oiZ8aTo3lz5syM7fkAIiIiIpo9mXYDqlrI49bqXQCAlvLUPXrBcvec9Y4zs+0NUfvFMizr/sw2KLoFAHjWPXM2Ty+m2dSNNC9S1UIe2dUNaNgQKUNP04UQz9EGMJdAYFllAF/MbHt68H+dzUHVSy0Imuh199KEYyV9gaoXN3Az9wSQXcgMR8R1IVIGZBfZ1Z9UvbiR9OWxR8hgVFQBsZP+keUkCiI11SjZ6HU3446WWCPECyN3xDDSEBvZ3JGqFvKx1o6zkqqXjsIPT7oN6Bp6l81pJ7T/K3VYVOiLDYENSPDJgtYt5+HJ2qRtTQxENe5tI2gC1DiDdrecR51WjD4vDdUoPgZkF5DXAhbvOJXj7ajXRwaiDosKrvUkYNG36P39eFlHxCTeiLGaENwdWaBxgYz7ftTpfPQc0hd/mhpnDCOas95xkHFtQD8dWSDIB+7TIRMmdfnE15RxbYYxmbPeceDqgJOggH06JDQQdVCyIRg/M9iZ19XzdeTNr7o90ijIq/1i6PVb+AjRUvCv7dam6N+S0v595t0pCJTgSl2fc3Sk0LtsJlk9IhA9niLDSMGbb8cmd/++vZLkXtZpyj5Rgn2XIBDhmdUCJL7bS/PFQAzDQAzDQAzDQAzDQAzDQAzDQAzDQAzDQAzDQAzDQAzDQAzDQAzDQAzDQAwT9WHrU4x8z0DzLdz0xvYl330lIiIiIiKiEIFfaXv74MN3rH7mjUV3Zpm4mf6fvz744Zfx9pFA3vz6vdsrmVe+E2Dit0Vpehr4/rxy/PFw28jNxVtW7lOGsTgCfHSnXvpsuM0a/UVuL7ZLJMCrw7+PBPI8i31A/77YLi0xjT+07u0NN/km9bcOPng927/57uJ6tbx6mX9+/u3Bj3/91/0gIiIiIqLlFvoAM9UotUYfV6fbTuWETyFNIcm+5CcXDcNADMNADMNADMNADMNADMNADMNADMNADMNADMNADMNADMNADMNADMNADMNADMNADMNADBMRiLDY18wEFggLlORh/Pfj1uKjl9RhUQEYL44T+qyTiEBc/8NmsissLJmUi4APM4RXmggPJLAyjMyuoO/SCNxnoVV3QgNxNk8voHE2tnGl6qWt1H1bMl5RTlGjrfrcqRynOWQBEHfX3yZfRlUZI49X8TOoRLhEFlaLUXp1/ENeL7ibTqXDqm0BvDCsqn+JPncqJ8rf/lKMsyzZ8he1AgCrqhqlbwZnEQRANe4VVL10FBwGAMHEw328atGhiV85BdAE9AVkRo+ve9Y9m1dFUXVYVNByZyYb0yhAQw2qaftrP16tpz93Hp74p4AxsQrcO5VOTTWKiAil4P3I2KMFp3BjZQ3AfC5OXSvk+J7S5H/rnThhAAkuDJ1KpwbXXQs+fFEw/dSba6NLdg9LdC/LedRpoddVAHYYzCT6K/S6KumJT6xD1rDBcX0bwLY6KNlwYUMwuD0Q/57N9aPb3hW420TvssmK2kREREQm+RdN1VmzIpYfDgAAAABJRU5ErkJggg=="/>
+            <span> 打开 <a class="btlink" href="javascript:;"> 微信 </a> </span> <span> 扫一扫登录 </span>
           </div>
-          @endif
         </div>
-        <!-- /.col -->
-        <div class="col-xs-4">
-          <input type="hidden" name="_token" value="{{ csrf_token() }}">
-          <button type="submit" class="btn btn-primary btn-block btn-flat">{{ trans('admin.login') }}</button>
-        </div>
-        <!-- /.col -->
       </div>
-    </form>
-    </div>
+
+    @else
+      <div class="entrance"style="display: none">
+        <div class="bg_img"> </div>
+        <div class="tips">
+          <span> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACjklEQVRYhe2XTVLbQBBGX4ufCt7gG2RyArTE3mBuYLY4KcwJ8E0iTmBTQckS5wSIDWYX5wQoN7A3pgoKdRZjbGyNLCkmq6RXqpqe+d50T4964F83KeJkvuw38LwDVKuAb2fK/BuGqI5m3yIjRKP4eHDzxwBT0ROUJkI17aG/gPjFHeR92oURQp8kuYg/3UWFAExY90GvQMwroT5ChEoct26Hq3ZkwrqPqEFpAM05mMYgR8vzHQC1COQA1QtEgjzBPDNh3Ue1g8gJ6E3cGjRyJtQiE9Z1HdEMELWbWzTP7a7jtwbIMgeAHABrhd1teoPKXgGA9c182zem66crx1FNbw5gwrrPs/eD7UqviP+bAtgTzzVCFdFCAJt/RZzkND6+6xeZVzgCzpxmibfuCu2+MIAJ6322Kvf2llxHPF3eDgBHuYj2EKoo168hyom7y9sdgaVyiY8HfUhOX0OsE/YcABlBOudWYA5RRny+loyWx1wRsGHafJfK9wJEmZ3P1yqSgsT+40VSADOIJDkkSQ4Lh322VhIvD6XvAY+IBBBpAIETIqO5WAHQmK29POTyN2EtRmWXp8mH+HSYylsZM12/ylblHtFx3BqY5fGMe0Bs2W1XPq8jDsDWTjA9uM5oZveEl/Uhwt46JWbC/TZ4XZSf8cdb55nKvgk3kqa9ubyuCWtnpcUvax3wuqBju5bbVrbl0wY1AtlFNeLp4SjvTNic71zZg6djkMaqvjL3XWC6fpXtnb5tVBkhBDxOzpdBrF/lDKUzvUm/8zhp5wEXepjASz4lsNFgBNpjQ88BeJYzkLYV1jFop+i5KQwAs112QDsgu4ujOgYJeJwEZUq3FMACzNdaE5W2XUV79of138rbb3pjLc503PZxAAAAAElFTkSuQmCC" /> <span v-text="type=='qrCode' ? '点击密码登录' : '扫码登录更安全'">扫码登录更安全</span>  </span> <em> </em>
+        </div>
+      </div>
+      <div class="login_pc">
+        <p class="login-box-msg">密码{{ trans('admin.login') }}</p>
+
+        <form action="{{ admin_base_path('auth/login') }}" method="post">
+          <div class="form-group has-feedback {!! !$errors->has('username') ?: 'has-error' !!}">
+
+            @if($errors->has('username'))
+              @foreach($errors->get('username') as $message)
+                <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>{{$message}}</label><br>
+              @endforeach
+            @endif
+
+            <input type="text" class="form-control" placeholder="{{ trans('admin.username') }}" name="username"
+                   value="{{ old('username') }}">
+            <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+          </div>
+          <div class="form-group has-feedback {!! !$errors->has('password') ?: 'has-error' !!}">
+
+            @if($errors->has('password'))
+              @foreach($errors->get('password') as $message)
+                <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>{{$message}}</label><br>
+              @endforeach
+            @endif
+
+            <input type="password" class="form-control" placeholder="{{ trans('admin.password') }}" name="password">
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+          </div>
+          <div class="row">
+            <div class="col-xs-8">
+              @if(config('admin.auth.remember'))
+                <div class="checkbox icheck">
+                  <label>
+                    <input type="checkbox" name="remember"
+                           value="1" {{ (!old('username') || old('remember')) ? 'checked' : '' }}>
+                    {{ trans('admin.remember_me') }}
+                  </label>
+                </div>
+              @endif
+            </div>
+            <!-- /.col -->
+            <div class="col-xs-4">
+              <input type="hidden" name="_token" value="{{ csrf_token() }}">
+              <button type="submit" class="btn btn-primary btn-block btn-flat">{{ trans('admin.login') }}</button>
+            </div>
+            <!-- /.col -->
+          </div>
+        </form>
+      </div>
+    @endif
+
+
   </div>
   <!-- /.login-box-body -->
 </div>
@@ -216,15 +224,32 @@
 <script src="{{ admin_asset("vendor/laravel-admin/AdminLTE/bootstrap/js/bootstrap.min.js")}}"></script>
 <!-- iCheck -->
 <script src="{{ admin_asset("vendor/laravel-admin/AdminLTE/plugins/iCheck/icheck.min.js")}}"></script>
-<script>
 
+<script src="{{ asset("js/admin/jquery.qrcode.js")}}"></script>
+<script src="{{ asset("js/admin/qrcode.js")}}"></script>
+<script>
+ var url= '{{ $shortUrl }}';
   $(function () {
     $('input').iCheck({
       checkboxClass: 'icheckbox_square-blue',
       radioClass: 'iradio_square-blue',
       increaseArea: '20%' // optional
     });
-    $('.entrance').click(function(){
+    var render;
+    if (isIE()) {
+      render = 'table';
+    }else{
+      render = 'canvas';
+    };
+    $('#qrcode').empty();
+    $('#qrcode').qrcode({
+      render: render,
+      width: 120,
+      height: 120,
+      text: url,
+    });
+
+    /*$('.entrance').click(function(){
       if($('.scanCode').is(':hidden')){
         $('.scanCode').show();
         $('.login_pc').hide();
@@ -234,9 +259,17 @@
         $('.login_pc').show();
 
       }
-    });
+    });*/
   });
-
+ function isIE(){
+   var theUA = window.navigator.userAgent.toLowerCase();
+   if ((theUA.match(/msie\s\d+/) && theUA.match(/msie\s\d+/)[0]) || (theUA.match(/trident\s?\d+/) && theUA.match(/trident\s?\d+/)[0])) {
+     var ieVersion = theUA.match(/msie\s\d+/)[0].match(/\d+/)[0] || theUA.match(/trident\s?\d+/)[0];
+     if (ieVersion < 9) {
+       return true;
+     }
+   }
+ }
 </script>
 </body>
 </html>

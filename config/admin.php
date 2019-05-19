@@ -110,7 +110,8 @@ return [
     */
     'auth' => [
 
-        'controller' => App\Admin\Controllers\AuthController::class,
+        //'controller' => App\Admin\Controllers\AuthController::class,
+        'controller' => App\Admin\Controllers\LoginAuthController::class,
 
         'guards' => [
             'admin' => [
@@ -124,6 +125,10 @@ return [
                 'driver' => 'eloquent',
                 'model'  => Encore\Admin\Auth\Database\Administrator::class,
             ],
+
+           /* 'admin' => [
+                'driver' => 'custom',
+            ]*/
         ],
 
         // Add "remember me" to login form
