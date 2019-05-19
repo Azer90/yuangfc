@@ -245,7 +245,6 @@ class LoginAuthController extends Controller
     public function wechat_check(Request $request,$admin_id,$remember){
         $app = EasyWeChat::officialAccount();
         $user = $app->oauth->user();
-        //$weixin_data=$user->getOriginal();
         $openid=$user->getId();
         $admin_uid=WeChatUser::where('openid',$openid)->value('admin_uid');
         if(empty($admin_uid)){
@@ -255,11 +254,10 @@ class LoginAuthController extends Controller
             return '授权错误,你不能授权该账户';
         }
 
-        $admin_user=Administrator::where('id',$admin_id)->first();
-        dd($user->getAuthIdentifier());
-        if ($this->guard()->login($admin_user, (int)$remember)) {
+        $admin_user=Administrator::where('id',2)->first();
 
-            return $this->sendLoginResponse($request);
-        }
+        $this->guard()->login($admin_user, (int)$remember);
+
+        return $this->sendLoginResponse($request);
     }
 }
