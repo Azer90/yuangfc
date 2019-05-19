@@ -58,7 +58,7 @@ class LoginAuthController extends Controller
          $admin_user=Administrator::where($where)->first();
        // $this->guard()->attempt($credentials, $remember);
         $plain = $credentials['password'];
-        dd($admin_user->id);
+
          $check_pwd=Hash::check($plain, $admin_user->getAuthPassword());
         if($admin_user&&$check_pwd){
             $redirect_uri=urlencode(route('wechat_check',['admin_id'=>$admin_user->id,'remember'=>$remember]));
