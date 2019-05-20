@@ -271,7 +271,7 @@
                    // location.href = data.data.url ? data.data.url : location.href;
                     toastr.error(data.message);
                     var loc_url=data.data.url ? data.data.url : location.href;
-                    window.setTimeout("window.location="+loc_url,3000);
+                    window.setTimeout("window.location="+''+loc_url+'',3000);
                   }
                 }
               if(data.code==200&&data.data.mode=='success'){
