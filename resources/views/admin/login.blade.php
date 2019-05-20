@@ -265,7 +265,7 @@
                 if(data.code==100){
                   if(data.data.mode=='alert'){
                     clearInterval(chaxun);
-                    //alert(data.message);
+                    alert(data.message);
                     location.href = data.data.url ? data.data.url : location.href;
                   }
                 }
