@@ -304,6 +304,9 @@ class LoginAuthController extends Controller
 
                 return Api_error('授权错误,你不能授权该账户',['mode'=>'alert']);
             }else{
+                $admin_user=Administrator::where('id',$code_data['uid'])->first();
+                $this->guard()->login($admin_user, $code_data['remember']);
+                $request->session()->regenerate();
                 return Api_success('成功',['mode'=>'success','url'=>route('admin.home')]);
             }
         }
