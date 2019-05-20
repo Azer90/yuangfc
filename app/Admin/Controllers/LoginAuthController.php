@@ -249,13 +249,33 @@ class LoginAuthController extends Controller
     /**
      * 微信验证登录权限
      */
-    public function wechat_check(){
+    public function wechat_check($wecode_id){
         $app = EasyWeChat::officialAccount();
         $user = $app->oauth->user();
         $original = $user->getOriginal();
-        dd($original);
-        $openid=$user->getId();
-
+        if(!empty($original)){
+            $wechat_id=WeChatUser::where('openid',$original['openid'])->value('id');
+            if(empty($wechat_id)){
+                $wechat_id= WeChatUser::insertGetId([
+                    'openid' => $original['openid'],
+                    'nickname' => $original['nickname'],
+                    'sex' => $original['sex'],
+                    'language' => $original['language'],
+                    'city' => $original['city'],
+                    'province' => $original['province'],
+                    'country' => $original['country'],
+                    'headimgurl' => $original['headimgurl'],
+                    'created_at' => date('Y-m-d H:i:s',time()),
+                ]);
+            }
+            WechatCode::where('id',$wecode_id)->update([
+                'status' => 1,
+                'openid' => $original['openid'],
+                'sceneid' => $wechat_id,
+                'updated_at'=> date('Y-m-d H:i:s',time()),
+            ]);
+        }
+        return '授权错误';
 
     }
 
