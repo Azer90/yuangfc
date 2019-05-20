@@ -261,10 +261,17 @@
     function long_contact() {
       $.post(code_url, {'wecode_id': wecode_id, '_token':csrf_token}, function (data) {
 
-                console.log(data);
-           // clearInterval(chaxun);
-
-
+                console.log(data.data.mode);
+                if(data.code==100){
+                  if(data.data.mode=='alert'){
+                    alert(data.message);
+                    clearInterval(chaxun);
+                  }
+                }
+              if(data.code==200&&data.data.mode=='success'){
+                clearInterval(chaxun);
+                location.href = data.data.url ? data.data.url : location.href;
+              }
       });
     }
     /*$('.entrance').click(function(){

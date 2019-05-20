@@ -274,8 +274,9 @@ class LoginAuthController extends Controller
                 'sceneid' => $wechat_id,
                 'updated_at'=> date('Y-m-d H:i:s',time()),
             ]);
+        }else{
+            return '授权错误';
         }
-        return '授权错误';
 
     }
 
@@ -303,7 +304,7 @@ class LoginAuthController extends Controller
 
                 return Api_error('授权错误,你不能授权该账户',['mode'=>'alert']);
             }else{
-                return Api_success('成功',['mode'=>'success']);
+                return Api_success('成功',['mode'=>'success','url'=>route('admin.home')]);
             }
         }
 
