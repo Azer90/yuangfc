@@ -268,7 +268,7 @@
                   if(data.data.mode=='alert'){
                     clearInterval(chaxun);
                     //alert(data.message);
-                    location.href = data.data.url ? data.data.url : location.href;
+                   // location.href = data.data.url ? data.data.url : location.href;
                   }
                 }
               if(data.code==200&&data.data.mode=='success'){
