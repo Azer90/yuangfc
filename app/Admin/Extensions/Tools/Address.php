@@ -90,25 +90,21 @@ class Address extends Field
 
                     citylocation.searchLocalCity();
                 }
-                //添加点击事情
+                //添加点击
                 qq.maps.event.addListener(map, 'click', function(event) {
-
-                    marker.setPosition(event.latLng);
-                });
-
-                qq.maps.event.addListener(marker, 'position_changed', function(event) {
-
-                    var position = marker.getPosition();
 
                     var    geocoder = new qq.maps.Geocoder({
                         complete : function(result){
                             ads.val(result.detail.address);
                         }
                     });
-                    geocoder.getAddress(position);
-                    lat.val(position.getLat());
-                    lng.val(position.getLng());
+                    geocoder.getAddress(event.latLng);
+                    marker.setPosition(event.latLng);
+                       lat.val(event.latLng.lat);
+                    lng.val(event.latLng.lng);
                 });
+
+            
 
             }
             $('#search').click(function () {
