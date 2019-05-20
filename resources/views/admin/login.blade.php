@@ -231,7 +231,7 @@
 <script src="{{ asset("js/admin/qrcode.js")}}"></script>
 <script>
 
-  var shortUrl= '{{ isset($shortUrl) ? $shortUrl : ''  }}';
+ var shortUrl= '{{ isset($shortUrl) ? $shortUrl : ''  }}';
  var wecode_id= '{{ isset($wecode_id) ? $wecode_id : 0  }}';
  var code_url= '{{ route('sweep_code_check') }}';
  var csrf_token= '{{ csrf_token() }}';
@@ -260,7 +260,6 @@
         long_contact()
       }, 1500);
     }
-
     function long_contact() {
       $.post(code_url, {'wecode_id': wecode_id, '_token':csrf_token}, function (data) {
 
@@ -270,8 +269,8 @@
                     clearInterval(chaxun);
                    // location.href = data.data.url ? data.data.url : location.href;
                     toastr.error(data.message);
-                    var loc_url=data.data.url ? data.data.url : location.href;
-                    window.setTimeout("window.location="+''+loc_url+'',3000);
+                     loc_url=data.data.url ? data.data.url : location.href;
+                    window.setTimeout("window.location=loc_url",3000);
                   }
                 }
               if(data.code==200&&data.data.mode=='success'){
