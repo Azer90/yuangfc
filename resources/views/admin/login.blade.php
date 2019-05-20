@@ -264,8 +264,9 @@
                 console.log(data.data.mode);
                 if(data.code==100){
                   if(data.data.mode=='alert'){
-                    alert(data.message);
                     clearInterval(chaxun);
+                    //alert(data.message);
+                    location.href = data.data.url ? data.data.url : location.href;
                   }
                 }
               if(data.code==200&&data.data.mode=='success'){
