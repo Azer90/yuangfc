@@ -41,5 +41,6 @@ Route::group($attributes,function (Router $router) {
     $router->post('api_housList', "HouseController@housList")->name('api_housList');
     $router->post('api_getAreaList', "HouseController@getAreaList")->name('api_getAreaList');
     $router->post('api_getCircleList', "HouseController@getCircleList")->name('api_getCircleList');
+    $router->post('api_getBuild', "HouseController@getBuild")->name('api_getBuild');
     $router->post('api_getBanner', "IndexController@getBanner")->name('api_getBanner');
 });

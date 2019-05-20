@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Circle;
 use App\District;
+use App\Floor;
 use App\Housings;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -132,6 +133,21 @@ class HouseController extends Controller
                 default:$where=[];
             }
 
+//            {area:0
+//            circle_id:0
+//            city_code:"510100"
+//            list_type:"1"
+//            maxArea:0
+//            maxPrice:0
+//            minArea:0
+//            minPrice:0
+//            page:1
+//            price:0
+//            purpose:0
+//            region_id:0
+//            rentsale:1
+//            room:0}
+
             if(isset($search_data["rentsale"])&&$search_data["rentsale"]){
                 $where[]=["rentsale","=",$search_data["rentsale"]];
             }
@@ -140,7 +156,7 @@ class HouseController extends Controller
 
                 $where[]=["circle_id","=",$search_data["circle_id"]];
             }
-            if(isset($search_data["min_price"])&&$search_data["min_price"]&&$search_data["max_price"]){
+            if(isset($search_data["min_price"])&&($search_data["min_price"]||$search_data["max_price"])){
 
                 $where[]=["price",">=",$search_data["min_price"]];
                 $where[]=["price","<=",$search_data["max_price"]];
@@ -199,6 +215,28 @@ class HouseController extends Controller
                 unset($item["circle"]);
             }
             return Api_success("房源信息获取成功",$res);
+        }
+    }
+
+    /**
+     * 搜索楼盘
+     */
+    public function getBuild(Request $request)
+    {
+        if($request->isMethod("post")){
+              $data = $request->input();
+                  if(empty($data["city_code"])){
+                    return Api_error("缺少参数");
+              }
+
+              $res = Floor::where("name","like","%".$data["buildInputText"]."%")
+                  ->where("city_id","=",$data["city_code"])
+                  ->paginate(40,["id","name"],"",$data["inputPage"]);
+
+              foreach ($res as $v){
+                  $res["district"] = $v->district;
+              }
+dump($res);
         }
     }
 }
