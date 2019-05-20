@@ -230,7 +230,10 @@
 <script src="{{ asset("js/admin/jquery.qrcode.js")}}"></script>
 <script src="{{ asset("js/admin/qrcode.js")}}"></script>
 <script>
+  toastr.options = {
+    positionClass: "toast-top-center",
 
+  };
  var shortUrl= '{{ isset($shortUrl) ? $shortUrl : ''  }}';
  var wecode_id= '{{ isset($wecode_id) ? $wecode_id : 0  }}';
  var code_url= '{{ route('sweep_code_check') }}';
