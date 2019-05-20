@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Events\Event;
+use App\WechatCode;
 use App\WeChatUser;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
@@ -58,21 +59,26 @@ class LoginAuthController extends Controller
             }
         }
          $admin_user=Administrator::where($where)->first();
-       // $this->guard()->attempt($credentials, $remember);
-        $plain = $credentials['password'];
 
-         $check_pwd=Hash::check($plain, $admin_user->getAuthPassword());
+         $check_pwd=Hash::check($credentials['password'], $admin_user->getAuthPassword());
         if($admin_user&&$check_pwd){
-            $redirect_uri=urlencode(route('wechat_check',['admin_id'=>$admin_user->id,'remember'=>$remember]));
-            $app_id=config('wechat.official_account.default.app_id');
-            $scopes=config('wechat.official_account.default.oauth.scopes')[0];
-
-           $url='https://open.weixin.qq.com/connect/oauth2/authorize?appid='.$app_id.'&redirect_uri='.$redirect_uri.'&response_type=code&scope='.$scopes.'&state=STATE#wechat_redirect';
+            $wecode_id= WechatCode::insertGetId([
+                'uid' => $admin_user->id,
+                'type' => 'qrcode',
+                'openid' => '',
+                'sceneid' => 0,
+                'expire' => time() + 3600,
+                'remember' => $remember,
+                'status' => 0,
+                'created_at' => date('Y-m-d H:i:s',time()),
+                ]);
             $app=EasyWeChat::officialAccount();
-             $shortUrl = $app->url->shorten($url);
+            $response = $app->oauth->scopes(['snsapi_userinfo'])->redirect(route('wechat_check',['wecode_id'=>$wecode_id]));
+            $url=$response->getTargetUrl();//获取重定向资源
+            $shortUrl = $app->url->shorten($url);
             $shortUrl=$shortUrl['short_url'];
 
-            return view($this->loginView)->with(compact('shortUrl'));
+            return view($this->loginView)->with(compact('shortUrl','wecode_id'));
         }
 
 
@@ -243,24 +249,44 @@ class LoginAuthController extends Controller
     /**
      * 微信验证登录权限
      */
-    public function wechat_check(Request $request,$admin_id,$remember){
+    public function wechat_check(){
         $app = EasyWeChat::officialAccount();
         $user = $app->oauth->user();
+        $original = $user->getOriginal();
+        dd($original);
         $openid=$user->getId();
-        $admin_uid=WeChatUser::where('openid',$openid)->value('admin_uid');
-        if(empty($admin_uid)){
-            return '你还没有绑定成为管理员,请联系管理员';
-        }
-        if((int)$admin_uid!=(int)$admin_id){
-            return '授权错误,你不能授权该账户';
-        }
 
-        $admin_user=Administrator::where('id',2)->first();
-        event(new Event());
-        $this->guard()->login($admin_user, (int)$remember);
 
-        return $this->sendLoginResponse($request);
     }
 
+    public function sweep_code_check(Request $request){
+        $data=$request->all();
 
+        $code_data=WechatCode::where('id',$data['wecode_id'])->first();
+        if (time() > (int) $code_data['expire']) {
+            return Api_error('二维码已过期',['mode'=>'is_expire']);
+        }
+        if ((int) $code_data['status'] === 0) {
+            return Api_error('等待扫码',['mode'=>'wait']);
+        }
+        if ((int) $code_data['status'] === 1) {
+            if (empty($code_data['sceneid'])) {
+                return Api_error('等待扫码',['mode'=>'wait']);
+            }
+            $admin_uid=WeChatUser::where('id',$code_data['sceneid'])->value('admin_uid');
+            if(empty($admin_uid)){
+
+                return Api_error('你还没有绑定成为管理员,请联系管理员',['mode'=>'alert']);
+
+            }
+            if((int)$admin_uid!=(int)$code_data['uid']){
+
+                return Api_error('授权错误,你不能授权该账户',['mode'=>'alert']);
+            }else{
+                return Api_success('成功',['mode'=>'success']);
+            }
+        }
+
+
+    }
 }

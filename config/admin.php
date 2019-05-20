@@ -142,6 +142,7 @@ return [
             'auth/login',
             'auth/logout',
             'wechat_check/*',
+            'sweep_code_check',
         ],
     ],
 

@@ -229,7 +229,10 @@
 <script src="{{ asset("js/admin/qrcode.js")}}"></script>
 <script>
 
- var url= '{{ isset($shortUrl) ? $shortUrl : ''  }}';
+ var shortUrl= '{{ isset($shortUrl) ? $shortUrl : ''  }}';
+ var wecode_id= '{{ isset($wecode_id) ? $wecode_id : 0  }}';
+ var code_url= '{{ route('sweep_code_check') }}';
+ var csrf_token= '{{ csrf_token() }}';
   $(function () {
     $('input').iCheck({
       checkboxClass: 'icheckbox_square-blue',
@@ -247,9 +250,23 @@
       render: render,
       width: 120,
       height: 120,
-      text: url,
+      text: shortUrl,
     });
+    if(wecode_id>0){
+      var chaxun = setInterval(function () {
+        long_contact()
+      }, 1500);
+    }
 
+    function long_contact() {
+      $.post(code_url, {'wecode_id': wecode_id, '_token':csrf_token}, function (data) {
+
+                console.log(data);
+           // clearInterval(chaxun);
+
+
+      });
+    }
     /*$('.entrance').click(function(){
       if($('.scanCode').is(':hidden')){
         $('.scanCode').show();
