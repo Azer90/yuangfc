@@ -241,6 +241,7 @@
       radioClass: 'iradio_square-blue',
       increaseArea: '20%' // optional
     });
+
     var render;
     if (isIE()) {
       render = 'table';
@@ -267,8 +268,8 @@
                 if(data.code==100){
                   if(data.data.mode=='alert'){
                     clearInterval(chaxun);
-                    //alert(data.message);
-                   // location.href = data.data.url ? data.data.url : location.href;
+                    location.href = data.data.url ? data.data.url : location.href;
+                    toastr.error(data.message);
                   }
                 }
               if(data.code==200&&data.data.mode=='success'){
