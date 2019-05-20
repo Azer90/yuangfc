@@ -253,6 +253,7 @@ class LoginAuthController extends Controller
         $app = EasyWeChat::officialAccount();
         $user = $app->oauth->user();
         $original = $user->getOriginal();
+        $info='账号授权成功';
         if(!empty($original)){
             $wechat_id=WeChatUser::where('openid',$original['openid'])->value('id');
             if(empty($wechat_id)){
@@ -275,9 +276,10 @@ class LoginAuthController extends Controller
                 'updated_at'=> date('Y-m-d H:i:s',time()),
             ]);
         }else{
-            return '授权错误';
+            $info='账号授权错误';
         }
 
+        return view('admin::wechatlogin')->with(compact('info'));
     }
 
     public function sweep_code_check(Request $request){
