@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="{{ admin_asset("vendor/laravel-admin/AdminLTE/dist/css/AdminLTE.min.css") }}">
   <!-- iCheck -->
   <link rel="stylesheet" href="{{ admin_asset("vendor/laravel-admin/AdminLTE/plugins/iCheck/square/blue.css") }}">
+  <link rel="stylesheet" href="{{ admin_asset('vendor/laravel-admin/toastr/build/toastr.min.css') }}">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -224,6 +225,7 @@
 <script src="{{ admin_asset("vendor/laravel-admin/AdminLTE/bootstrap/js/bootstrap.min.js")}}"></script>
 <!-- iCheck -->
 <script src="{{ admin_asset("vendor/laravel-admin/AdminLTE/plugins/iCheck/icheck.min.js")}}"></script>
+<script src="{{ admin_asset('vendor/laravel-admin/toastr/build/toastr.min.js') }}"></script>
 
 <script src="{{ asset("js/admin/jquery.qrcode.js")}}"></script>
 <script src="{{ asset("js/admin/qrcode.js")}}"></script>
@@ -265,7 +267,7 @@
                 if(data.code==100){
                   if(data.data.mode=='alert'){
                     clearInterval(chaxun);
-                    alert(data.message);
+                    //alert(data.message);
                     location.href = data.data.url ? data.data.url : location.href;
                   }
                 }

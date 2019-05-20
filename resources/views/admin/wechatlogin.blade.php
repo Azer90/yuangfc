@@ -39,8 +39,11 @@
 <script>
    $(function () {
     $('#close').click(function(){
-      window.location.href="about:blank";
-      window.close();
+        //这个可以关闭安卓系统的手机
+        document.addEventListener('WeixinJSBridgeReady', function(){ WeixinJSBridge.call('closeWindow'); }, false);
+        //这个可以关闭ios系统的手机
+        WeixinJSBridge.call('closeWindow');
+
     })
    });
 </script>

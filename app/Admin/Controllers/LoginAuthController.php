@@ -298,12 +298,12 @@ class LoginAuthController extends Controller
             }
             $admin_uid=WeChatUser::where('id',$code_data['sceneid'])->value('admin_uid');
             if(empty($admin_uid)){
-
+                admin_toastr(trans('admin.login_successful'));
                 return Api_error('你还没有绑定成为管理员,请联系管理员',['mode'=>'alert','url'=>route('admin.login')]);
 
             }
             if((int)$admin_uid!=(int)$code_data['uid']){
-
+                admin_toastr(trans('admin.login_successful'));
                 return Api_error('授权错误,你不能授权该账户',['mode'=>'alert','url'=>route('admin.login')]);
             }else{
                 $admin_user=Administrator::where('id',$code_data['uid'])->first();
