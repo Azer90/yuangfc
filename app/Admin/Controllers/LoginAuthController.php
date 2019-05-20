@@ -306,6 +306,7 @@ class LoginAuthController extends Controller
             }else{
                 $admin_user=Administrator::where('id',$code_data['uid'])->first();
                 $this->guard()->login($admin_user, $code_data['remember']);
+                admin_toastr(trans('admin.login_successful'));
                 $request->session()->regenerate();
                 return Api_success('成功',['mode'=>'success','url'=>route('admin.home')]);
             }
