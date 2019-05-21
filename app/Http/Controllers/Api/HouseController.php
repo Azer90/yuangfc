@@ -132,10 +132,13 @@ class HouseController extends Controller
                     $where = ["is_display" => 1, "type" => 1, "rentsale" => 1, "city_id" => $search_data["city_code"]];//新房
                     break;
                 case 3 :
-                    $where = ["is_display" => 1, "rentsale" => 2, "city_id" => $search_data["city_code"]];//租房
+                    $where = ["is_display" => 1, "rentsale" => 2];//租房
                     break;
                 default:
                     $where = [];
+            }
+            if (isset($search_data["city_code"]) && $search_data["city_code"]){
+                "city_id" => $search_data["city_code"];
             }
 
 
