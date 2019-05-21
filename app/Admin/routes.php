@@ -17,6 +17,7 @@ Route::group([
     $router->resource('circle', 'CircleController')->names('admin.circle');//hkz
     $router->resource('floor', 'FloorController')->names('admin.floor');//hkz
     $router->resource('banner', 'BannerController')->names('admin.banner');//hkz
+    $router->resource('tag', 'TagController')->names('admin.tag');//hkz
     $router->resource('wechat_user', 'WeChatUserController',['only' => ['index','destroy']])->names('admin.wechat_user');//hkz
     $router->resource('users', 'UsersController',['only' => ['index','destroy']])->names('admin.users');//hkz
 

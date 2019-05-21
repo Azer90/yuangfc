@@ -160,7 +160,7 @@ class LoginAuthController extends Controller
 
         $form->display('username', trans('admin.username'));
         $form->text('name', trans('admin.name'))->rules('required');
-        $form->image('avatar', trans('admin.avatar'));
+        $form->image('avatar', trans('admin.avatar'))->move('/images/avatar')->uniqueName();
         $form->password('password', trans('admin.password'))->rules('confirmed|required');
         $form->password('password_confirmation', trans('admin.password_confirmation'))->rules('required')
             ->default(function ($form) {

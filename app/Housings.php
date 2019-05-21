@@ -22,6 +22,17 @@ class Housings extends Model
         return json_decode($pictures, true);
     }
 
+    public function getTagsAttribute($value)
+    {
+        return explode(',', $value);
+    }
+
+    public function setTagsAttribute($value)
+    {
+        if (is_array($value)) {
+            $this->attributes['tags'] = implode(',', $value);
+        }
+    }
 
     public function floors()
     {

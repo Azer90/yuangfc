@@ -4,8 +4,9 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Extensions\HouseExporter;
 use App\Admin\Extensions\Tools\ImportTool;
-use App\Circle;
 use App\Housings;
+use App\Tags;
+use App\User;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Facades\Admin;
@@ -14,7 +15,7 @@ use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
-
+use Illuminate\Support\MessageBag;
 class HouseController extends Controller
 {
     use HasResourceActions;
@@ -284,6 +285,7 @@ class HouseController extends Controller
         // 多图
         $form->multipleImage('pictures','图片')->removable()->sortable()->move('/images/house/'.date('Y-m-d'))->uniqueName();
         $form->radio('setup', '设置')->options([0=>'不设置',1 => '热门']);
+        $form->multipleSelect('tags','标签')->options(Tags::all()->pluck('name', 'id'));
         $states = [
             'on'  => ['value' => 1, 'text' => '打开', 'color' => 'success'],
             'off' => ['value' => 0, 'text' => '关闭', 'color' => 'danger'],
@@ -292,10 +294,19 @@ class HouseController extends Controller
         $form->switch('is_display','是否显示')->states($states);
         $form->saving(function (Form $form) {
 
-            if(empty($form->agent_id)){
-                $form->agent_id=Admin::user()->id;
-            }
+            if(count($form->tags)>4){
+                $error = new MessageBag([
+                    'title'   => '错误',
+                    'message' => '标签不能超过3个',
+                ]);
 
+                return back()->with(compact('error'));
+            }
+            $agent_id=$form->agent_id;
+            if(empty($agent_id)){
+                $user_id=User::where(['type'=>2,'mobile'=>Admin::user()->mobile])->value('id');
+                $form->agent_id=empty($user_id)?0:$user_id;
+            }
         });
         return $form;
     }

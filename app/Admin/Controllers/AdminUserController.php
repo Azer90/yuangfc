@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\District;
+use App\User;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -172,7 +173,7 @@ class AdminUserController extends Controller
         $form->text('username', trans('admin.username'))->rules($userNameRules);
         $form->text('name', trans('admin.name'))->rules('required');
         $form->text('mobile','手机号')->rules('required');
-        $form->image('avatar', trans('admin.avatar'))->move('/images/admin_user')->uniqueName();
+        $form->image('avatar', trans('admin.avatar'))->move('/images/avatar')->uniqueName();
         $form->password('password', trans('admin.password'))->rules('required|confirmed');
         $form->password('password_confirmation', trans('admin.password_confirmation'))->rules('required')
             ->default(function ($form) {
@@ -194,7 +195,19 @@ class AdminUserController extends Controller
                 $form->password = bcrypt($form->password);
             }
         });
-
+        //保存后回调
+        $form->saved(function (Form $form) {
+            $user_id=User::where(['type'=>2,'mobile'=>$form->model()->mobile])->value('id');
+            if(empty($user_id)){
+                User::insert([
+                    'name' =>  $form->model()->username,
+                    'mobile' => $form->model()->mobile,
+                    'password' => $form->model()->password,
+                    'type' => 2,
+                    'created_at' => date('Y-m-d H:s:i'),
+                ]);
+            }
+        });
         return $form;
     }
 }
