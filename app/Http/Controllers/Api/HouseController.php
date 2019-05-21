@@ -126,10 +126,10 @@ class HouseController extends Controller
 
             switch ($search_data["list_type"]) {
                 case 1 :
-                    $where = ["is_display" => 1, "type" => 2, "rentsale" => 1, "city_id" => $search_data["city_code"]];//二手房
+                    $where = ["is_display" => 1, "type" => 2, "rentsale" => 1];//二手房
                     break;
                 case 2 :
-                    $where = ["is_display" => 1, "type" => 1, "rentsale" => 1, "city_id" => $search_data["city_code"]];//新房
+                    $where = ["is_display" => 1, "type" => 1, "rentsale" => 1];//新房
                     break;
                 case 3 :
                     $where = ["is_display" => 1, "rentsale" => 2];//租房
@@ -137,10 +137,10 @@ class HouseController extends Controller
                 default:
                     $where = [];
             }
-            if (isset($search_data["city_code"]) && $search_data["city_code"]){
-                "city_id" => $search_data["city_code"];
-            }
 
+            if (isset($search_data["city_code"]) && $search_data["city_code"]){
+                 $where[] = ["city_id", "=", $search_data["city_code"]];
+            }
 
             if (isset($search_data["rentsale"]) && $search_data["rentsale"]) {
                 $where[] = ["rentsale", "=", $search_data["rentsale"]];
