@@ -51,7 +51,7 @@ class HouseController extends Controller
         foreach ($res as $item) {
             $item["thumd"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $item["pictures"][0] . "?x-oss-process=image/resize,w_500";
             if ($w["rentsale"] != 2) {
-                $item["unit_price"] = $item["unit_price"] * 10000;
+                $item["unit_price"] = round($item["unit_price"] * 10000);
             }
             //小区
             $floors = $item->floors;
@@ -143,7 +143,7 @@ class HouseController extends Controller
             }
 
             if (isset($search_data["rentsale"]) && $search_data["rentsale"]) {
-                $where[] = ["rentsale", "=", $search_data["rentsale"]];
+                $where["rentsale"] =  $search_data["rentsale"];
             }
 
             if (isset($search_data["region_id"]) && $search_data["region_id"]) {
@@ -256,12 +256,12 @@ class HouseController extends Controller
 
             $res = Housings::where($where)
                 ->orderByDesc("created_at")
-                ->paginate(10, ["id", "title", "type", "purpose", "rentsale", "room", "hall", "toilet", "floor_id", "district_id", "circle_id", "area", "direction", "price", DB::raw('price/area AS unit_price'), "pictures"]);
+                ->paginate(10, ["id", "title", "type", "purpose", "rentsale", "room", "hall", "toilet", "floor_id", "district_id", "circle_id", "area", "direction", "price", DB::raw('price/area AS unit_price'), "pictures","tags"]);
 
             foreach ($res as $item) {
                 $item["thumd"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $item["pictures"][0] . "?x-oss-process=image/resize,w_500";
                 if ($search_data["list_type"] != 3) {
-                    $item["unit_price"] = round($item["unit_price"]) * 10000;
+                    $item["unit_price"] = round($item["unit_price"] * 10000);
                     $item["price_unit"] = "万";
                 } else {
                     $item["price_unit"] = "元/月";
