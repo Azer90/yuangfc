@@ -7,11 +7,9 @@ namespace App\Imports;
 use App\Housings;
 
 
+use App\User;
 use Encore\Admin\Facades\Admin;
 
-
-
-use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -33,6 +31,9 @@ class FirstSheetImport implements ToModel,WithBatchInserts,WithStartRow
         $this->housings_model = new Housings();
         $this->user_info = Admin::user();
 //        $this->agen_id = DB::name("users")->where("mobile",$this->user_info["mobile"])->value("id");
+        $w =["mobile","=",$this->user_info["mobile"]];
+        $w[] = ["type","=",1];
+        $this->agen_id = User::where($w)->value("id");
     }
     public function model(array $row)
     {
