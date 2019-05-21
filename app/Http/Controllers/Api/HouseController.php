@@ -9,6 +9,7 @@ use App\District;
 use App\Floor;
 use App\Housings;
 use App\Http\Controllers\Controller;
+use App\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -48,11 +49,22 @@ class HouseController extends Controller
             ->limit(3)
             ->orderBy("created_at", "desc")
             ->get();
+        $all_tag = Tag::get(["id","name"])->toArray();
         foreach ($res as $item) {
             $item["thumd"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $item["pictures"][0] . "?x-oss-process=image/resize,w_500";
             if ($w["rentsale"] != 2) {
                 $item["unit_price"] = round($item["unit_price"] * 10000);
             }
+
+            //标签
+            $tag = [];
+            foreach ($all_tag as $v){
+                if(in_array($v["id"],$item["tags"])){
+                    $tag[] = $v["name"];
+                };
+            }
+            $item["tag"] =$tag;
+
             //小区
             $floors = $item->floors;
             if ($floors) {
@@ -258,6 +270,8 @@ class HouseController extends Controller
                 ->orderByDesc("created_at")
                 ->paginate(10, ["id", "title", "type", "purpose", "rentsale", "room", "hall", "toilet", "floor_id", "district_id", "circle_id", "area", "direction", "price", DB::raw('price/area AS unit_price'), "pictures","tags"]);
 
+            $all_tag = Tag::get(["id","name"])->toArray();
+
             foreach ($res as $item) {
                 $item["thumd"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $item["pictures"][0] . "?x-oss-process=image/resize,w_500";
                 if ($search_data["list_type"] != 3) {
@@ -266,6 +280,15 @@ class HouseController extends Controller
                 } else {
                     $item["price_unit"] = "元/月";
                 }
+                $item["tags"] = explode(",",$item["tags"]);
+                //标签
+                $tag = [];
+                foreach ($all_tag as $v){
+                    if(in_array($v["id"],$item["tags"])){
+                        $tag[] = $v["name"];
+                    };
+                }
+                $item["tag"] =$tag;
 
                 //小区
                 $floors = $item->floors;
