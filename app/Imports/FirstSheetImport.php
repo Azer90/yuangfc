@@ -11,6 +11,7 @@ use App\User;
 use Encore\Admin\Facades\Admin;
 
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
@@ -31,9 +32,11 @@ class FirstSheetImport implements ToModel,WithBatchInserts,WithStartRow
         $this->housings_model = new Housings();
         $this->user_info = Admin::user();
 //        $this->agen_id = DB::name("users")->where("mobile",$this->user_info["mobile"])->value("id");
-        $w =["mobile","=",$this->user_info["mobile"]];
-        $w[] = ["type","=",1];
-        $this->agen_id = User::where($w)->value("id");
+        if(!empty($this->user_info["mobile"])){
+            $w =["mobile","=",$this->user_info["mobile"]];
+            $w[] = ["type","=",2];
+            $this->agen_id = User::where($w)->value("id");
+        }
     }
     public function model(array $row)
     {
@@ -59,9 +62,10 @@ class FirstSheetImport implements ToModel,WithBatchInserts,WithStartRow
         $arr["desc"]=$row[17];
         $arr["creat_at"]=$row[18];
         $arr["remark"]=$row[19];
-        $arr["circle_id"]=$row[20];
-        $arr["floor_id"]=$row[21];
-        $arr["agent_id"]=$row[22];
+        $arr["circle_id"]=intval($row[20]);
+        $arr["floor_id"]=intval($row[21]);
+        $arr["agent_id"]=intval($row[22]);
+
         $rules=[
             "title"=>'required',
             "rentsale"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',

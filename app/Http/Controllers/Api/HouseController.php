@@ -126,18 +126,21 @@ class HouseController extends Controller
 
             switch ($search_data["list_type"]) {
                 case 1 :
-                    $where = ["is_display" => 1, "type" => 2, "rentsale" => 1, "city_id" => $search_data["city_code"]];//二手房
+                    $where = ["is_display" => 1, "type" => 2, "rentsale" => 1];//二手房
                     break;
                 case 2 :
-                    $where = ["is_display" => 1, "type" => 1, "rentsale" => 1, "city_id" => $search_data["city_code"]];//新房
+                    $where = ["is_display" => 1, "type" => 1, "rentsale" => 1];//新房
                     break;
                 case 3 :
-                    $where = ["is_display" => 1, "rentsale" => 2, "city_id" => $search_data["city_code"]];//租房
+                    $where = ["is_display" => 1, "rentsale" => 2];//租房
                     break;
                 default:
                     $where = [];
             }
 
+            if (isset($search_data["city_code"]) && $search_data["city_code"]){
+                 $where[] = ["city_id", "=", $search_data["city_code"]];
+            }
 
             if (isset($search_data["rentsale"]) && $search_data["rentsale"]) {
                 $where[] = ["rentsale", "=", $search_data["rentsale"]];
@@ -258,7 +261,7 @@ class HouseController extends Controller
             foreach ($res as $item) {
                 $item["thumd"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $item["pictures"][0] . "?x-oss-process=image/resize,w_500";
                 if ($search_data["list_type"] != 3) {
-                    $item["unit_price"] = $item["unit_price"] * 10000;
+                    $item["unit_price"] = round($item["unit_price"]) * 10000;
                     $item["price_unit"] = "万";
                 } else {
                     $item["price_unit"] = "元/月";
