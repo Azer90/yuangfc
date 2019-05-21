@@ -110,8 +110,8 @@ return [
     */
     'auth' => [
 
-        'controller' => App\Admin\Controllers\AuthController::class,
-        //'controller' => App\Admin\Controllers\LoginAuthController::class,
+        //'controller' => App\Admin\Controllers\AuthController::class,
+        'controller' => App\Admin\Controllers\LoginAuthController::class,
 
         'guards' => [
             'admin' => [
