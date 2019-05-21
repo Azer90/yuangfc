@@ -131,12 +131,12 @@ class HouseController extends Controller
 
         });
         $grid->id('ID')->sortable();
-        $grid->title('标题')->modal('更多', function ($model) {
+        $grid->title('标题')->limit(12)->modal('更多', function ($model) {
             $comments = $model->where("id",$model->id)->take(1)->get()->map(function ($comment) {
-                return $comment->only(['address','desc', 'remark']);
+                return $comment->only(['title','address','desc', 'remark']);
             });
 
-            return new Table(['地址', '描述', '备注'], $comments->toArray(),['table-hover']);
+            return new Table(['标题','地址', '描述', '备注'], $comments->toArray(),['table-hover']);
         });
 
         $grid->rentsale('租售')->display(function ($released) {
@@ -208,9 +208,8 @@ class HouseController extends Controller
         });
         $grid->floor('楼层');
         $grid->t_floor('总楼层');
-        $grid->created_at(trans('admin.created_at'));
-       // $grid->updated_at(trans('admin.updated_at'));
-        //$grid->disableExport();//禁用导出
+        //$grid->created_at(trans('admin.created_at'));
+        $grid->pictures('房源相册')->gallery(['width' => 40, 'height' => 40,'zooming' => true]);
         $grid->exporter(new HouseExporter());
         $grid->actions(function ($actions) {
             $actions->disableView();
@@ -267,7 +266,7 @@ class HouseController extends Controller
         $form->radio('purpose', '用途')->options([1 => '住宅', 2 => '别墅', 3 => '商铺', 4 => '写字楼'])->rules('required');
         $form->text('owner', '业主姓名')->rules('required');
         $form->mobile('phone', '联系方式')->rules('required');
-        $form->datetime('years', '修建年份')->format('YYYY')->rules('required');
+        $form->datetime('years', '修建年份')->format('YYYY')->default(date('Y'))->rules('required');
 
         $form->text('direction', '朝向')->placeholder('填写朝向,如:坐南朝北,南,等')->rules('required');
         $form->slider('room', '房')->options(['max' => 10, 'min' => 1, 'step' => 1, 'postfix' => '房'])->rules('required');
@@ -283,7 +282,7 @@ class HouseController extends Controller
         $form->textarea('desc', '描述');
         $form->textarea('remark', '备注');
         // 多图
-        $form->multipleImage('pictures','图片')->removable()->sortable()->uniqueName();
+        $form->multipleImage('pictures','图片')->removable()->sortable()->move('/images/house/'.date('Y-m-d'))->uniqueName();
         $form->radio('setup', '设置')->options([0=>'不设置',1 => '热门']);
         $states = [
             'on'  => ['value' => 1, 'text' => '打开', 'color' => 'success'],

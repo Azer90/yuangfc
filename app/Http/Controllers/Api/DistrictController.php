@@ -39,6 +39,6 @@ class DistrictController extends Controller{
     public function agent()
     {
 
-        return User::where('type', 2)->get(['id', DB::raw('name as text')]);
+        return User::where('type', 1)->get(['id', DB::raw('wchat_name as text')]);
     }
 }

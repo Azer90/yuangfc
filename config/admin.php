@@ -110,8 +110,8 @@ return [
     */
     'auth' => [
 
-        //'controller' => App\Admin\Controllers\AuthController::class,
-        'controller' => App\Admin\Controllers\LoginAuthController::class,
+        'controller' => App\Admin\Controllers\AuthController::class,
+        //'controller' => App\Admin\Controllers\LoginAuthController::class,
 
         'guards' => [
             'admin' => [
@@ -391,6 +391,11 @@ return [
             ]
         ],
         'chartjs' => [
+
+            // Set to `false` if you want to disable this extension
+            'enable' => true,
+        ],
+        'grid-lightbox' => [
 
             // Set to `false` if you want to disable this extension
             'enable' => true,

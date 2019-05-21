@@ -98,7 +98,7 @@ class WeChatUserController extends Controller
             }
             return $str;
         });
-        $grid->headimgurl('头像')->image(50, 50);
+        $grid->headimgurl('头像')->gallery(['width' => 50, 'height' => 50,'zooming' => true]);
         $grid->country('国家');
         $grid->province('省份');
         $grid->city('城市');

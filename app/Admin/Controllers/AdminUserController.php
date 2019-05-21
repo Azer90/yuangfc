@@ -172,7 +172,7 @@ class AdminUserController extends Controller
         $form->text('username', trans('admin.username'))->rules($userNameRules);
         $form->text('name', trans('admin.name'))->rules('required');
         $form->text('mobile','手机号')->rules('required');
-        $form->image('avatar', trans('admin.avatar'));
+        $form->image('avatar', trans('admin.avatar'))->move('/images/admin_user')->uniqueName();
         $form->password('password', trans('admin.password'))->rules('required|confirmed');
         $form->password('password_confirmation', trans('admin.password_confirmation'))->rules('required')
             ->default(function ($form) {
