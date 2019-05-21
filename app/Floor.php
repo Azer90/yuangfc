@@ -17,4 +17,9 @@ class Floor extends Model
     {
         return $this->hasMany(Housings::class);
     }
+
+    public function district()
+    {
+        return $this->belongsTo(District::class);
+    }
 }
