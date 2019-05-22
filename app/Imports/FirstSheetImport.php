@@ -65,6 +65,7 @@ class FirstSheetImport implements ToModel,WithBatchInserts,WithStartRow
         $arr["circle_id"]=intval($row[20]);
         $arr["floor_id"]=intval($row[21]);
         $arr["agent_id"]=intval($row[22]);
+        $arr["min_price"]=$row[23];
 
         $rules=[
             "title"=>'required',
@@ -90,6 +91,7 @@ class FirstSheetImport implements ToModel,WithBatchInserts,WithStartRow
             "circle_id"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
             "floor_id"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
             "agent_id"=>'nullable|regex:/^[0-9]+(.[0-9]{1,2})?$/',
+            "min_price"=>'nullable|regex:/^[0-9]+(.[0-9]{1,2})?$/',
         ];
         $messages=[
             "title"=>"标题必填",
@@ -115,6 +117,7 @@ class FirstSheetImport implements ToModel,WithBatchInserts,WithStartRow
             "floor_id.required"=>"楼盘不能为空",
             "floor_id"=>"楼盘必须为数字",
             "agent_id"=>"经纪人必须为数字",
+            "min_price"=>"最低价格必须为数字",
 //            "16"=>'地址为必填',
 //            "17"=>'房屋描述为必填'
         ];
@@ -135,11 +138,11 @@ class FirstSheetImport implements ToModel,WithBatchInserts,WithStartRow
 
         $insert_data = [$province_id,$city_id,$district_id,$row[0],$row[1],$row[2],$row[6],$row[3],$row[4],$row[5],$row[7],$row[8],
             $row[9],$row[10],$row[11],$row[12],$row[13],$row[14],$row[15],$row[16],$row[17],
-            $row[19],date("Y-m-d H:i:s",time()),$row[20]?intval($row[20]):0,$row[21]?intval($row[21]):0,$row[22]?intval($row[22]):(!empty($this->agen_id)?$this->agen_id:0),$row[0]];
+            $row[19],date("Y-m-d H:i:s",time()),$row[20]?intval($row[20]):0,$row[21]?intval($row[21]):0,$row[22]?intval($row[22]):(!empty($this->agen_id)?$this->agen_id:0),$row[23],$row[0]];
 
        $sql = 'insert INTO yuangfc_housings (province_id,city_id,district_id,title,rentsale,`type`,purpose,owner,phone,years,direction,room,hall,toilet,area,
-        price,renovation,floor,t_floor,address,`desc`,remark,created_at,circle_id,floor_id,agent_id)
-        SELECT ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? FROM DUAL WHERE NOT EXISTS (
+        price,renovation,floor,t_floor,address,`desc`,remark,created_at,circle_id,floor_id,agent_id,min_price)
+        SELECT ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? FROM DUAL WHERE NOT EXISTS (
         SELECT 1 FROM yuangfc_housings WHERE title= ?
 )';
 

@@ -9,7 +9,9 @@ use App\District;
 use App\Floor;
 use App\Housings;
 use App\Http\Controllers\Controller;
+use App\MakeOrder;
 use App\Tags;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -251,13 +253,11 @@ class HouseController extends Controller
                 $where[] = ["area", "<=", $search_data["maxArea"]];
             }else{
                 if(!empty($search_data["area"])){
-
                     //面积
                     $area_list = explode(":",$search_data["area"]);
                     $where[] = ["area", ">=", $area_list[0]];
                     $where[] = ["area", "<=", $area_list[1]];
                 }
-
             }
 
             if (isset($search_data["room"]) && $search_data["room"]) {
@@ -349,6 +349,51 @@ class HouseController extends Controller
             }
 
            return Api_success("楼盘获取成功",$res);
+        }
+    }
+
+    /**
+     * 房源详情
+     */
+    public function details(Request $request)
+    {
+        if($request->isMethod("post")){
+            $data = $request->input();
+            if(empty($data["house_id"])){
+                return Api_error("缺少参数");
+            }
+            $res = Housings::find($data["house_id"],["id","title","price","area","agent_id","floor_id","district_id","purpose","years","direction","room","hall","toilet","renovation","floor","t_floor",]);
+
+            //区
+            $district = $res->district;
+            if($district){
+                $res["region_name"] = $district->name;
+            }else{
+                $res["region_name"] = "";
+            }
+
+            //小区
+            $floors = $res->floors;
+            if ($floors) {
+                $res["floor_name"] = $floors->name;
+            } else {
+                $res["floor_name"] = "";
+            }
+            //经纪人
+            $agent = User::where(["id"=>$res["agent_id"],"type"=>1])->first(["id","name","mobile","avatar","open_id"]);
+
+            $makeOrder = 0;
+            if(isset($data["make_id"])&&!empty($data["make_id"])){
+                $where = ["house_id"=>$data["house_id"],"make_id"=>$res["make_id"],"state"=>0];
+                $makeOrder = MakeOrder::where($where)->count();
+            }
+            $houseInfo = [
+                "house" =>$res,
+                "agent" => $agent,
+                "make" =>$makeOrder
+            ];
+
+            return Api_success("获取成功",$houseInfo);
         }
     }
 }
