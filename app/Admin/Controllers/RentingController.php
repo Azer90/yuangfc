@@ -203,6 +203,11 @@ class RentingController extends Controller
         $grid->floor('楼层');
         $grid->t_floor('总楼层');
         //$grid->created_at(trans('admin.created_at'));
+        $grid->tags('标签')->display(function ($tag) {
+
+            return Tags::wherein('id',$tag)->get(['name'])->pluck('name');
+
+        })->label('primary');
         $grid->pictures('房源相册')->gallery(['width' => 40, 'height' => 40,'zooming' => true]);
         $grid->exporter(new HouseExporter());
         $grid->actions(function ($actions) {
