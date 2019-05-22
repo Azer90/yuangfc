@@ -10,7 +10,7 @@ use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 
-class UsersController extends Controller
+class AgentController extends Controller
 {
     use HasResourceActions;
 
@@ -23,7 +23,7 @@ class UsersController extends Controller
     public function index(Content $content)
     {
         return $content
-            ->header('普通用户')
+            ->header('经纪人管理')
             ->description('列表')
             ->body($this->grid());
     }
@@ -80,7 +80,7 @@ class UsersController extends Controller
     protected function grid()
     {
         $grid = new Grid(new User);
-        $grid->model()->where('type',0);
+        $grid->model()->where('type',1);
         $grid->id('Id');
         $grid->name('姓名(昵称)');
         $grid->wchat_name('微信名称');

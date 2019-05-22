@@ -20,6 +20,8 @@ Route::group([
     $router->resource('tag', 'TagController')->names('admin.tag');//hkz
     $router->resource('wechat_user', 'WeChatUserController',['only' => ['index','destroy']])->names('admin.wechat_user');//hkz
     $router->resource('users', 'UsersController',['only' => ['index','destroy']])->names('admin.users');//hkz
+    $router->resource('agent', 'AgentController',['only' => ['index','destroy']])->names('admin.agent');//hkz
+    $router->resource('agent_check', 'AgentCheckController',['only' => ['index','destroy']])->names('admin.agent_check');//hkz
 
     $router->post('import', 'ImportController@import')->name('import');
     $router->get('export', 'ImportController@export')->name('export');
