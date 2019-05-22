@@ -191,6 +191,7 @@ class TwoHouseController extends Controller
         $grid->toilet('卫');
         $grid->area('面积');
         $grid->price('价格');
+        $grid->min_price('最低价格');
         $grid->renovation('装修类型')->display(function ($released) {
             switch ($released){
                 case 1:
@@ -281,6 +282,7 @@ class TwoHouseController extends Controller
         $form->slider('toilet', '卫')->options(['max' => 10, 'min' => 1, 'step' => 1, 'postfix' => '卫'])->rules('required');
         $form->decimal('area', '面积')->default(0.0)->rules('required');
         $form->decimal('price', '价格')->default(0.00)->rules('required');
+        $form->decimal('min_price', '最低价格')->default(0.00)->rules('required');
         $form->radio('renovation', '装修类型')->options([1 => '精装修', 2 => '简装', 3 => '清水房'])->rules('required');
         $form->number('floor', '楼层')->min(1)->max(100)->rules('required');
         $form->number('t_floor', '总楼层')->min(1)->max(100)->rules('required');
