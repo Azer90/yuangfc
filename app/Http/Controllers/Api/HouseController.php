@@ -362,7 +362,7 @@ class HouseController extends Controller
             if(empty($data["house_id"])){
                 return Api_error("缺少参数");
             }
-            $res = Housings::find($data["house_id"],["id","title","price","area","agent_id","floor_id","district_id","purpose","years","direction","room","hall","toilet","renovation","floor","t_floor",]);
+            $res = Housings::find($data["house_id"],["id","rentsale","title","price","area","agent_id","floor_id","district_id","purpose","years","direction","room","hall","toilet","renovation","floor","t_floor",]);
 
             //区
             $district = $res->district;
