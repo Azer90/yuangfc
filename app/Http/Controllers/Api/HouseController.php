@@ -9,9 +9,10 @@ use App\District;
 use App\Floor;
 use App\Housings;
 use App\Http\Controllers\Controller;
-use App\Tag;
+use App\Tags;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class HouseController extends Controller
 {
@@ -49,7 +50,7 @@ class HouseController extends Controller
             ->limit(3)
             ->orderBy("created_at", "desc")
             ->get();
-        $all_tag = Tag::get(["id","name"])->toArray();
+        $all_tag = Tags::get(["id","name"])->toArray();
         foreach ($res as $item) {
             $item["thumd"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $item["pictures"][0] . "?x-oss-process=image/resize,w_500";
             if ($w["rentsale"] != 2) {
@@ -132,7 +133,7 @@ class HouseController extends Controller
     {
         if ($request->isMethod("post")) {
             $search_data = $request->input();
-            if (empty($search_data["list_type"]) || empty($search_data["city_code"])) {
+            if (empty($search_data["list_type"])) {
                 return Api_error("缺少参数");
             }
 
@@ -250,6 +251,7 @@ class HouseController extends Controller
                 $where[] = ["area", "<=", $search_data["maxArea"]];
             }else{
                 if(!empty($search_data["area"])){
+
                     //面积
                     $area_list = explode(":",$search_data["area"]);
                     $where[] = ["area", ">=", $area_list[0]];
@@ -270,17 +272,18 @@ class HouseController extends Controller
                 ->orderByDesc("created_at")
                 ->paginate(10, ["id", "title", "type", "purpose", "rentsale", "room", "hall", "toilet", "floor_id", "district_id", "circle_id", "area", "direction", "price", DB::raw('price/area AS unit_price'), "pictures","tags"]);
 
-            $all_tag = Tag::get(["id","name"])->toArray();
+            $all_tag = Tags::get(["id","name"])->toArray();
 
             foreach ($res as $item) {
                 $item["thumd"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $item["pictures"][0] . "?x-oss-process=image/resize,w_500";
+//                $item["thumd"] = Storage::disk(config('admin.upload.disk'))->url($item["pictures"][0])."?x-oss-process=image/resize,w_500";
                 if ($search_data["list_type"] != 3) {
                     $item["unit_price"] = round($item["unit_price"] * 10000);
                     $item["price_unit"] = "万";
                 } else {
                     $item["price_unit"] = "元/月";
                 }
-                $item["tags"] = explode(",",$item["tags"]);
+
                 //标签
                 $tag = [];
                 foreach ($all_tag as $v){
