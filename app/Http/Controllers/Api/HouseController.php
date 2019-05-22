@@ -362,7 +362,7 @@ class HouseController extends Controller
             if(empty($data["house_id"])){
                 return Api_error("缺少参数");
             }
-            $res = Housings::find($data["house_id"],["id","rentsale","title","price","area","agent_id","floor_id","district_id","purpose","years","direction","room","hall","toilet","renovation","floor","t_floor",]);
+            $res = Housings::find($data["house_id"],["id","rentsale","title","price","area","agent_id","floor_id","district_id","purpose","years","direction","room","hall","toilet","renovation","floor","t_floor", DB::raw('price/area AS unit_price')]);
 
             //区
             $district = $res->district;
@@ -371,7 +371,8 @@ class HouseController extends Controller
             }else{
                 $res["region_name"] = "";
             }
-
+            //单价
+            $res["unit_price"] = round($res["unit_price"] * 10000);
             //小区
             $floors = $res->floors;
             if ($floors) {
