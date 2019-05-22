@@ -9,7 +9,7 @@ use App\District;
 use App\Floor;
 use App\Housings;
 use App\Http\Controllers\Controller;
-use App\Tag;
+use App\Tags;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -49,7 +49,7 @@ class HouseController extends Controller
             ->limit(3)
             ->orderBy("created_at", "desc")
             ->get();
-        $all_tag = Tag::get(["id","name"])->toArray();
+        $all_tag = Tags::get(["id","name"])->toArray();
         foreach ($res as $item) {
             $item["thumd"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $item["pictures"][0] . "?x-oss-process=image/resize,w_500";
             if ($w["rentsale"] != 2) {
@@ -270,7 +270,7 @@ class HouseController extends Controller
                 ->orderByDesc("created_at")
                 ->paginate(10, ["id", "title", "type", "purpose", "rentsale", "room", "hall", "toilet", "floor_id", "district_id", "circle_id", "area", "direction", "price", DB::raw('price/area AS unit_price'), "pictures","tags"]);
 
-            $all_tag = Tag::get(["id","name"])->toArray();
+            $all_tag = Tags::get(["id","name"])->toArray();
 
             foreach ($res as $item) {
                 $item["thumd"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $item["pictures"][0] . "?x-oss-process=image/resize,w_500";
