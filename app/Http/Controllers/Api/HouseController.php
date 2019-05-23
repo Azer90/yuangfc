@@ -467,7 +467,6 @@ class HouseController extends Controller
                 "is_follow" =>$is_follow,
                 "is_collection"=>$is_collection
             ];
-            dump($houseInfo);
             return Api_success("获取成功",$houseInfo);
         }
     }
