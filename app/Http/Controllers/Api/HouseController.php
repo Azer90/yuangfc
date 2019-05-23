@@ -365,6 +365,12 @@ class HouseController extends Controller
             }
             $res = Housings::find($data["house_id"],["id","rentsale","title","price","area","agent_id","floor_id","district_id","purpose","years","direction","room","hall","toilet","renovation","floor","t_floor", DB::raw('price/area AS unit_price'),"pictures","desc"]);
 
+            $pictures =[];
+            foreach ($res["pictures"] as $item){
+                $pictures[] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $item . "?x-oss-process=image/resize,w_500";
+            }
+            $res["pictures"] = $pictures;
+
 
             switch ($res["purpose"]){
                 case 1:
@@ -452,7 +458,10 @@ class HouseController extends Controller
 //            $recommend_where[] = ["id","!=",$data["house_id"]];
             $recommend = Housings::where($recommend_where)->select(["id","title","area","price","room","hall","floor_id", DB::raw('price/area AS rec_unit_price'),"pictures"])->first();
 
-            $recommend["img"] = $recommend["pictures"][0];
+            if($recommend["pictures"]){
+                $recommend["img"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $recommend["pictures"][0] . "?x-oss-process=image/resize,w_500";
+            }
+
             $recommend_floor = $recommend->floors;
             if ($recommend_floor) {
                 $recommend_floor["floor_name"] = $recommend_floor->name;
