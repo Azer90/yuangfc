@@ -456,18 +456,23 @@ class HouseController extends Controller
             $recommend_where[] = ["area",">=",$res["area"]-20];
             $recommend_where[] = ["area","<=",$res["area"]+20];
 //            $recommend_where[] = ["id","!=",$data["house_id"]];
-            $recommend = Housings::where($recommend_where)->select(["id","title","area","price","room","hall","floor_id", DB::raw('price/area AS rec_unit_price'),"pictures"])->first();
+            $recommend = Housings::where($recommend_where)->select(["id","title","area","price","room","hall","floor_id", DB::raw('price/area AS rec_unit_price'),"pictures"])->get();
 
-            if($recommend["pictures"]){
-                $recommend["img"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $recommend["pictures"][0] . "?x-oss-process=image/resize,w_500";
+            foreach ($recommend as $item){
+                if($item["pictures"]){
+                    $item["img"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $item["pictures"][0] . "?x-oss-process=image/resize,w_500";
+                }
+
+                $item["rec_unit_price"] = round($item["rec_unit_price"] * 10000);
+
+                $recommend_floor = $item->floors;
+                if (!empty($recommend_floor)) {
+                    $recommend["floor_name"] = $recommend_floor->name;
+                } else {
+                    $recommend["floor_name"] = "";
+                }
             }
 
-            $recommend_floor = $recommend->floors;
-            if ($recommend_floor) {
-                $recommend_floor["floor_name"] = $recommend_floor->name;
-            } else {
-                $recommend_floor["floor_name"] = "";
-            }
             $houseInfo = [
                 "house" =>$res,
                 "agent" => $agent,
