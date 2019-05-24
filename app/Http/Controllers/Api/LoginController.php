@@ -101,4 +101,24 @@ class LoginController extends Controller
            }
         }
     }
+
+
+    /**
+     * 注册检测
+     */
+    public function checkRegister(Request $request)
+    {
+        if($request->isMethod("post")){
+            $data = $request->input();
+            if(empty($data["openId"])){
+                return Api_error("缺少参数");
+            }
+            $res = User::where("open_id",$data["openId"])->value("mobile");
+            if($res){
+                return Api_success("获取成功",$res);
+            }else{
+                return Api_error("获取失败");
+            }
+        }
+    }
 }
