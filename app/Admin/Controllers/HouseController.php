@@ -99,6 +99,11 @@ class HouseController extends Controller
         $grid->filter(function($filter){
 
             $filter->column(1/2, function ($filter) {
+                if(Admin::user()->isAdministrator()){
+                    $filter->equal('province_id', '省')->select('/api/province')->load('city_id', '/api/city');
+                    $filter->equal('city_id', '市')->select()->load('district_id', '/api/city');
+                    $filter->equal('district_id', '区')->select();
+                }
                 $filter->equal('owner', '业主');
                 $filter->equal('phone', '联系方式')->mobile();
                 $filter->year('years', '修建年份');
@@ -276,9 +281,16 @@ class HouseController extends Controller
         $form->datetime('years', '修建年份')->format('YYYY')->default(date('Y'))->rules('required');
 
         $form->text('direction', '朝向')->placeholder('填写朝向,如:坐南朝北,南,等')->rules('required');
-        $form->slider('room', '房')->options(['max' => 10, 'min' => 1, 'step' => 1, 'postfix' => '房'])->rules('required');
-        $form->slider('hall', '厅')->options(['max' => 10, 'min' => 1, 'step' => 1, 'postfix' => '厅'])->rules('required');
-        $form->slider('toilet', '卫')->options(['max' => 10, 'min' => 1, 'step' => 1, 'postfix' => '卫'])->rules('required');
+        //$form->slider('room', '房')->options(['max' => 10, 'min' => 1, 'step' => 1, 'postfix' => '房'])->rules('required');
+        //$form->slider('hall', '厅')->options(['max' => 10, 'min' => 1, 'step' => 1, 'postfix' => '厅'])->rules('required');
+        //$form->slider('toilet', '卫')->options(['max' => 10, 'min' => 1, 'step' => 1, 'postfix' => '卫'])->rules('required');
+        $room=[1 => '1房', 2 => '2房' , 3 => '3房', 4 => '4房', 5 => '5房', 6 => '6房', 7 => '7房', 8 => '8房', 9 => '9房', 10 => '10房'];
+        $hall=[1 => '1厅', 2 => '2厅' , 3 => '3厅', 4 => '4厅', 5 => '5厅', 6 => '6厅', 7 => '7厅', 8 => '8厅', 9 => '9厅', 10 => '10厅'];
+        $toilet=[1 => '1卫', 2 => '2卫' , 3 => '3卫', 4 => '4卫', 5 => '5卫', 6 => '6卫', 7 => '7卫', 8 => '8卫', 9 => '9卫', 10 => '10卫'];
+        $form->select('room', '房')->options($room)->rules('required');
+        $form->select('hall', '厅')->options($hall)->rules('required');
+        $form->select('toilet', '卫')->options($toilet)->rules('required');
+
         $form->decimal('area', '面积')->default(0.0)->rules('required');
         $form->decimal('price', '价格')->default(0.00)->rules('required');
         $form->decimal('min_price', '最低价格')->default(0.00)->rules('required');
