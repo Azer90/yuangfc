@@ -56,6 +56,9 @@ class EntrustController extends Controller
                 'price'=>$data['price'],
                 'mobile'=>$data['mobile'],
                 'rentsale'=>(int)$data['rentsale'],
+                'state'=>0,
+                'reason'=>'',
+                'created_at'=>date('Y-m-d H:i:s'),
             ];
         $id=Entrust::insertGetId($_data);
         if($id){
