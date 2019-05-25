@@ -27,7 +27,6 @@ class AppointmentController extends Controller
                 return Api_error("缺少参数");
             }
             $data["created_at"] = date("Y-m-d H:i:s",time());
-            $data["created_at"] = date("Y-m-d H:i:s",time());
             $res = MakeOrder::insert($data);
             if($res>0){
                 return Api_success("预约成功");
