@@ -30,11 +30,11 @@ class EntrustController extends Controller
 
             if ($validator->fails()) {
                 $errors = $validator->errors();
-                Api_error($errors->first());
+              return  Api_error($errors->first());
             }
 
         }else{
-            Api_error('非法请求');
+            return  Api_error('非法请求');
         }
     }
 }
