@@ -467,9 +467,9 @@ class HouseController extends Controller
 
                 $recommend_floor = $item->floors;
                 if (!empty($recommend_floor)) {
-                    $recommend["floor_name"] = $recommend_floor->name;
+                    $item["floor_name"] = $recommend_floor->name;
                 } else {
-                    $recommend["floor_name"] = "";
+                    $item["floor_name"] = "";
                 }
             }
 
