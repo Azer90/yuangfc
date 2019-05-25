@@ -68,7 +68,6 @@ class LoginController extends Controller
         $data = $request->input();
 
         if($request->isMethod("post")){
-            $data["userInfo"] = json_decode($data["userInfo"],true);
 
             if(empty($data["openid"])||empty($data["userInfo"])){
                 return Api_error("缺少参数");
