@@ -83,7 +83,7 @@ class LoginController extends Controller
             if($code!=$data["code"]||empty($code)){
                 return Api_error("验证码错误");
             }
-            
+
             $insert = [
                 "open_id" => $data["openid"],
                 "wchat_name" => isset($data["userInfo"]["nickName"])?$data["userInfo"]["nickName"]:$data["userInfo"]["userInfo"]["wchat_name"],
