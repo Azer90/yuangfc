@@ -48,5 +48,5 @@ Route::group($attributes,function (Router $router) {
     $router->post('api_getBanner', "IndexController@getBanner")->name('api_getBanner');
     $router->post('api_followHandle', "FollowController@followHandle")->name('api_followHandle');
     $router->post('api_entrust_add_data', "EntrustController@add_data")->name('api_entrust_add_data');//hkz
-    
+
 });

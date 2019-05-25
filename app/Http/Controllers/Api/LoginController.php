@@ -82,7 +82,10 @@ class LoginController extends Controller
             if($code!=$data["code"]||empty($code)){
                 return Api_error("验证码错误");
             }
-
+            $check = User::where("open_id",$data["openid"])->first();
+            if($check){
+               return Api_error("该账号已注册");
+            }
             $insert = [
                 "open_id" => $data["openid"],
                 "wchat_name" => isset($data["userInfo"]["nickName"])?$data["userInfo"]["nickName"]:$data["userInfo"]["userInfo"]["wchat_name"],
