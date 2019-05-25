@@ -42,7 +42,7 @@ class LoginController extends Controller
         $url="https://api.weixin.qq.com/sns/jscode2session?appid=wx0d754fd3f7b4a131&secret=bb4e7d915336be487208b13b019dfce2&js_code=$code&grant_type=authorization_code";
         $res = curl_post($url);
         $wx_info = json_decode($res,true);
-     
+
         $userInfo = User::where("open_id",$wx_info["openid"])->select("id","name","mobile","avatar","wchat_name","type","sex")->first();
         $res = [
             "openid"=>$wx_info["openid"],
@@ -66,11 +66,9 @@ class LoginController extends Controller
 
         if($request->isMethod("post")){
 
-
             if(empty($data["openid"])||empty($data["userInfo"])){
                 return Api_error("缺少参数");
             }
-
             $res=0;
             $info = User::where("open_id",$data["openid"])->first();//查询当前用户是否存在
 
@@ -97,10 +95,12 @@ class LoginController extends Controller
                     $res = User::where("open_id",$data["openid"])->update($insert);
                 }
             }
+
+            $userInfo = User::where("open_id",$data["openid"])->first();
            if($res > 0){
-               return Api_success("注册成功",$res);
+               return Api_success("注册成功",$userInfo);
             }else{
-               return Api_error("注册失败",$res);
+               return Api_error("注册失败",$userInfo);
            }
         }
     }
