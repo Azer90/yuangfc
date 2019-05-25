@@ -17,7 +17,7 @@ class EntrustController extends Controller
     public function add_data(Request $request){
         if ($request->isMethod("post")) {
             $data=$request->all();
-            $validator = Validator::make($data, [
+            $rules=[
                 'addrs' => 'required',
                 'cell_name' => 'required',
                 'addr' => 'required',
@@ -26,10 +26,18 @@ class EntrustController extends Controller
                 'price' => 'required',
                 'mobile' => 'required',
                 'rentsale' => 'required',
-            ],[
-                'addrs' => '省市区必须',
-                'rentsale' => '租售类型',
-            ]);
+            ];
+            $messages = [
+                'addrs.required' => '省市区必选',
+                'cell_name.required' => '小区名必填',
+                'addr.required' => '详细地址必填',
+                'name.required' => '称呼必填',
+                'area.required' => '面积必填',
+                'price.required' => '价格必填',
+                'mobile.required' => '联系电话必填',
+                'rentsale.required' => '租售类型必选',
+            ];
+            $validator = Validator::make($data, $rules,$messages);
 
             if ($validator->fails()) {
                 $errors = $validator->errors();
