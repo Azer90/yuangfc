@@ -456,7 +456,7 @@ class HouseController extends Controller
             $recommend_where[] = ["area",">=",$res["area"]-20];
             $recommend_where[] = ["area","<=",$res["area"]+20];
 //            $recommend_where[] = ["id","!=",$data["house_id"]];
-            $recommend = Housings::where($recommend_where)->select(["id","title","area","price","room","hall","floor_id", DB::raw('price/area AS rec_unit_price'),"pictures"])->get();
+            $recommend = Housings::where($recommend_where)->select(["id","title","area","price","room","hall","floor_id", DB::raw('price/area AS rec_unit_price'),"pictures"])->paginate(10);
 
             foreach ($recommend as $item){
                 if($item["pictures"]){
