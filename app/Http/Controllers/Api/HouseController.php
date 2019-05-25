@@ -10,6 +10,7 @@ use App\Floor;
 use App\Housings;
 use App\Http\Controllers\Controller;
 use App\MakeOrder;
+use App\Recommend;
 use App\Tags;
 use App\User;
 use Illuminate\Http\Request;
@@ -362,7 +363,54 @@ class HouseController extends Controller
             if(empty($data["house_id"])){
                 return Api_error("缺少参数");
             }
-            $res = Housings::find($data["house_id"],["id","rentsale","title","price","area","agent_id","floor_id","district_id","purpose","years","direction","room","hall","toilet","renovation","floor","t_floor", DB::raw('price/area AS unit_price')]);
+            $res = Housings::find($data["house_id"],["id","rentsale","title","price","area","agent_id","floor_id","district_id","purpose","years","direction","room","hall","toilet","renovation","floor","t_floor", DB::raw('price/area AS unit_price'),"pictures","desc"]);
+
+            $pictures =[];
+            foreach ($res["pictures"] as $item){
+                $pictures[] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $item . "?x-oss-process=image/resize,w_500";
+            }
+            $res["pictures"] = $pictures;
+
+
+            switch ($res["purpose"]){
+                case 1:
+                    $res["use"] ="住宅";
+                    break;
+                case 2:
+                    $res["use"] ="别墅";
+                    break;
+                case 3:
+                    $res["use"] ="商铺";
+                    break;
+                case 4:
+                    $res["use"] ="写字楼";
+                    break;
+            }
+
+            switch ($res["renovation"]){
+                case 1:
+                    $res["renovation"] ="精装修";
+                    break;
+                case 2:
+                    $res["renovation"] ="简装";
+                    break;
+                case 3:
+                    $res["renovation"] ="清水房";
+                    break;
+            }
+            $res["houseFloor"] = "";
+            $one_Third = ceil($res["t_floor"]/3);
+            if($res["floor"] <= $one_Third){
+                $res["houseFloor"]="低层";
+            }else{
+                if($one_Third<$res["floor"] && $res["floor"]<= $one_Third*2){
+                    $res["houseFloor"]="中层";
+                }else{
+                    if($one_Third*2 < $res["floor"]){
+                        $res["houseFloor"]="高层";
+                    }
+                }
+            }
 
             //区
             $district = $res->district;
@@ -374,26 +422,65 @@ class HouseController extends Controller
             //单价
             $res["unit_price"] = round($res["unit_price"] * 10000);
             //小区
-            $floors = $res->floors;
-            if ($floors) {
-                $res["floor_name"] = $floors->name;
+            $floor = $res->floors;
+            if ($floor) {
+                $res["floor_name"] = $floor->name;
             } else {
                 $res["floor_name"] = "";
             }
             //经纪人
             $agent = User::where(["id"=>$res["agent_id"],"type"=>1])->first(["id","name","mobile","avatar","open_id"]);
+            //是否关注
+            $is_follow = 0;
+            if(isset($data["make_id"])&&!empty($data["make_id"])){
+                $is_follow = Recommend::where(["user_id"=>$data["make_id"],"rec_id"=>$agent["id"],"type"=>1])->count();
+            }
 
+            //是否收藏
+            $is_collection = 0;
+            if(isset($data["make_id"])&&!empty($data["make_id"])){
+                $is_collection = Recommend::where(["user_id"=>$data["make_id"],"rec_id"=>$agent["id"],"type"=>2])->count();
+            }
+            //是否预约
             $makeOrder = 0;
             if(isset($data["make_id"])&&!empty($data["make_id"])){
                 $where = ["house_id"=>$data["house_id"],"make_id"=>$res["make_id"],"state"=>0];
                 $makeOrder = MakeOrder::where($where)->count();
             }
+
+            //推荐  条件：区、室、面积
+            $recommend_where=[
+                "district_id"=>$res["district_id"],
+                "room"=>$res["room"],
+            ];
+            $recommend_where[] = ["area",">=",$res["area"]-20];
+            $recommend_where[] = ["area","<=",$res["area"]+20];
+//            $recommend_where[] = ["id","!=",$data["house_id"]];
+            $recommend = Housings::where($recommend_where)->select(["id","title","area","price","room","hall","floor_id", DB::raw('price/area AS rec_unit_price'),"pictures"])->get();
+
+            foreach ($recommend as $item){
+                if($item["pictures"]){
+                    $item["img"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $item["pictures"][0] . "?x-oss-process=image/resize,w_500";
+                }
+
+                $item["rec_unit_price"] = round($item["rec_unit_price"] * 10000);
+
+                $recommend_floor = $item->floors;
+                if (!empty($recommend_floor)) {
+                    $recommend["floor_name"] = $recommend_floor->name;
+                } else {
+                    $recommend["floor_name"] = "";
+                }
+            }
+
             $houseInfo = [
                 "house" =>$res,
                 "agent" => $agent,
-                "make" =>$makeOrder
+                "make" =>$makeOrder,
+                "recommend" =>$recommend,
+                "is_follow" =>$is_follow,
+                "is_collection"=>$is_collection
             ];
-
             return Api_success("获取成功",$houseInfo);
         }
     }
