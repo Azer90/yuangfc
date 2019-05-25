@@ -66,9 +66,13 @@ class LoginController extends Controller
 
         if($request->isMethod("post")){
 
+
             if(empty($data["openid"])||empty($data["userInfo"])){
                 return Api_error("缺少参数");
             }
+            dump($data["userInfo"]);
+//            $data["userInfo"] = json_decode($data["userInfo"],true);
+    
             $res=0;
             $info = User::where("open_id",$data["openid"])->first();//查询当前用户是否存在
 
