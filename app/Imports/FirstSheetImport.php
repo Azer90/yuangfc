@@ -31,7 +31,6 @@ class FirstSheetImport implements ToModel,WithBatchInserts,WithStartRow
     {
         $this->housings_model = new Housings();
         $this->user_info = Admin::user();
-//        $this->agen_id = DB::name("users")->where("mobile",$this->user_info["mobile"])->value("id");
         if(!empty($this->user_info["mobile"])){
             $w[] =["mobile","=",$this->user_info["mobile"]];
             $w[] = ["type","=",2];
