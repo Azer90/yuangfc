@@ -33,7 +33,7 @@ class FirstSheetImport implements ToModel,WithBatchInserts,WithStartRow
         $this->user_info = Admin::user();
 //        $this->agen_id = DB::name("users")->where("mobile",$this->user_info["mobile"])->value("id");
         if(!empty($this->user_info["mobile"])){
-            $w =["mobile","=",$this->user_info["mobile"]];
+            $w[] =["mobile","=",$this->user_info["mobile"]];
             $w[] = ["type","=",2];
             $this->agen_id = User::where($w)->value("id");
         }
@@ -75,7 +75,7 @@ class FirstSheetImport implements ToModel,WithBatchInserts,WithStartRow
             "phone"=>'required|regex:/^1[3-9]\d{9}$/',
             "years"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
             "purpose"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
-            "direction"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
+            "direction"=>'required',
             "room"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
             "hall"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
             "toilet"=>'required|regex:/^[0-9]+(.[0-9]{1,2})?$/',
@@ -101,7 +101,7 @@ class FirstSheetImport implements ToModel,WithBatchInserts,WithStartRow
             "phone"=>"电话号码格式不正确",
             "years"=>"年份为数字",
             "purpose"=>"用途必须为数字",
-            "direction"=>"房必须为数字",
+            "direction.required"=>"朝向必填",
             "room"=>"厅必须为数字",
             "hall"=>"卫必须为数字",
             "toilet"=>"面积为数字",
