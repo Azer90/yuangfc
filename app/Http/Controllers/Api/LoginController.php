@@ -6,9 +6,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Housings;
 use App\Http\Controllers\Controller;
+use App\Libs\Sms;
 use App\User;
+use App\Verification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
 {
@@ -125,6 +128,42 @@ class LoginController extends Controller
                 return Api_success("获取成功",$res);
             }else{
                 return Api_error("获取失败");
+            }
+        }
+    }
+
+
+    /**
+     * 获取验证码
+     */
+    public function getCode(Request $request)
+    {
+        $sms = new Sms();
+        if($request->isMethod("post")){
+            $data = $request->input();
+            if(empty($data["mobile"])){
+                return Api_error("请输入电话号码");
+            }
+            $validator = Validator::make($data, ["mobile"=>'regex:/^1[3-9]\d{9}$/',], ["mobile"=>"手机号不正确"]);
+            if($validator->fails()){
+              return Api_error($validator->errors()->getMessages());
+            }
+            $str = '';
+            for ($i=0;$i<6;$i++){
+                $str.=mt_rand(0,9);
+            }
+            $sms_res = $sms->send($data["mobile"],$str);
+            if($sms_res=="success"){
+                $insert_data = [
+                    "mobile"=>$data["mobile"],
+                    "code"=>$str
+                ];
+                $res = Verification::insert($insert_data);
+                if($res>0){
+                    return Api_success("验证码获取成功");
+                }
+            }else{
+                return Api_error("验证码获取失败");
             }
         }
     }
