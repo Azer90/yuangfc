@@ -439,7 +439,7 @@ class HouseController extends Controller
             //是否收藏
             $is_collection = 0;
             if(isset($data["make_id"])&&!empty($data["make_id"])){
-                $is_collection = Recommend::where(["user_id"=>$data["make_id"],"rec_id"=>$agent["id"],"type"=>2])->count();
+                $is_collection = Recommend::where(["user_id"=>$data["make_id"],"rec_id"=>$data["house_id"],"type"=>2])->count();
             }
             //是否预约
             $makeOrder = 0;
