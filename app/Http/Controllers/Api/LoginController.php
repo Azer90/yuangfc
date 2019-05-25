@@ -68,45 +68,37 @@ class LoginController extends Controller
         $data = $request->input();
 
         if($request->isMethod("post")){
-
+            $data["userInfo"] = json_decode($data["userInfo"],true);
 
             if(empty($data["openid"])||empty($data["userInfo"])){
                 return Api_error("缺少参数");
             }
-
-//            $data["userInfo"] = json_decode($data["userInfo"],true);
-
+            $validator = Validator::make($data, ["mobile"=>'regex:/^1[3-9]\d{9}$/',"code"=>"required"], ["mobile"=>"手机号不正确","code.required"=>"请输入验证码"]);
+            if($validator->fails()){
+                return Api_error($validator->errors()->getMessages());
+            }
             $res=0;
-            $info = User::where("open_id",$data["openid"])->first();//查询当前用户是否存在
+            $code = Verification::where("mobile",$data["mobile"])->orderBy("create_time","desc")->value("code");
 
-            if(empty($info)){
-                $insert = [
-                    "open_id" => $data["openid"],
-                    "wchat_name" => $data["userInfo"]["nickName"],
-                    "avatar" => $data["userInfo"]["avatarUrl"],
-                    "sex" => $data["userInfo"]["gender"],
-                    "email" => "",
-                    "created_at" => date("Y-m-d H:i:s")
-                ];
-                $res = User::insert($insert);//添加新用户
-            }else{
-                if($data["userInfo"]["nickName"]!=$info["wchat_name"]||$data["userInfo"]["avatarUrl"]!=$info["avatar"]|| $data["userInfo"]["gender"]!=$info["sex"]){
-                    $insert = [
-                        "open_id" => $data["openid"],
-                        "wchat_name" => $data["userInfo"]["nickName"],
-                        "avatar" => $data["userInfo"]["avatarUrl"],
-                        "sex" => $data["userInfo"]["gender"],
-                        "updated_at" => date("Y-m-d H:i:s")
-                    ];
-                    //信息变化，修改用户信息
-                    $res = User::where("open_id",$data["openid"])->update($insert);
-                }
+            if($code!=$data["code"]||empty($code)){
+                return Api_error("验证码错误");
             }
 
+            $insert = [
+                "open_id" => $data["openid"],
+                "wchat_name" => isset($data["userInfo"]["nickName"])?$data["userInfo"]["nickName"]:$data["userInfo"]["userInfo"]["wchat_name"],
+                "avatar" => isset($data["userInfo"]["avatarUrl"])?$data["userInfo"]["avatarUrl"]:$data["userInfo"]["userInfo"]["avatar"],
+                "sex" => isset($data["userInfo"]["gender"])?$data["userInfo"]["gender"]:$data["userInfo"]["userInfo"]["sex"],
+                "mobile"=>$data["mobile"],
+                "email" => "",
+                "created_at" => date("Y-m-d H:i:s")
+            ];
+            $res = User::insert($insert);//添加新用户
             $userInfo = User::where("open_id",$data["openid"])->first();
            if($res > 0){
+               Verification::where("mobile",$data["mobile"])->delete();
                return Api_success("注册成功",$userInfo);
-            }else{
+           }else{
                return Api_error("注册失败",$userInfo);
            }
         }
@@ -144,7 +136,7 @@ class LoginController extends Controller
             if(empty($data["mobile"])){
                 return Api_error("请输入电话号码");
             }
-            $validator = Validator::make($data, ["mobile"=>'regex:/^1[3-9]\d{9}$/',], ["mobile"=>"手机号不正确"]);
+            $validator = Validator::make($data, ["mobile"=>'regex:/^1[3-9]\d{9}$/'], ["mobile"=>"手机号不正确"]);
             if($validator->fails()){
               return Api_error($validator->errors()->getMessages());
             }
@@ -156,7 +148,8 @@ class LoginController extends Controller
             if($sms_res=="success"){
                 $insert_data = [
                     "mobile"=>$data["mobile"],
-                    "code"=>$str
+                    "code"=>$str,
+                    "create_time"=>date("Y-m-d H:i:s",time())
                 ];
                 $res = Verification::insert($insert_data);
                 if($res>0){
@@ -165,6 +158,16 @@ class LoginController extends Controller
             }else{
                 return Api_error("验证码获取失败");
             }
+        }
+    }
+
+    /**
+     * 更换手机号
+     */
+    public function replaceMobile(Request $request)
+    {
+        if($request->isMethod("post")){
+
         }
     }
 }
