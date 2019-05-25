@@ -30,11 +30,12 @@ class FollowController extends Controller
                 $res = Recommend::insert(["user_id"=>$data["user_id"],"rec_id"=>$data["rec_id"],"type"=>$data["type"]]);
                 if($res>0){
                     return Api_success("关注成功");
-                }else{
-                    return Api_error("您已关注");
                 }
             }else{
-                return Api_error("您已关注");
+                $res = Recommend::where(["user_id"=>$data["user_id"],"rec_id"=>$data["rec_id"],"type"=>$data["type"]])->delete();
+                if($res>0){
+                    return Api_success("取消成功");
+                }
             }
         }
     }
