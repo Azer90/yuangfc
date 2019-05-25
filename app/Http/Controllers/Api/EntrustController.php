@@ -26,6 +26,9 @@ class EntrustController extends Controller
                 'price' => 'required',
                 'mobile' => 'required',
                 'rentsale' => 'required',
+            ],[
+                'addrs' => '省市区必须',
+                'rentsale' => '租售类型',
             ]);
 
             if ($validator->fails()) {
