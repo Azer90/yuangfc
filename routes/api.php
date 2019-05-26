@@ -49,5 +49,8 @@ Route::group($attributes,function (Router $router) {
     $router->post('api_followHandle', "FollowController@followHandle")->name('api_followHandle');
     $router->post('api_entrust_add_data', "EntrustController@add_data")->name('api_entrust_add_data');//hkz
     $router->post('api_appoint', "AppointmentController@appoint")->name('api_appoint');
+    $router->post('api_getAppointList', "AppointmentController@getAppointList")->name('api_getAppointList');
+    $router->post('api_getSchedule', "AppointmentController@getSchedule")->name('api_getSchedule');
+    $router->post('api_addSchedule', "AppointmentController@addSchedule")->name('api_addSchedule');
 
 });

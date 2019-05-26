@@ -315,7 +315,7 @@ class HouseController extends Controller
                 } else {
                     $item["district_name"] = "";
                 }
-
+                //商圈
                 $circle = $item->circle;
                 if ($circle) {
                     $item["circle_name"] = $circle->name;
