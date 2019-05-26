@@ -86,16 +86,32 @@ class LoginController extends Controller
             if($check){
                return Api_error("该账号已注册");
             }
-            $insert = [
-                "open_id" => $data["openid"],
-                "wchat_name" => isset($data["userInfo"]["nickName"])?$data["userInfo"]["nickName"]:$data["userInfo"]["userInfo"]["wchat_name"],
-                "avatar" => isset($data["userInfo"]["avatarUrl"])?$data["userInfo"]["avatarUrl"]:$data["userInfo"]["userInfo"]["avatar"],
-                "sex" => isset($data["userInfo"]["gender"])?$data["userInfo"]["gender"]:$data["userInfo"]["userInfo"]["sex"],
-                "mobile"=>$data["mobile"],
-                "email" => "",
-                "created_at" => date("Y-m-d H:i:s")
-            ];
-            $res = User::insert($insert);//添加新用户
+            $check_mobile = User::where("mobile",$data["mobile"])->first();
+            if($check_mobile){
+                $insert = [
+                    "open_id" => $data["openid"],
+                    "wchat_name" => isset($data["userInfo"]["nickName"])?$data["userInfo"]["nickName"]:$data["userInfo"]["userInfo"]["wchat_name"],
+                    "avatar" => isset($data["userInfo"]["avatarUrl"])?$data["userInfo"]["avatarUrl"]:$data["userInfo"]["userInfo"]["avatar"],
+                    "sex" => isset($data["userInfo"]["gender"])?$data["userInfo"]["gender"]:$data["userInfo"]["userInfo"]["sex"],
+                    "mobile"=>$data["mobile"],
+                    "email" => "",
+                    "created_at" => date("Y-m-d H:i:s")
+                ];
+                $res = User::update($insert);//添加新用户
+            }else{
+                $insert = [
+                    "open_id" => $data["openid"],
+                    "wchat_name" => isset($data["userInfo"]["nickName"])?$data["userInfo"]["nickName"]:$data["userInfo"]["userInfo"]["wchat_name"],
+                    "avatar" => isset($data["userInfo"]["avatarUrl"])?$data["userInfo"]["avatarUrl"]:$data["userInfo"]["userInfo"]["avatar"],
+                    "sex" => isset($data["userInfo"]["gender"])?$data["userInfo"]["gender"]:$data["userInfo"]["userInfo"]["sex"],
+                    "mobile"=>$data["mobile"],
+                    "email" => "",
+                    "created_at" => date("Y-m-d H:i:s")
+                ];
+                $res = User::insert($insert);//添加新用户
+            }
+
+
             $userInfo = User::where("open_id",$data["openid"])->first();
            if($res > 0){
                Verification::where("mobile",$data["mobile"])->delete();
