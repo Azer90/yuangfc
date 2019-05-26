@@ -48,4 +48,9 @@ class Housings extends Model
     {
         return $this->belongsTo(Circle::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
