@@ -452,7 +452,7 @@ class HouseController extends Controller
             //是否预约
             $makeOrder = 0;
             if(isset($data["make_id"])&&!empty($data["make_id"])){
-                $where = ["house_id"=>$data["house_id"],"make_id"=>$res["make_id"],"state"=>0];
+                $where = ["house_id"=>$data["house_id"],"make_id"=>$data["make_id"],"state"=>0];
                 $makeOrder = MakeOrder::where($where)->count();
             }
 
@@ -490,6 +490,7 @@ class HouseController extends Controller
                 "is_follow" =>$is_follow,
                 "is_collection"=>$is_collection
             ];
+
             return Api_success("获取成功",$houseInfo);
         }
     }
