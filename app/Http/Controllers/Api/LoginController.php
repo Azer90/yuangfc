@@ -115,9 +115,14 @@ class LoginController extends Controller
             $userInfo = User::where("open_id",$data["openid"])->first();
            if($res > 0){
                Verification::where("mobile",$data["mobile"])->delete();
-               return Api_success("注册成功",$userInfo);
+               $reg_res = [
+                   "openid"=>$data["openid"],
+                   "userInfo"=>$userInfo,
+                   "isRegister"=>1
+               ];
+               return Api_success("注册成功",$reg_res);
            }else{
-               return Api_error("注册失败",$userInfo);
+               return Api_error("注册失败");
            }
         }
     }
