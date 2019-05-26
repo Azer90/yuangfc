@@ -275,7 +275,8 @@ class HouseController extends Controller
 
             $all_tag = Tags::get(["id","name"])->toArray();
 
-            foreach ($res as $item) {
+
+              foreach ($res as $item) {
                 $item["thumd"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $item["pictures"][0] . "?x-oss-process=image/resize,w_500";
 //                $item["thumd"] = Storage::disk(config('admin.upload.disk'))->url($item["pictures"][0])."?x-oss-process=image/resize,w_500";
                 if ($search_data["list_type"] != 3) {
@@ -284,15 +285,20 @@ class HouseController extends Controller
                 } else {
                     $item["price_unit"] = "元/月";
                 }
+              }
 
                 //标签
                 $tag = [];
+              if($all_tag){
+
                 foreach ($all_tag as $v){
                     if(in_array($v["id"],$item["tags"])){
                         $tag[] = $v["name"];
                     };
                 }
+              }
                 $item["tag"] =$tag;
+
 
                 //小区
                 $floors = $item->floors;
@@ -323,7 +329,7 @@ class HouseController extends Controller
                 unset($item["circle"]);
             }
             return Api_success("房源信息获取成功", $res);
-        }
+
     }
 
     /**
@@ -366,8 +372,10 @@ class HouseController extends Controller
             $res = Housings::find($data["house_id"],["id","rentsale","title","price","area","agent_id","floor_id","district_id","purpose","years","direction","room","hall","toilet","renovation","floor","t_floor", DB::raw('price/area AS unit_price'),"pictures","desc"]);
 
             $pictures =[];
-            foreach ($res["pictures"] as $item){
-                $pictures[] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $item . "?x-oss-process=image/resize,w_500";
+            if($res["pictures"]){
+                foreach ($res["pictures"] as $item){
+                    $pictures[] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $item . "?x-oss-process=image/resize,w_500";
+                }
             }
             $res["pictures"] = $pictures;
 
@@ -458,21 +466,22 @@ class HouseController extends Controller
 //            $recommend_where[] = ["id","!=",$data["house_id"]];
             $recommend = Housings::where($recommend_where)->select(["id","title","area","price","room","hall","floor_id", DB::raw('price/area AS rec_unit_price'),"pictures"])->paginate(10);
 
-            foreach ($recommend as $item){
-                if($item["pictures"]){
-                    $item["img"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $item["pictures"][0] . "?x-oss-process=image/resize,w_500";
-                }
+            if($recommend){
+                foreach ($recommend as $item){
+                    if($item["pictures"]){
+                        $item["img"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $item["pictures"][0] . "?x-oss-process=image/resize,w_500";
+                    }
 
-                $item["rec_unit_price"] = round($item["rec_unit_price"] * 10000);
+                    $item["rec_unit_price"] = round($item["rec_unit_price"] * 10000);
 
-                $recommend_floor = $item->floors;
-                if (!empty($recommend_floor)) {
-                    $item["floor_name"] = $recommend_floor->name;
-                } else {
-                    $item["floor_name"] = "";
+                    $recommend_floor = $item->floors;
+                    if (!empty($recommend_floor)) {
+                        $item["floor_name"] = $recommend_floor->name;
+                    } else {
+                        $item["floor_name"] = "";
+                    }
                 }
             }
-
             $houseInfo = [
                 "house" =>$res,
                 "agent" => $agent,
