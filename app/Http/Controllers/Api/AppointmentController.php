@@ -21,11 +21,19 @@ class AppointmentController extends Controller
      */
     public function appoint(Request $request)
     {
+
         if($request->isMethod("post")){
-            $data = $request->isMethod("post");
+            $data = $request->input();
+
             if(empty($data["house_id"])||empty($data["agent_id"])||empty($data["make_id"])){
                 return Api_error("缺少参数");
             }
+            $exist =MakeOrder::where(["house_id"=>$data["house_id"],"agent_id"=>$data["agent_id"],"make_id"=>$data["make_id"]]);
+
+            if($exist){
+                return Api_error("该房源已预约");
+            }
+
             $data["created_at"] = date("Y-m-d H:i:s",time());
             $res = MakeOrder::insert($data);
             if($res>0){
