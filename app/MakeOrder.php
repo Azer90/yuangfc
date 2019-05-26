@@ -15,4 +15,9 @@ use Illuminate\Database\Eloquent\Model;
 class MakeOrder extends Model
 {
     protected $table = 'make_order';
+
+    public function housings()
+    {
+        return $this->belongsTo(Housings::class,"house_id");
+    }
 }
