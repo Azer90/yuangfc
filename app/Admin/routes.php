@@ -22,6 +22,7 @@ Route::group([
     $router->resource('users', 'UsersController',['only' => ['index','destroy']])->names('admin.users');//hkz
     $router->resource('agent', 'AgentController',['only' => ['index','destroy']])->names('admin.agent');//hkz
     $router->resource('agent_check', 'AgentCheckController',['only' => ['index','destroy']])->names('admin.agent_check');//hkz
+    $router->resource('entrust', 'EntrustController',['only' => ['index']])->names('admin.entrust');//hkz
 
     $router->post('import', 'ImportController@import')->name('import');
     $router->get('export', 'ImportController@export')->name('export');
@@ -31,5 +32,7 @@ Route::group([
 
     $router->any('wechat_check/{wecode_id}', 'LoginAuthController@wechat_check')->name('wechat_check');
     $router->post('sweep_code_check', 'LoginAuthController@sweep_code_check')->name('sweep_code_check');
+    $router->post('to_examine', 'EntrustController@to_examine')->name('to_examine');
+    $router->post('rebut', 'EntrustController@rebut')->name('rebut');
 
 });

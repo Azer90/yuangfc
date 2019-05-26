@@ -2,7 +2,6 @@
 
 namespace App\Admin\Extensions;
 
-use App\WeChatUser;
 use Encore\Admin\Admin;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
