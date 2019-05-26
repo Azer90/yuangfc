@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\MakeOrder;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -161,6 +162,18 @@ class AppointmentController extends Controller
         foreach ($res as $val){
             $val["house"] = $val->housings;
 
+
+            switch ($val["time_slot"]){
+                case 0:$val["time_slot"]="全天";
+                    break;
+                case 1:$val["time_slot"]="上午";
+                    break;
+                case 2:$val["time_slot"]="下午";
+                    break;
+                case 3:$val["time_slot"]="晚上";
+                    break;
+            }
+
             //小区
             $floors = $val["house"]->floors;
             if ($floors) {
@@ -177,12 +190,8 @@ class AppointmentController extends Controller
             }
 
             //经纪人
-            $agen = $val["house"]->user;
-            if ($agen) {
-                $val["house"]["circle_name"] = $agen->name;
-            } else {
-                $val["house"]["circle_name"] = "";
-            }
+            $val["agen"] = User::where("id",$val["agent_id"])->first();
+
 
             if($val["house"]["rentsale"]==1){
                 $val["house"]["unit_price"] =  round(($val["house"]["price"]/$val["house"]["area"])*10000);
@@ -190,7 +199,6 @@ class AppointmentController extends Controller
             $val["house"]["thumd"] = "";
             if($val["house"]["pictures"]){
                 $val["house"]["thumd"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $val["house"]["pictures"][0] . "?x-oss-process=image/resize,w_500";
-
             }
 
             unset($val["housings"]);
