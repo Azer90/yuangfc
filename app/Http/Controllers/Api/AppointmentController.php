@@ -43,4 +43,17 @@ class AppointmentController extends Controller
             }
         }
     }
+
+    /**
+     * 获取预约列表
+     */
+    public function getAppointList(Request $request)
+    {
+        $data = $request->input();
+        if(empty($data["user_id"])){
+           return Api_error("缺少参数");
+        }
+
+        MakeOrder::where("make_id",$data["user_id"])->paginate(10,["id,house_id,agent_id,make_id"],isset($data["page"])?isset($data["page"]):1);
+    }
 }

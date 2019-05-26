@@ -95,9 +95,9 @@ class LoginController extends Controller
                     "sex" => isset($data["userInfo"]["gender"])?$data["userInfo"]["gender"]:$data["userInfo"]["userInfo"]["sex"],
                     "mobile"=>$data["mobile"],
                     "email" => "",
-                    "created_at" => date("Y-m-d H:i:s")
+                    "updated_at" => date("Y-m-d H:i:s")
                 ];
-                $res = User::update($insert);//添加新用户
+                $res = User::where("mobile" , $data["mobile"])->update($insert);//更新新用户
             }else{
                 $insert = [
                     "open_id" => $data["openid"],
@@ -115,9 +115,14 @@ class LoginController extends Controller
             $userInfo = User::where("open_id",$data["openid"])->first();
            if($res > 0){
                Verification::where("mobile",$data["mobile"])->delete();
-               return Api_success("注册成功",$userInfo);
+               $reg_res = [
+                   "openid"=>$data["openid"],
+                   "userInfo"=>$userInfo,
+                   "isRegister"=>1
+               ];
+               return Api_success("注册成功",$reg_res);
            }else{
-               return Api_error("注册失败",$userInfo);
+               return Api_error("注册失败");
            }
         }
     }
