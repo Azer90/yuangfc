@@ -94,21 +94,58 @@ class AppointmentController extends Controller
     /**
      * 加入日程
      */
-//    public function addSchedule(Request $request)
-//    {
-//        $data = $request->input();
-//
-//        if(empty($data["id"])){
-//            return Api_error("缺少参数");
-//        }
-//        $validator = Validator::make($data, ["mobile"=>'regex:/^1[3-9]\d{9}$/',"name"=>"required","time"=>"required"], ["mobile"=>"手机号不正确","name.required"=>"请输入姓名","time.required"=>"请选择时间"]);
-//        if($validator->fails()){
-//            return Api_error($validator->errors()->getMessages());
-//        }
-//
-//
-//
-//    }
+
+//note:"sdfdsa"
+//rDayInfo:"全天"
+//rId:"4,5"
+//rName:"sdfsd"
+//rPhone:"18782495926"
+//rTime:"2019-5-26"
+//wxApp:1
+    public function addSchedule(Request $request)
+    {
+        $data = $request->input();
+
+        if(empty($data["rId"])){
+            return Api_error("缺少参数");
+        }
+        $rule =["rPhone"=>'regex:/^1[3-9]\d{9}$/',"rName"=>"required","rTime"=>"required"];
+        $message =  ["rPhone"=>"手机号不正确","rName.required"=>"请输入姓名","rTime.required"=>"请选择时间"];
+        $validator = Validator::make($data,$rule ,$message);
+        if($validator->fails()){
+            return Api_error($validator->errors()->getMessages());
+        }
+        switch ($data["rDayInfo"]){
+            case "全天":$data["rDayInfo"]=0;
+                break;
+            case "上午":$data["rDayInfo"]=1;
+                break;
+            case "下午":$data["rDayInfo"]=2;
+                break;
+            case "晚上":$data["rDayInfo"]=3;
+                break;
+        }
+        $update_data = [
+            "make_name"=>$data["rName"],
+            "make_mobile"=>$data["rPhone"],
+            "time"=>$data["rTime"],
+            "time_slot"=>$data["rDayInfo"],
+            "add_schedule"=>1,
+            "remark"=>$data["note"],
+            "updated_at"=>date("Y-m-d H:i:s",time())
+        ];
+
+        $data["rId"] = explode(",",$data["rId"]);
+
+        $res = MakeOrder::whereIn("id",$data["rId"])->update($update_data);
+
+        if($res>0){
+            return Api_success("预约成功");
+        }else{
+            return Api_error("预约失败");
+        }
+
+    }
 
 
 
