@@ -95,13 +95,7 @@ class AppointmentController extends Controller
      * 加入日程
      */
 
-//note:"sdfdsa"
-//rDayInfo:"全天"
-//rId:"4,5"
-//rName:"sdfsd"
-//rPhone:"18782495926"
-//rTime:"2019-5-26"
-//wxApp:1
+
     public function addSchedule(Request $request)
     {
         $data = $request->input();
