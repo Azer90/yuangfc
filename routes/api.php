@@ -52,5 +52,6 @@ Route::group($attributes,function (Router $router) {
     $router->post('api_getAppointList', "AppointmentController@getAppointList")->name('api_getAppointList');
     $router->post('api_getSchedule', "AppointmentController@getSchedule")->name('api_getSchedule');
     $router->post('api_addSchedule', "AppointmentController@addSchedule")->name('api_addSchedule');
+    $router->post('api_appoinrDelete', "AppointmentController@appoinrDelete")->name('api_appoinrDelete');
 
 });
