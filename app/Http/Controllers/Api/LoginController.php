@@ -95,9 +95,9 @@ class LoginController extends Controller
                     "sex" => isset($data["userInfo"]["gender"])?$data["userInfo"]["gender"]:$data["userInfo"]["userInfo"]["sex"],
                     "mobile"=>$data["mobile"],
                     "email" => "",
-                    "created_at" => date("Y-m-d H:i:s")
+                    "updated_at" => date("Y-m-d H:i:s")
                 ];
-                $res = User::update($insert);//添加新用户
+                $res = User::where("mobile" , $data["mobile"])->update($insert);//更新新用户
             }else{
                 $insert = [
                     "open_id" => $data["openid"],
