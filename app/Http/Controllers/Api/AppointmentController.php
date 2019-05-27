@@ -52,7 +52,7 @@ class AppointmentController extends Controller
     {
         $data = $request->input();
         if(empty($data["make_id"])){
-           return Api_error("缺少参数");
+            return Api_error("缺少参数");
         }
         $res =MakeOrder::where(["make_id"=>$data["make_id"],"state"=>0,"add_schedule"=>0])
             ->paginate(10,["id","house_id","agent_id","make_id"],"",isset($data["page"])?$data["page"]:1);
@@ -68,7 +68,7 @@ class AppointmentController extends Controller
                 $val["house"]["floor_name"] = "";
             }
             //商圈
-             $circle = $val["house"]->circle;
+            $circle = $val["house"]->circle;
             if ($circle) {
                 $val["house"]["circle_name"] = $circle->name;
             } else {
@@ -93,10 +93,25 @@ class AppointmentController extends Controller
     }
 
     /**
+     * 删除预约
+     */
+    public function appoinrDelete(Request $request)
+    {
+        $data = $request->input();
+        if(empty($data["rId"])){
+            return Api_error("缺少参数");
+        }
+        $res = MakeOrder::where(["id"=>$data["rId"],"add_schedule"=>0])->delete();
+        if($res>0){
+            return Api_success("删除成功");
+        }else{
+            return Api_error("删除失败");
+        }
+
+    }
+    /**
      * 加入日程
      */
-
-
     public function addSchedule(Request $request)
     {
         $data = $request->input();
@@ -142,11 +157,6 @@ class AppointmentController extends Controller
 
     }
 
-
-
-
-
-
     /**
      * 获取日程列表
      */
@@ -157,12 +167,10 @@ class AppointmentController extends Controller
             return Api_error("缺少参数");
         }
         $res =MakeOrder::where(["make_id"=>$data["make_id"],"add_schedule"=>1])
-            ->paginate(10,["id","house_id","agent_id","make_id","time","time_slot"],"",isset($data["page"])?$data["page"]:1);
+            ->paginate(10,["id","house_id","agent_id","make_id","time","time_slot","state"],"",isset($data["page"])?$data["page"]:1);
 
         foreach ($res as $val){
             $val["house"] = $val->housings;
-
-
             switch ($val["time_slot"]){
                 case 0:$val["time_slot"]="全天";
                     break;
