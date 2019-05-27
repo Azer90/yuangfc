@@ -84,7 +84,7 @@ EOT;
     {
         Admin::script($this->script());
 
-        $url = $this->get_host()."/template/房源模板.xls";
+        $url = $this->get_host()."/template/房源导入模板.xls";
 
         return view('admin.tools.import',compact('url'));
     }
