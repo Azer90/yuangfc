@@ -190,7 +190,32 @@ class LoginController extends Controller
     public function replaceMobile(Request $request)
     {
         if($request->isMethod("post")){
+            $data = $request->input();
+            if(empty($data["openId"])){
+                    return Api_error("缺少参数");
+            }
+            $validator = Validator::make($data, ["mobile"=>'regex:/^1[3-9]\d{9}$/',"code"=>"required"], ["mobile"=>"手机号不正确","code.required"=>"请输入验证码"]);
+            if($validator->fails()){
+                return Api_error($validator->errors()->getMessages());
+            }
+            $user = User::where("open_id",$data["openId"])->first();
+            if(empty($user)){
+                return Api_error("用户不存在");
+            }
+            $code = Verification::where("mobile",$data["mobile"])->orderBy("create_time","desc")->value("code");
 
+            if($code != $data["code"]){
+                return Api_error("验证码不正确");
+            }
+
+            $res = User::where("open_id",$data["openId"])->update(["mobile"=>$data["mobile"],"updated_at"=>date("Y-m-d H:i:s",time())]);
+            if($res>0){
+                Verification::where("mobile",$data["mobile"])->delete();
+                return Api_success("号码修改成功");
+            }else{
+                return Api_error("修改失败");
+            }
         }
     }
 }
+//14	18782495926	129985	2019-05-27 20:01:14

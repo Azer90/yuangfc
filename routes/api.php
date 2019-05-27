@@ -39,6 +39,7 @@ Route::group($attributes,function (Router $router) {
     $router->post('api_getOpenId', "LoginController@getOpenId")->name('api_getOpenId');
     $router->post('api_checkRegister', "LoginController@checkRegister")->name('api_checkRegister');
     $router->post('api_getCode', "LoginController@getCode")->name('api_getCode');
+    $router->post('api_replaceMobile', "LoginController@replaceMobile")->name('api_replaceMobile');
     $router->post('api_hotHouse', "HouseController@hotHouse")->name('api_hotHouse');
     $router->post('api_housList', "HouseController@housList")->name('api_housList');
     $router->post('api_getAreaList', "HouseController@getAreaList")->name('api_getAreaList');
@@ -53,5 +54,6 @@ Route::group($attributes,function (Router $router) {
     $router->post('api_getSchedule', "AppointmentController@getSchedule")->name('api_getSchedule');
     $router->post('api_addSchedule', "AppointmentController@addSchedule")->name('api_addSchedule');
     $router->post('api_appoinrDelete', "AppointmentController@appoinrDelete")->name('api_appoinrDelete');
+    $router->post('api_getCollection', "AppointmentController@getCollection")->name('api_getCollection');
 
 });
