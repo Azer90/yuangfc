@@ -202,7 +202,7 @@ class LoginController extends Controller
             if(empty($user)){
                 return Api_error("用户不存在");
             }
-            $code = Verification::where("mobile",$data["mobile"])->value("code");
+            $code = Verification::where("mobile",$data["mobile"])->orderBy("create_time","desc")->value("code");
 
             if($code != $data["code"]){
                 return Api_error("验证码不正确");
