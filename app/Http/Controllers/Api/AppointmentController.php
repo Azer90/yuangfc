@@ -256,7 +256,7 @@ class AppointmentController extends Controller
             ->leftJoin("housings as h","h.id","=","r.rec_id")
             ->leftJoin("floor as f","f.id","=","h.floor_id")
             ->where(["user_id"=>$data["user_id"],"r.type"=>2,"h.rentsale"=>1])
-            ->paginate(10,["h.id as h_id","title","room","hall","toilet","area","price","tags",DB::raw('price/area AS unit_price')],isset($data["sale_page"])?$data["sale_page"]:1)
+            ->paginate(10,["h.id as h_id","r.id as c_id","title","room","hall","toilet","area","price","tags",DB::raw('price/area AS unit_price')],isset($data["sale_page"])?$data["sale_page"]:1)
             ->each(function($value){
                 $value["unit_price"] = round($value["unit_price"]*10000);
             });
@@ -274,7 +274,7 @@ class AppointmentController extends Controller
             ->leftJoin("housings as h","h.id","=","r.rec_id")
             ->leftJoin("floor as f","f.id","=","h.floor_id")
             ->where(["user_id"=>$data["user_id"],"r.type"=>2,"h.rentsale"=>2])
-            ->paginate(10,["h.id as h_id","title","room","hall","toilet","area","price","tags",DB::raw('price/area AS unit_price')],isset($data["lease_page"])?$data["lease_page"]:1)
+            ->paginate(10,["h.id as h_id","r.id as c_id","title","room","hall","toilet","area","price","tags",DB::raw('price/area AS unit_price')],isset($data["lease_page"])?$data["lease_page"]:1)
             ->each(function($value){
                 $value["unit_price"] = round($value["unit_price"]*10000);
             });
@@ -289,7 +289,7 @@ class AppointmentController extends Controller
         $collection= Recommend::from("recommend as r")
             ->leftJoin("users as u","u.id","=","r.rec_id")
             ->where(["user_id"=>$data["user_id"],"r.type"=>1])
-            ->paginate(10,["name","mobile","avatar"],isset($data["agent_page"])?$data["agent_page"]:1);
+            ->paginate(10,["name","mobile","avatar","r.id as c_id"],isset($data["agent_page"])?$data["agent_page"]:1);
         return $collection;
     }
 }
