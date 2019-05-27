@@ -210,6 +210,7 @@ class LoginController extends Controller
 
             $res = User::where("open_id",$data["openId"])->update(["mobile"=>$data["mobile"],"updated_at"=>date("Y-m-d H:i:s",time())]);
             if($res>0){
+                Verification::where("mobile",$data["mobile"])->delete();
                 return Api_success("号码修改成功");
             }else{
                 return Api_error("修改失败");
