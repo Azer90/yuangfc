@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\MakeOrder;
+use App\Recommend;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -215,5 +216,80 @@ class AppointmentController extends Controller
             unset($val["house"]["pictures"]);
         }
         return Api_success("预约列表获取成功",$res);
+    }
+
+
+    /**
+     * 获取关注买房、租房、经纪人
+     */
+    public function getCollection(Request $request)
+    {
+        $data = $request->input();
+        if(empty($data["user_id"])){
+            return Api_error("缺少参数");
+        }
+
+        switch ($data["caseType"]){
+            case 1:
+                $collection =$this->getSale($data);
+                break;
+            case 2:
+                $collection =$this->getLease($data);
+                break;
+            case 3:
+                $collection = $this->getAgent($data);
+                break;
+            default:$collection=[];
+        };
+
+        return Api_success("信息获取成功",$collection);
+    }
+
+    /**
+     * @param $data
+     * @return mixed
+     * 获取关注出售房源
+     */
+    public function getSale($data)
+    {
+        $collection= Recommend::from("recommend as r")
+            ->leftJoin("housings as h","h.id","=","r.rec_id")
+            ->leftJoin("floor as f","f.id","=","h.floor_id")
+            ->where(["user_id"=>$data["user_id"],"r.type"=>2,"h.rentsale"=>1])
+            ->paginate(10,["h.id as h_id","title","room","hall","toilet","area","price","tags",DB::raw('price/area AS unit_price')],isset($data["sale_page"])?$data["sale_page"]:1)
+            ->each(function($value){
+                $value["unit_price"] = round($value["unit_price"]*10000);
+            });
+        return $collection;
+    }
+
+    /**
+     * @param $data
+     * @return mixed
+     * 获取关注出租房源
+     */
+    public function getLease($data)
+    {
+        $collection= Recommend::from("recommend as r")
+            ->leftJoin("housings as h","h.id","=","r.rec_id")
+            ->leftJoin("floor as f","f.id","=","h.floor_id")
+            ->where(["user_id"=>$data["user_id"],"r.type"=>2,"h.rentsale"=>2])
+            ->paginate(10,["h.id as h_id","title","room","hall","toilet","area","price","tags",DB::raw('price/area AS unit_price')],isset($data["lease_page"])?$data["lease_page"]:1)
+            ->each(function($value){
+                $value["unit_price"] = round($value["unit_price"]*10000);
+            });
+        return $collection;
+    }
+
+    /**
+     * 获取关注经纪人
+     */
+    public function getAgent($data)
+    {
+        $collection= Recommend::from("recommend as r")
+            ->leftJoin("users as u","u.id","=","r.rec_id")
+            ->where(["user_id"=>$data["user_id"],"r.type"=>1])
+            ->paginate(10,["name","mobile","avatar"],isset($data["agent_page"])?$data["agent_page"]:1);
+        return $collection;
     }
 }
