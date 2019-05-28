@@ -14,7 +14,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 class EntrustController extends Controller
 {
-
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * 添加委托
+     */
     public function add_data(Request $request){
         if ($request->isMethod("post")) {
             $data=$request->all();
@@ -68,5 +72,17 @@ class EntrustController extends Controller
         }else{
             return  Api_error('非法请求');
         }
+    }
+
+    /**
+     *获取委托列表
+     */
+    public function getList(Request $request)
+    {
+        $data = $request->input();
+        if(empty($data["uId"])){
+            return Api_error("缺少参数");
+        }
+//        Entrust::where("u_id",$data["id"])->paginate(10,"");
     }
 }

@@ -285,7 +285,7 @@ class HouseController extends Controller
                 } else {
                     $item["price_unit"] = "元/月";
                 }
-              }
+
 
                 //标签
                 $tag = [];
@@ -327,6 +327,7 @@ class HouseController extends Controller
                 unset($item["floors"]);
                 unset($item["district"]);
                 unset($item["circle"]);
+              }
             }
             return Api_success("房源信息获取成功", $res);
 
