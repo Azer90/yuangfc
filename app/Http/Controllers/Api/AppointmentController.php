@@ -255,11 +255,19 @@ class AppointmentController extends Controller
         $collection= Recommend::from("recommend as r")
             ->leftJoin("housings as h","h.id","=","r.rec_id")
             ->leftJoin("floor as f","f.id","=","h.floor_id")
+
             ->where(["user_id"=>$data["user_id"],"r.type"=>2,"h.rentsale"=>1])
-            ->paginate(10,["h.id as h_id","r.id as c_id","title","room","hall","toilet","area","price","tags",DB::raw('price/area AS unit_price')],isset($data["sale_page"])?$data["sale_page"]:1)
-            ->each(function($value){
-                $value["unit_price"] = round($value["unit_price"]*10000);
-            });
+            ->paginate(10,["h.id as h_id","f.name as f_name","r.id as c_id","title","room","hall","toilet","area","price","pictures","tags",DB::raw('price/area AS unit_price')],isset($data["page"])?$data["page"]:1);
+
+
+        foreach ($collection as $value){
+            $value["unit_price"] = round($value["unit_price"]*10000);
+            $value["pictures"] = json_decode($value["pictures"],true);
+            $value["tags"] = json_decode($value["tags"],true);
+            $value["select"] =false;
+            $value["thumd"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $value["pictures"][0] . "?x-oss-process=image/resize,w_500";
+
+        }
         return $collection;
     }
 
@@ -274,10 +282,15 @@ class AppointmentController extends Controller
             ->leftJoin("housings as h","h.id","=","r.rec_id")
             ->leftJoin("floor as f","f.id","=","h.floor_id")
             ->where(["user_id"=>$data["user_id"],"r.type"=>2,"h.rentsale"=>2])
-            ->paginate(10,["h.id as h_id","r.id as c_id","title","room","hall","toilet","area","price","tags",DB::raw('price/area AS unit_price')],isset($data["lease_page"])?$data["lease_page"]:1)
-            ->each(function($value){
-                $value["unit_price"] = round($value["unit_price"]*10000);
-            });
+            ->paginate(10,["h.id as h_id","f.name as f_name","r.id as c_id","title","room","hall","toilet","area","price","tags",DB::raw('price/area AS unit_price')],isset($data["page"])?$data["page"]:1);
+
+        foreach ($collection as $value){
+                $value["unit_price"] = round($value["unit_price"] * 10000);
+                $value["pictures"] = json_decode($value["pictures"], true);
+                $value["tags"] = json_decode($value["tags"], true);
+                $value["select"] = false;
+                $value["thumd"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $value["pictures"][0] . "?x-oss-process=image/resize,w_500";
+            }
         return $collection;
     }
 
@@ -289,7 +302,33 @@ class AppointmentController extends Controller
         $collection= Recommend::from("recommend as r")
             ->leftJoin("users as u","u.id","=","r.rec_id")
             ->where(["user_id"=>$data["user_id"],"r.type"=>1])
-            ->paginate(10,["name","mobile","avatar","r.id as c_id"],isset($data["agent_page"])?$data["agent_page"]:1);
+            ->paginate(10,["name","mobile","avatar","r.id as c_id"],isset($data["page"])?$data["page"]:1);
+
+        foreach ($collection as $value){
+            $value["select"] =false;
+        }
         return $collection;
+    }
+
+    /**
+     *
+     * 删除收藏/关注信息
+     */
+    public function delete(Request $request)
+    {
+        $data = $request->input();
+        if(empty($data["rId"])){
+            return Api_error("缺少参数");
+        }
+        $id = explode(",",$data["rId"]);
+        for ($i=0;$i<count($id);$i++){
+            $res = Recommend::where("id",$id[$i])->delete();
+        }
+
+        if($res>0){
+            return Api_success("删除成功");
+        }else{
+            return Api_error("删除失败");
+        }
     }
 }
