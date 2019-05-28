@@ -54,6 +54,7 @@ class EntrustController extends Controller
                 'price'=>$data['price'],
                 'mobile'=>$data['mobile'],
                 'rentsale'=>(int)$data['rentsale'],
+                'u_id'=>(int)$data['u_id'],
                 'state'=>0,
                 'reason'=>'',
                 'created_at'=>date('Y-m-d H:i:s'),
