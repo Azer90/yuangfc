@@ -75,9 +75,10 @@ class EntrustController extends Controller
     public function getList(Request $request)
     {
         $data = $request->input();
-        if(empty($data["uId"])){
+        if(empty($data["uid"])){
             return Api_error("缺少参数");
         }
-//        Entrust::where("u_id",$data["id"])->paginate(10,"");
+        $data=Entrust::where("u_id",$data["uid"])->simplePaginate(10);
+        return  Api_success('请求成功',$data);
     }
 }

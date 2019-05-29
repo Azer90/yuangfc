@@ -58,5 +58,7 @@ Route::group($attributes,function (Router $router) {
     $router->post('api_delete', "AppointmentController@delete")->name('api_delete');
     $router->post('api_addAgent', "AgentController@addAgent")->name('api_addAgent');
     $router->post('api_getState', "AgentController@getState")->name('api_getState');
+    $router->post('api_getEntrustList', "EntrustController@getList")->name('api_getEntrustList');//hkz
 
 });
+	
