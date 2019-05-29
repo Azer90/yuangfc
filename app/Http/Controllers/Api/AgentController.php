@@ -33,7 +33,7 @@ class AgentController extends Controller
         $insert_data = [
             "user_id" => $data["id"],
             "real_name" => $data["name"],
-            "ID_card" => $data["id_card"],
+            "id_card" => $data["id_card"],
             "mobile" => $data["phoneNum"],
             "province_id"=>$data["region"][0],
             "city_id"=>$data["region"][1],
@@ -42,21 +42,57 @@ class AgentController extends Controller
 
         $rules=[
             "real_name"=>"required",
-            "ID_card"=>"regex:/(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx])|([1−9]\d5\d2((0[1−9])|(10|11|12))(([0−2][1−9])|10|20|30|31)\d2[0−9Xx])/",
+            "id_card"=>[
+                "required",
+                "regex:/^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9xX]$/"
+            ],
+            "mobile"=>[
+                "required",
+                "regex:/^1[0-9][0-9]|15[012356789]|17[0123456789]|18[0-9]|14[57]/"
+            ]
         ];
         $messages=[
             "real_name.required"=>'请输入真实姓名',
-            "ID_card"=>"身份证格式不正确",
+            "id_card.required"=>"请输入身份证号",
+            "id_card.regex"=>"身份证格式不正确",
+            "mobile.required"=>"请输入手机号",
+            "mobile.regex"=>"手机号格式不正确",
         ];
-        $validator = Validator::make($data, $rules,$messages);
+        $validator = Validator::make($insert_data, $rules,$messages);
         if($validator->fails()){
-            return Api_error( $validator->errors()->getMessages());
+            return Api_error($validator->errors()->getMessages());
         }
+
+        $check = AgentCheck::where("user_id",$data["id"])->first();
+        if(!empty($check)){
+            return Api_error("信息正在审核中，请不要重复提交");
+        }
+
         $res = AgentCheck::insert($insert_data);
         if($res>0){
             return Api_success("提交成功");
         }else{
             return Api_error("提交失败");
         }
+    }
+
+
+    /**
+     * 获取用户申请经纪人状态
+     */
+    public function getState(Request $request)
+    {
+        $data = $request->input();
+        if(empty($data["id"])){
+            return Api_error("缺少参数");
+        }
+
+        $res = AgentCheck::where("user_id",$data["id"])->value("state");
+        if(empty($res)){
+            $state = 3;
+        }else{
+            $state = $res;
+        }
+        return Api_success("获取成功",$state);
     }
 }
