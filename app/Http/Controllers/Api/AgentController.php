@@ -33,7 +33,7 @@ class AgentController extends Controller
         $insert_data = [
             "user_id" => $data["id"],
             "real_name" => $data["name"],
-            "ID_card" => $data["id_card"],
+            "id_card" => $data["id_card"],
             "mobile" => $data["phoneNum"],
             "province_id"=>$data["region"][0],
             "city_id"=>$data["region"][1],
@@ -74,5 +74,25 @@ class AgentController extends Controller
         }else{
             return Api_error("提交失败");
         }
+    }
+
+
+    /**
+     * 获取用户申请经纪人状态
+     */
+    public function getState(Request $request)
+    {
+        $data = $request->input();
+        if(empty($data["id"])){
+            return Api_error("缺少参数");
+        }
+
+        $res = AgentCheck::where("user_id",$data["id"])->value("state");
+        if(empty($res)){
+            $state = 3;
+        }else{
+            $state = $res;
+        }
+        return Api_success("获取成功",$state);
     }
 }
