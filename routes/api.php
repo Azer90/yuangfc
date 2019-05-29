@@ -56,5 +56,6 @@ Route::group($attributes,function (Router $router) {
     $router->post('api_appoinrDelete', "AppointmentController@appoinrDelete")->name('api_appoinrDelete');
     $router->post('api_getCollection', "AppointmentController@getCollection")->name('api_getCollection');
     $router->post('api_delete', "AppointmentController@delete")->name('api_delete');
+    $router->post('api_addAgent', "AgentController@addAgent")->name('api_addAgent');
 
 });
