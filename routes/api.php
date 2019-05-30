@@ -59,6 +59,7 @@ Route::group($attributes,function (Router $router) {
     $router->post('api_addAgent', "AgentController@addAgent")->name('api_addAgent');
     $router->post('api_getState', "AgentController@getState")->name('api_getState');
     $router->post('api_getEntrustList', "EntrustController@getList")->name('api_getEntrustList');//hkz
+    $router->post('api_getUser', "UserController@getUser")->name('api_getUser');//hkz
 
 });
 	
