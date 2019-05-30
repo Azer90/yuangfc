@@ -5,18 +5,13 @@ namespace App\Admin\Controllers;
 use App\Admin\Extensions\GetPast;
 use App\Admin\Extensions\Rebut;
 use App\Entrust;
-use App\Tags;
-use App\User;
-use App\Housings;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
-use Encore\Admin\Facades\Admin;
 use Illuminate\Http\Request;
-use Illuminate\Support\MessageBag;
 class EntrustController extends Controller
 {
     use HasResourceActions;
@@ -122,8 +117,8 @@ class EntrustController extends Controller
             $actions->disableDelete();
             // 添加操作
             if($actions->row->state==0){
-                $actions->append(new  GetPast($actions->getKey()));
-                $actions->append(new  Rebut($actions->getKey()));
+                $actions->append(new  GetPast($actions->getKey(),route('to_examine')));
+                $actions->append(new  Rebut($actions->getKey(),route('rebut')));
             }
 
         });

@@ -6,16 +6,18 @@ use Illuminate\Support\Facades\Request;
 class Rebut
 {
     protected $id;
+    protected $url;
 
-    public function __construct($id)
+    public function __construct($id,$url)
     {
         $this->id = $id;
+        $this->url = $url;
     }
 
     protected function script()
     {
         $listPath = Request::getRequestUri();
-        $url=route('rebut');
+        //$url=route('rebut');
         return <<<SCRIPT
 
         $('.rebut').on('click', function () {
@@ -27,7 +29,7 @@ class Rebut
               title: '驳回理由',
            
              }, function(value, index, elem){
-                $.post("$url", {'id': id, _token:LA.token,reason:value}, function (data) {
+                $.post(" $this->url", {'id': id, _token:LA.token,reason:value}, function (data) {
             
                         if (typeof data === 'object') {
                             if (data.code===200) {

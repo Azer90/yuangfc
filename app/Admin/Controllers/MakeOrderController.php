@@ -103,7 +103,7 @@ class MakeOrderController extends Controller
             });
 
             return new Table(['ID','标题','地址', '房源类型', '租售类型', '业主', '联系方式'], $comments->toArray(),['table-hover']);
-        });;
+        });
         $grid->name('经纪人姓名');
         $grid->wchat_name('预约人微信名');
         $grid->make_name('称呼');

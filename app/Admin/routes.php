@@ -35,5 +35,7 @@ Route::group([
     $router->post('sweep_code_check', 'LoginAuthController@sweep_code_check')->name('sweep_code_check');
     $router->post('to_examine', 'EntrustController@to_examine')->name('to_examine');
     $router->post('rebut', 'EntrustController@rebut')->name('rebut');
+    $router->post('agent_examine', 'AgentCheckController@agent_examine')->name('agent_examine');
+    $router->post('agent_rebut', 'AgentCheckController@agent_rebut')->name('agent_rebut');
 
 });

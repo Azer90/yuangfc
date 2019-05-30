@@ -6,21 +6,22 @@ use Illuminate\Support\Facades\Request;
 class GetPast
 {
     protected $id;
-
-    public function __construct($id)
+    protected $url;
+    public function __construct($id,$url)
     {
         $this->id = $id;
+        $this->url = $url;
     }
 
     protected function script()
     {
         $listPath = Request::getRequestUri();
-        $url=route('to_examine');
+        //$url=route('to_examine');
         return <<<SCRIPT
 
         $('.GetPast').on('click', function () {
              var id= $(this).data('id');
-             $.post("$url", {'id': id, _token:LA.token}, function (data) {
+             $.post(" $this->url", {'id': id, _token:LA.token}, function (data) {
         
                     if (typeof data === 'object') {
                         if (data.code===200) {
