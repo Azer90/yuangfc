@@ -81,4 +81,13 @@ class EntrustController extends Controller
         $data=Entrust::where("u_id",$data["uid"])->simplePaginate(10);
         return  Api_success('请求成功',$data);
     }
+
+    public function deleteEntrust(Request $request){
+        $data = $request->input();
+        if(empty($data["id"])){
+            return Api_error("缺少参数");
+        }
+        Entrust::where("id",$data["id"])->delete();
+        return  Api_success('删除成功');
+    }
 }
