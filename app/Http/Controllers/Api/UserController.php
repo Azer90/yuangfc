@@ -22,10 +22,11 @@ class UserController extends Controller
     public function getUser(Request $request)
     {
             $data = $request->input();
+       
             if(empty($data["uId"])){
                 return Api_error("缺少参数");
             }
-            $info = User::where("id",$data["id"])->first(["id","name","mobile","avatar"]);
+            $info = User::where("id",$data["uId"])->first(["id","name","mobile","avatar"]);
             return Api_success("获取成功",$info);
     }
 }
