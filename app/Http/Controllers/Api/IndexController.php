@@ -34,7 +34,7 @@ class IndexController extends Controller
         if($request->isMethod("post")){
             $data=$request->all();
             $rentsale= $data['caseType']=='sale'? 1 :2;
-            $res = Housings::from('housings as h')->Join('floor as f','h.floor_id=f.id')->where(['h.rentsale'=>$rentsale,'f.name'=>$data['keyword']])
+            $res = Housings::from('housings as h')->Join('floor as f','h.floor_id','=','f.id')->where(['h.rentsale'=>$rentsale,'f.name'=>$data['keyword']])
                 ->get(['h.*']);
             return Api_success("查询成功",$res);
         }
