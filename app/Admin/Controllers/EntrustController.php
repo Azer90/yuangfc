@@ -92,6 +92,7 @@ class EntrustController extends Controller
         $grid->price('价格');
         $grid->mobile('联系电话');
         $grid->rentsale('租售类型')->using([1 => '出售',2 => '出租']);
+        $grid->type('委托类型')->using([1 => '直接委托',2 => '代委托']);
         $grid->state('审核状态')->display(function ($state) {
             switch ($state){
                 case 1:
