@@ -22,7 +22,7 @@ class UserController extends Controller
     public function getUser(Request $request)
     {
             $data = $request->input();
-       
+
             if(empty($data["uId"])){
                 return Api_error("缺少参数");
             }

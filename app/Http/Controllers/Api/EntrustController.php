@@ -57,6 +57,7 @@ class EntrustController extends Controller
                 'u_id'=>(int)$data['u_id'],
                 'state'=>0,
                 'reason'=>'',
+                'type'=>$data["type"],
                 'created_at'=>date('Y-m-d H:i:s'),
             ];
         $id=Entrust::insertGetId($_data);
