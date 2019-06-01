@@ -347,13 +347,13 @@ class HouseController extends Controller
             if (isset($data["inputPage"]) && $data["inputPage"]) {
                 $page = $data["inputPage"];
             }
+
             $res = Floor::where("name", "like", "%" . $data["buildInputText"] . "%")
                 ->where("city_id", "=", $data["city_code"])
                 ->orderByDesc("created_at")
                 ->paginate(40, ["id", "name","district_id"], "", $page);
-
             foreach ($res as $v) {
-                $res["district"] = $v->district;
+                $v["district"] = $v->district;
             }
 
            return Api_success("楼盘获取成功",$res);
