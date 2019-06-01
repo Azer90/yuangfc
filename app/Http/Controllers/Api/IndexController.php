@@ -39,7 +39,7 @@ class IndexController extends Controller
 //            'h.rentsale'=>$rentsale,
 //            $where = ['f.name'=>$search_data['keyword']];
             $where = [];
-            
+
             if (isset($search_data["buildInputText"]) && $search_data["buildInputText"]){
                 $where[] = ["f.name", "=", $search_data["buildInputText"]];
             }
@@ -146,7 +146,7 @@ class IndexController extends Controller
                 ->Leftjoin('district as d','h.district_id','=','d.id')
                 ->Leftjoin('circle as c','h.circle_id','=','c.id')
                 ->where($where)
-                ->paginate(10,["h.id as h_id", "title", "type", "purpose", "rentsale", "room", "hall", "toilet", "area", "direction", "price", DB::raw('price/area AS unit_price'), "pictures","tags","f.name as floor_name","d.name as district_name","c.name as circle_name"]);
+                ->paginate(10,["h.id as id", "title", "type", "purpose", "rentsale", "room", "hall", "toilet", "area", "direction", "price", DB::raw('price/area AS unit_price'), "pictures","tags","f.name as floor_name","d.name as district_name","c.name as circle_name"]);
 
 
             $all_tag = Tags::get(["id","name"])->toArray();
