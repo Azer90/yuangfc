@@ -53,4 +53,9 @@ class Housings extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function where1()
+    {
+        return where("name","=","1");
+    }
 }

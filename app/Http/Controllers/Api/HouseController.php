@@ -173,6 +173,9 @@ class HouseController extends Controller
                 $where[] = ["floor_id", "=", $search_data["floor_id"]];
             }
 
+//            if (isset($search_data["buildInputText"]) && $search_data["buildInputText"]) {
+//                $where[] = ["floor_id", "=", $search_data["buildInputText"]];
+//            }
 
 
             if ($search_data["minPrice"] || $search_data["maxPrice"]) {
@@ -298,7 +301,6 @@ class HouseController extends Controller
                 }
               }
                 $item["tag"] =$tag;
-
 
                 //小区
                 $floors = $item->floors;

@@ -60,7 +60,7 @@ class EntrustController extends Controller
                 'type'=>$data["type"],
                 'created_at'=>date('Y-m-d H:i:s'),
             ];
-          
+
         $id=Entrust::insertGetId($_data);
         if($id){
             return  Api_success('提交成功,等待管理员审核');
