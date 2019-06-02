@@ -86,14 +86,14 @@ class WanBuyController extends Controller
 
         $res = WantBuy::where("user_id",$data["u_id"])
             ->simplePaginate(10);
-
+        $address=[];
         foreach ($res  as $key=>$value){
             $address[$value['province_id']]=$value['province_id'];
             $address[$value['city_id']]=$value['city_id'];
             $address[$value['district_id']]=$value['district_id'];
         }
         $name=District::whereIn('id',$address)->get(['id','name'])->pluck('name','id')->toArray();
-
+        
         foreach ($res  as $key=>$value){
             $res[$key]['address']=$name[$value['province_id']].'-'.$name[$value['city_id']].'-'.$name[$value['district_id']];
         }
