@@ -38,7 +38,7 @@ class AgentController extends Controller
             "province_id"=>$data["region"][0],
             "city_id"=>$data["region"][1],
             "district_id"=>$data["region"][2],
-            "create_time"=>date("Y-m-d H:i:s",time())
+            "created_at"=>date("Y-m-d H:i:s",time())
         ];
 
         $rules=[
