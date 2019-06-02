@@ -163,7 +163,6 @@ class IndexController extends Controller
                 //标签
                 $tag = [];
                 if($all_tag){
-
                     foreach ($all_tag as $v){
                         if(in_array($v["id"],$item["tags"])){
                             $tag[] = $v["name"];
