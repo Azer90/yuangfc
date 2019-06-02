@@ -56,7 +56,8 @@ class AppointmentController extends Controller
             return Api_error("缺少参数");
         }
         $res =MakeOrder::where(["make_id"=>$data["make_id"],"state"=>0,"add_schedule"=>0])
-            ->paginate(10,["id","house_id","agent_id","make_id"],"",isset($data["page"])?$data["page"]:1);
+            ->orderBy("created_at","desc")
+            ->paginate(100,["id","house_id","agent_id","make_id"],"",isset($data["page"])?$data["page"]:1);
 
         foreach ($res as $val){
             $val["house"] = $val->housings;
@@ -168,7 +169,8 @@ class AppointmentController extends Controller
             return Api_error("缺少参数");
         }
         $res =MakeOrder::where(["make_id"=>$data["make_id"],"add_schedule"=>1])
-            ->paginate(10,["id","house_id","agent_id","make_id","time","time_slot","state"],"",isset($data["page"])?$data["page"]:1);
+            ->orderBy("time","asc")
+            ->paginate(100,["id","house_id","agent_id","make_id","time","time_slot","state"],"",isset($data["page"])?$data["page"]:1);
 
         foreach ($res as $val){
             $val["house"] = $val->housings;
