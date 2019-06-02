@@ -89,7 +89,8 @@ class AgentController extends Controller
         }
 
         $res = AgentCheck::where("user_id",$data["id"])->value("state");
-        if(empty($res)){
+
+        if(is_null($res)){
             $state = 3;
         }else{
             $state = $res;
