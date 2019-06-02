@@ -93,7 +93,7 @@ class WanBuyController extends Controller
             $address[$value['district_id']]=$value['district_id'];
         }
         $name=District::whereIn('id',$address)->get(['id','name'])->pluck('name','id')->toArray();
-        
+
         foreach ($res  as $key=>$value){
             $res[$key]['address']=$name[$value['province_id']].'-'.$name[$value['city_id']].'-'.$name[$value['district_id']];
         }

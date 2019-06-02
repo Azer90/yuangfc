@@ -64,7 +64,7 @@ class AgentController extends Controller
             return Api_error($validator->errors()->getMessages());
         }
 
-        $check = AgentCheck::where("user_id",$data["id"])->first();
+        $check = AgentCheck::where(["user_id"=>$data["id"],"state"=>0])->first();
         if(!empty($check)){
             return Api_error("信息正在审核中，请不要重复提交");
         }
@@ -88,7 +88,7 @@ class AgentController extends Controller
             return Api_error("缺少参数");
         }
 
-        $res = AgentCheck::where("user_id",$data["id"])->value("state");
+        $res = AgentCheck::where("user_id",$data["id"])->orderBy("created_at","desc")->value("state");
 
         if(is_null($res)){
             $state = 3;
