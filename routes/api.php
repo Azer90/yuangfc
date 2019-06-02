@@ -63,6 +63,8 @@ Route::group($attributes,function (Router $router) {
     $router->post('api_deleteEntrust', "EntrustController@deleteEntrust")->name('api_deleteEntrust');//hkz
     $router->post('api_search', "IndexController@search")->name('api_search');//hkz
     $router->post('api_addWanBuy', "WanBuyController@addWanBuy")->name('api_addWanBuy');//hkz
+    $router->post('api_getWanBuy', "WanBuyController@getWanBuy")->name('api_getWanBuy');//hkz
+    $router->post('api_deleteWanBuy', "WanBuyController@deleteWanBuy")->name('api_deleteWanBuy');//hkz
 
 
 });
