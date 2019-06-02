@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\District;
 use App\Http\Controllers\Controller;
 use App\WantBuy;
 use Illuminate\Http\Request;
@@ -61,6 +62,7 @@ class WanBuyController extends Controller
             "province_id"=>$data["region"][0],
             "city_id"=>$data["region"][1],
             "district_id"=>$data["region"][2],
+            "created_at"=>date("Y-m-d H:i:s",time())
         ];
 
         $res = WantBuy::insert($insert);
@@ -70,6 +72,49 @@ class WanBuyController extends Controller
         }else{
             return Api_error("提交失败");
         }
+    }
 
+    /**
+     * 获取求购信息
+     */
+    public function getWanBuy(Request $request)
+    {
+        $data = $request->input();
+        if(empty($data["u_id"])){
+            return Api_error("缺少参数");
+        }
+
+        $res = WantBuy::where("user_id",$data["u_id"])
+            ->simplePaginate(10);
+
+        foreach ($res  as $key=>$value){
+            $address[$value['province_id']]=$value['province_id'];
+            $address[$value['city_id']]=$value['city_id'];
+            $address[$value['district_id']]=$value['district_id'];
+        }
+        $name=District::whereIn('id',$address)->get(['id','name'])->pluck('name','id')->toArray();
+
+        foreach ($res  as $key=>$value){
+            $res[$key]['address']=$name[$value['province_id']].'-'.$name[$value['city_id']].'-'.$name[$value['district_id']];
+        }
+
+        return Api_success("获取成功",$res);
+    }
+
+    /**
+     * 删除求购信息
+     */
+    public function deleteWanBuy(Request $request)
+    {
+        $data = $request->input();
+        if(empty($data["id"])){
+            return Api_error("缺少参数");
+        }
+        $res = WantBuy::where("id",$data["id"])->delete();
+        if($res>0){
+            return Api_success("删除成功");
+        }else{
+            return Api_error("删除失败");
+        }
     }
 }
