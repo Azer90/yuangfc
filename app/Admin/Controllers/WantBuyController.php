@@ -23,8 +23,8 @@ class WantBuyController extends Controller
     public function index(Content $content)
     {
         return $content
-            ->header('Index')
-            ->description('description')
+            ->header('求购信息')
+            ->description('列表')
             ->body($this->grid());
     }
 
@@ -82,17 +82,20 @@ class WantBuyController extends Controller
         $grid = new Grid(new WantBuy);
 
         $grid->id('Id');
-        $grid->user_id('User id');
-        $grid->province_id('Province id');
-        $grid->city_id('City id');
-        $grid->district_id('District id');
-        $grid->real_name('Real name');
-        $grid->mobile('Mobile');
-        $grid->area('Area');
-        $grid->price('Price');
-        $grid->ament('Ament');
-        $grid->created_at('Created at');
-        $grid->updated_at('Updated at');
+        $grid->real_name('姓名');
+        $grid->mobile('手机号');
+        $grid->address('地址');
+        $grid->area('面积');
+        $grid->price('价钱');
+        $grid->ament('房型');
+        $grid->created_at('创建时间');
+        $grid->disableExport();//禁用导出
+        $grid->disableCreateButton();
+        $grid->actions(function ($actions) {
+            $actions->disableEdit();
+            $actions->disableView();
+
+        });
 
         return $grid;
     }

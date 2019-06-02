@@ -24,6 +24,7 @@ Route::group([
     $router->resource('agent_check', 'AgentCheckController',['only' => ['index','destroy']])->names('admin.agent_check');//hkz
     $router->resource('entrust', 'EntrustController',['only' => ['index']])->names('admin.entrust');//hkz
     $router->resource('makeorder', 'MakeOrderController')->names('admin.makeorder');//hkz
+    $router->resource('wantbuy', 'WantBuyController')->names('admin.wantbuy');//hkz
 
     $router->post('import', 'ImportController@import')->name('import');
     $router->get('export', 'ImportController@export')->name('export');
