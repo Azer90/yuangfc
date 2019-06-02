@@ -22,7 +22,9 @@ class IndexController extends Controller
             $res = Banner::where("state",1)
                 ->select("title","src")
                 ->orderBy("sort")
-                ->get();
+                ->get()->each(function($item){
+                    $item["src"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $item["src"] . "?x-oss-process=image/resize,w_500";
+                });
             return Api_success("获取成功",$res);
         }
     }
