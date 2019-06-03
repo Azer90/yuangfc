@@ -29,4 +29,30 @@ class UserController extends Controller
             $info = User::where("id",$data["uId"])->first(["id","name","mobile","avatar"]);
             return Api_success("获取成功",$info);
     }
+
+
+    /**
+     * 获取用户信息
+     */
+    public function getUserInfo(Request $request)
+    {
+        $data = $request->input();
+      
+        if(empty($data["openId"])){
+            return Api_error("缺少openId");
+        }
+
+        $userInfo = User::where("open_id",$data["openId"])->select("id","name","mobile","avatar","wchat_name","type","sex")->first();
+        $res = [
+            "openid"=>$data["openId"],
+            "userInfo"=>$userInfo
+        ];
+        if(!empty($userInfo)){
+            $res["isRegister"] = 1;
+            return Api_success("获取成功",$res);
+        }else{
+            $res["isRegister"] = 0;
+            return Api_error("获取失败",$res);
+        }
+    }
 }
