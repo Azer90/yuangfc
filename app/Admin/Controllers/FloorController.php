@@ -140,10 +140,20 @@ class FloorController extends Controller
         $form = new Form(new Floor);
 
         if(Admin::user()->isAdministrator()){
-
-            $form->select('province_id','省')->options('/api/province')->load('city_id', '/api/city')->rules('required');
-            $form->select('city_id','市')->load('district_id', '/api/city')->rules('required');
-            $form->select('district_id','区')->load('circle_id', '/api/circle')->rules('required');
+            $id = request()->route('floor');
+            $city_id = 0;
+            $district_id = 0;
+            $circle_id = 0;
+            if ($id)
+            {
+                $model = $form->model()->find($id);
+                $city_id = $model->city_id;
+                $district_id= $model->district_id;
+                $circle_id= $model->circle_id;
+            }
+            $form->select('province_id','省')->options('/api/province')->load('city_id', '/api/city',$city_id)->rules('required');
+            $form->select('city_id','市')->load('district_id', '/api/city',$district_id)->rules('required');
+            $form->select('district_id','区')->load('circle_id', '/api/circle',$circle_id)->rules('required');
             $form->select('circle_id','商圈')->rules('required');
         }else{
             $form->hidden('province_id')->default(Admin::user()->province_id);

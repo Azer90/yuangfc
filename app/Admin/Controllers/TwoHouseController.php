@@ -93,7 +93,7 @@ class TwoHouseController extends Controller
             $where=['type'=>2,'district_id'=>$district_id];
         }
 
-        $grid->model()->where($where);
+        $grid->model()->where($where)->orderBy('id','desc');
         // 在这里添加字段过滤器
         $grid->filter(function($filter){
 
@@ -259,10 +259,23 @@ class TwoHouseController extends Controller
         $form = new Form(new Housings);
         if(Admin::user()->isAdministrator()){
 
-            $form->select('province_id','省')->options('/api/province')->load('city_id', '/api/city');
-            $form->select('city_id','市')->load('district_id', '/api/city');
-            $form->select('district_id','区')->load('circle_id', '/api/circle');
-            $form->select('circle_id','商圈')->load('floor_id', '/api/floor');
+            $id = request()->route('twohouse');
+            $city_id = 0;
+            $district_id = 0;
+            $circle_id = 0;
+            $floor_id = 0;
+            if ($id)
+            {
+                $model = $form->model()->find($id);
+                $city_id = $model->city_id?:0;
+                $district_id= $model->district_id?:0;
+                $circle_id= $model->circle_id?:0;
+                $floor_id= $model->floor_id?:0;
+            }
+            $form->select('province_id','省')->options('/api/province')->load('city_id', '/api/city',$city_id);
+            $form->select('city_id','市')->load('district_id', '/api/city',$district_id);
+            $form->select('district_id','区')->load('circle_id', '/api/circle',$circle_id);
+            $form->select('circle_id','商圈')->load('floor_id', '/api/floor',$floor_id);
             $form->select('floor_id','楼盘');
             $form->select('agent_id','经纪人')->options('/api/agent')->rules('required');
         }else{
@@ -296,8 +309,8 @@ class TwoHouseController extends Controller
         $form->decimal('price', '价格')->default(0.00)->rules('required');
         $form->decimal('min_price', '最低价格')->default(0.00)->rules('required');
         $form->radio('renovation', '装修类型')->options([1 => '精装修', 2 => '简装', 3 => '清水房'])->rules('required');
-        $form->number('floor', '楼层')->min(1)->max(100)->rules('required');
-        $form->number('t_floor', '总楼层')->min(1)->max(100)->rules('required');
+        $form->number('floor', '楼层')->min(1)->max(100)->rules('required')->default(0);
+        $form->number('t_floor', '总楼层')->min(1)->max(100)->rules('required')->default(0);
         $form->address('latitude', 'longitude','地址','address');
         $form->textarea('desc', '描述');
         $form->textarea('remark', '备注');

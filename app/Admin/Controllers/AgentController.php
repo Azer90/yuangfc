@@ -9,7 +9,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
-
+use Encore\Admin\Facades\Admin;
 class AgentController extends Controller
 {
     use HasResourceActions;
@@ -80,7 +80,15 @@ class AgentController extends Controller
     protected function grid()
     {
         $grid = new Grid(new User);
-        $grid->model()->where('type',1);
+        if(Admin::user()->isAdministrator()){
+
+            $grid->model()->where('type',1)->orderBy('id','desc');
+        }else{
+            $grid->model()->where('type',1)->orderBy('id','desc');
+           //$district_id=Admin::user()->district_id;
+            //$grid->model()->where(['type'=>1,'district_id'=>$district_id])->orderBy('id','desc');
+        }
+
         $grid->id('Id');
         $grid->name('姓名(昵称)');
         $grid->wchat_name('微信名称');

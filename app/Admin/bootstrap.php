@@ -38,6 +38,8 @@ Grid::init(function (Grid $grid) {
 });
 Form::init(function (Form $form) {
 
+    // 去掉`重置`按钮
+    $form->disableReset();
     $form->disableEditingCheck();
 
     $form->disableCreatingCheck();

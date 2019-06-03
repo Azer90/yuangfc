@@ -80,7 +80,7 @@ class TagController extends Controller
     protected function grid()
     {
         $grid = new Grid(new Tags);
-
+        $grid->model()->orderBy('id','desc');
         $grid->id('Id');
         $grid->name('名称');
         $grid->created_at(trans('admin.created_at'));

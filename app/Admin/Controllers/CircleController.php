@@ -148,10 +148,19 @@ class CircleController extends Controller
     {
         $form = new Form(new Circle);
         if(Admin::user()->isAdministrator()){
+            $id = request()->route('circle');
+            $city_id = 0;
+            $district_id = 0;
 
-            $form->select('province_id','省')->options('/api/province')->load('city_id', '/api/city')->rules('required');
-            $form->select('city_id','市')->load('district_id', '/api/city')->rules('required');
-            $form->select('district_id','区')->rules('required');
+            if ($id)
+            {
+                $model = $form->model()->find($id);
+                $city_id = $model->city_id;
+                $district_id= $model->district_id;
+            }
+            $form->select('province_id','省')->options('/api/province')->load('city_id', '/api/city',$city_id)->rules('required');
+            $form->select('city_id','市')->options()->load('district_id', '/api/city',$district_id)->rules('required');
+            $form->select('district_id','区')->options()->rules('required');
         }else{
             $form->hidden('province_id')->default(Admin::user()->province_id);
             $form->hidden('city_id')->default(Admin::user()->city_id);
