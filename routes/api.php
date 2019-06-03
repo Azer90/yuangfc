@@ -65,6 +65,7 @@ Route::group($attributes,function (Router $router) {
     $router->post('api_addWanBuy', "WanBuyController@addWanBuy")->name('api_addWanBuy');//hkz
     $router->post('api_getWanBuy', "WanBuyController@getWanBuy")->name('api_getWanBuy');//hkz
     $router->post('api_deleteWanBuy', "WanBuyController@deleteWanBuy")->name('api_deleteWanBuy');//hkz
+    $router->post('api_getUserInfo', "UserController@getUserInfo")->name('api_getUserInfo');//hkz
 
 
 });
