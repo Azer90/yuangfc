@@ -78,7 +78,7 @@ class AppointmentController extends Controller
             }
 
             if($val["house"]["rentsale"]==1){
-                $val["house"]["unit_price"] =  round(($val["house"]["price"]/$val["house"]["area"])*10000);
+                $val["house"]["unit_price"] =  round(($val["house"]["price"]/(empty($val["house"]["area"])?$val["house"]["area"]:1))*10000);
             }
             $val["house"]["thumd"] = "";
             if($val["house"]["pictures"]){
@@ -205,7 +205,7 @@ class AppointmentController extends Controller
 
 
             if($val["house"]["rentsale"]==1){
-                $val["house"]["unit_price"] =  round(($val["house"]["price"]/$val["house"]["area"])*10000);
+                $val["house"]["unit_price"] =  round(($val["house"]["price"]/(empty($val["house"]["area"])?$val["house"]["area"]:1))*10000);
             }
             $val["house"]["thumd"] = "";
             if($val["house"]["pictures"]){
@@ -263,7 +263,7 @@ class AppointmentController extends Controller
 
 
         foreach ($collection as $value){
-            $value["unit_price"] = round($value["unit_price"]*10000);
+            $value["unit_price"] = round((empty($value["unit_price"])?0:$value["unit_price"])*10000);
             $value["pictures"] = json_decode($value["pictures"],true);
             $value["tags"] = json_decode($value["tags"],true);
             $value["select"] =false;
@@ -287,7 +287,7 @@ class AppointmentController extends Controller
             ->paginate(10,["h.id as h_id","f.name as f_name","r.id as c_id","title","room","hall","toilet","area","price","tags",DB::raw('price/area AS unit_price')],isset($data["page"])?$data["page"]:1);
 
         foreach ($collection as $value){
-                $value["unit_price"] = round($value["unit_price"] * 10000);
+                $value["unit_price"] = round(empty($value["unit_price"])?0:$value["unit_price"] * 10000);
                 $value["pictures"] = json_decode($value["pictures"], true);
                 $value["tags"] = json_decode($value["tags"], true);
                 $value["select"] = false;

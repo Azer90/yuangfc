@@ -57,7 +57,7 @@ class HouseController extends Controller
         foreach ($res as $item) {
             $item["thumd"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $item["pictures"][0] . "?x-oss-process=image/resize,w_500";
             if ($w["rentsale"] != 2) {
-                $item["unit_price"] = round($item["unit_price"] * 10000);
+                $item["unit_price"] = round(empty($item["unit_price"])?0:$item["unit_price"] * 10000);
             }
 
             //标签
@@ -283,7 +283,7 @@ class HouseController extends Controller
                 $item["thumd"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $item["pictures"][0] . "?x-oss-process=image/resize,w_500";
 //                $item["thumd"] = Storage::disk(config('admin.upload.disk'))->url($item["pictures"][0])."?x-oss-process=image/resize,w_500";
                 if ($search_data["list_type"] != 3) {
-                    $item["unit_price"] = round($item["unit_price"] * 10000);
+                    $item["unit_price"] = round(empty($item["unit_price"])?0:$item["unit_price"] * 10000);
                     $item["price_unit"] = "万";
                 } else {
                     $item["price_unit"] = "元/月";
@@ -475,7 +475,7 @@ class HouseController extends Controller
                         $item["img"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $item["pictures"][0] . "?x-oss-process=image/resize,w_500";
                     }
 
-                    $item["rec_unit_price"] = round($item["rec_unit_price"] * 10000);
+                    $item["rec_unit_price"] = round(empty($item["rec_unit_price"])?0:$item["rec_unit_price"] * 10000);
 
                     $recommend_floor = $item->floors;
                     if (!empty($recommend_floor)) {
