@@ -440,7 +440,13 @@ class HouseController extends Controller
                 $res["floor_name"] = "";
             }
             //经纪人
-            $agent = User::where(["id"=>$res["agent_id"],"type"=>1])->first(["id","name","mobile","avatar","open_id"]);
+
+            $agent = User::where(["id"=>$res["agent_id"]])
+                ->where(function($q1){
+                    $q1->orWhere('type',1)
+                        ->orWhere('type',2);
+                })->first(["id","name","mobile","avatar","open_id"]);
+
             //是否关注
             $is_follow = 0;
             if(isset($data["make_id"])&&!empty($data["make_id"])){
