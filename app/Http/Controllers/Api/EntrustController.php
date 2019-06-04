@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\District;
 use App\Entrust;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -60,6 +61,10 @@ class EntrustController extends Controller
                 'type'=>$data["type"],
                 'created_at'=>date('Y-m-d H:i:s'),
             ];
+            if(empty($_data['province_id'])){
+                $parent_id= District::where('id',$_data['city_id'])->value('parent_id');
+                $_data['province_id']=$parent_id;
+            }
 
         $id=Entrust::insertGetId($_data);
         if($id){
