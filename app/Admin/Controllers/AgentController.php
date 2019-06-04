@@ -84,9 +84,9 @@ class AgentController extends Controller
 
             $grid->model()->where('type',1)->orderBy('id','desc');
         }else{
-            $grid->model()->where('type',1)->orderBy('id','desc');
-           //$district_id=Admin::user()->district_id;
-            //$grid->model()->where(['type'=>1,'district_id'=>$district_id])->orderBy('id','desc');
+
+           $district_id=Admin::user()->district_id;
+            $grid->model()->from('users as u')->join('agent_check as ac','ac.user_id','=','u.id')->where(['u.type'=>1,'ac.district_id'=>$district_id])->orderBy('u.id','desc');
         }
 
         $grid->id('Id');
