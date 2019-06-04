@@ -85,7 +85,7 @@ class EntrustController extends Controller
         if(empty($data["uid"])){
             return Api_error("缺少参数");
         }
-        $data=Entrust::where("u_id",$data["uid"])->simplePaginate(10);
+        $data=Entrust::where("u_id",$data["uid"])->orderBy('id','desc')->simplePaginate(10);
         return  Api_success('请求成功',$data);
     }
 

@@ -11,6 +11,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
+use Encore\Admin\Widgets\Table;
 use Illuminate\Http\Request;
 class EntrustController extends Controller
 {
@@ -91,7 +92,7 @@ class EntrustController extends Controller
         $grid->area('面积');
         $grid->price('价格');
         $grid->mobile('联系电话');
-        $grid->rentsale('租售类型')->using([1 => '出售',2 => '出租']);
+        $grid->rentsale('租售类型')->using([1 => '出售',2 => '出租',3 => '求购',4 => '求租']);
         $grid->type('委托类型')->using([1 => '直接委托',2 => '代委托']);
         $grid->state('审核状态')->display(function ($state) {
             switch ($state){
@@ -107,7 +108,13 @@ class EntrustController extends Controller
             }
             return $str;
         });
-        $grid->reason('驳回理由');
+        $grid->reason('驳回理由')->limit(12)->modal(function ($model) {
+            $comments = $model->where("id",$model->id)->take(1)->get()->map(function ($comment) {
+                return $comment->only(['reason']);
+            });
+
+            return new Table(['驳回理由'], $comments->toArray(),['table-hover']);
+        });
         $grid->created_at('创建时间');
 
         $grid->disableExport();//禁用导出
