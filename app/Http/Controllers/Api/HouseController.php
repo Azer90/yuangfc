@@ -460,6 +460,7 @@ class HouseController extends Controller
             }
             //是否预约
             $makeOrder = 0;
+
             if(isset($data["make_id"])&&!empty($data["make_id"])){
                 $where = ["house_id"=>$data["house_id"],"make_id"=>$data["make_id"],"state"=>0];
                 $makeOrder = MakeOrder::where($where)->count();
