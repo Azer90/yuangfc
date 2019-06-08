@@ -37,8 +37,14 @@ class CreateQrController extends Controller
         }
         $token = $this->getAccessToken();
         $url = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=".$token['access_token'];
+
+//        houseId: o,
+//        shar_id: shar_id,
+//        shar_type: shar_type,
+//        pages:"pages/detail/detail"
+
         $requst_data=[
-            "scene"=>"yuangfdc",
+            "scene"=>"shar_id=".$data["shar_id"]."&shar_type=".$data['shar_type']."&id=".$data['houseId'],
             "page"=>$data["pages"],
             "width"=>70
         ];
