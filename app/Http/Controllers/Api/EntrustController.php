@@ -60,6 +60,7 @@ class EntrustController extends Controller
                 'reason'=>'',
                 'type'=>$data["type"],
                 'created_at'=>date('Y-m-d H:i:s'),
+                "bU_id"=>$data["bU_id"]
             ];
             if(empty($_data['province_id'])){
                 $parent_id= District::where('id',$_data['city_id'])->value('parent_id');
