@@ -92,7 +92,7 @@ class WantBuyController extends Controller
         $grid->rentsale('租售类型')->using([1 => '出售',2 => '出租',3 => '求购',4 => '求租']);
         $grid->type('委托类型')->using([1 => '直接委托',2 => '代委托']);
         $grid->is_buy('是否购买')->radio([
-            0 => '未购买',
+            2 => '未购买',
             3 => '已购买',
         ]);
         $grid->created_at('创建时间');
@@ -142,7 +142,7 @@ class WantBuyController extends Controller
         $form->switch('rentsale', 'Rentsale');
         $form->switch('state', 'State');
         $form->radio('is_buy', 'is_buy')->options([
-            0 => '未购买',
+            2 => '未购买',
             3 => '已购买',
 
         ]);
