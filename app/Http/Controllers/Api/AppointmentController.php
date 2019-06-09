@@ -275,7 +275,8 @@ class AppointmentController extends Controller
                 };
             }
 
-            $value["pictures"] = explode(",",$value["pictures"]);
+            $value["pictures"] = json_decode($value["pictures"],true);
+
             $value["tags"] = $tag;
             $value["select"] =false;
             $value["thumd"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $value["pictures"][0] . "?x-oss-process=image/resize,w_500";
@@ -310,7 +311,7 @@ class AppointmentController extends Controller
             }
 
             $value["unit_price"] = round(empty($value["unit_price"])?0:$value["unit_price"] * 10000);
-            $value["pictures"] = explode(",",$value["pictures"]);
+            $value["pictures"] = json_decode($value["pictures"],true);
             $value["tags"] = $tag;
             $value["select"] = false;
             $value["thumd"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $value["pictures"][0] . "?x-oss-process=image/resize,w_500";
