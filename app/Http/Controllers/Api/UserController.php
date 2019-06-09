@@ -37,7 +37,7 @@ class UserController extends Controller
     public function getUserInfo(Request $request)
     {
         $data = $request->input();
-      
+
         if(empty($data["openId"])){
             return Api_error("缺少openId");
         }
