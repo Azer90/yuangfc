@@ -13,6 +13,7 @@ use App\Entrust;
 use App\Http\Controllers\Controller;
 use App\MakeOrder;
 use App\Recommend;
+use App\Tags;
 use App\User;
 use function foo\func;
 use Illuminate\Http\Request;
@@ -259,15 +260,23 @@ class AppointmentController extends Controller
         $collection= Recommend::from("recommend as r")
             ->leftJoin("housings as h","h.id","=","r.rec_id")
             ->leftJoin("floor as f","f.id","=","h.floor_id")
-
             ->where(["user_id"=>$data["user_id"],"r.type"=>2,"h.rentsale"=>1])
             ->paginate(10,["h.id as h_id","f.name as f_name","r.id as c_id","title","room","hall","toilet","area","price","pictures","tags",DB::raw('price/area AS unit_price')],isset($data["page"])?$data["page"]:1);
 
-
+        $all_tag = Tags::get(["id","name"])->toArray();
         foreach ($collection as $value){
             $value["unit_price"] = round((empty($value["unit_price"])?0:$value["unit_price"])*10000);
-            $value["pictures"] = json_decode($value["pictures"],true);
-            $value["tags"] = json_decode($value["tags"],true);
+            $value["tags"] = explode(",",$value["tags"]);
+            //标签
+            $tag = [];
+            foreach ($all_tag as $v){
+                if(in_array($v["id"],$value["tags"])){
+                    $tag[] = $v["name"];
+                };
+            }
+
+            $value["pictures"] = explode(",",$value["pictures"]);
+            $value["tags"] = $tag;
             $value["select"] =false;
             $value["thumd"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $value["pictures"][0] . "?x-oss-process=image/resize,w_500";
 
@@ -288,13 +297,24 @@ class AppointmentController extends Controller
             ->where(["user_id"=>$data["user_id"],"r.type"=>2,"h.rentsale"=>2])
             ->paginate(10,["h.id as h_id","f.name as f_name","r.id as c_id","title","room","hall","toilet","area","price","tags",DB::raw('price/area AS unit_price')],isset($data["page"])?$data["page"]:1);
 
+        $all_tag = Tags::get(["id","name"])->toArray();
         foreach ($collection as $value){
-                $value["unit_price"] = round(empty($value["unit_price"])?0:$value["unit_price"] * 10000);
-                $value["pictures"] = json_decode($value["pictures"], true);
-                $value["tags"] = json_decode($value["tags"], true);
-                $value["select"] = false;
-                $value["thumd"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $value["pictures"][0] . "?x-oss-process=image/resize,w_500";
+
+            $value["tags"] = explode(",",$value["tags"]);
+            //标签
+            $tag = [];
+            foreach ($all_tag as $v){
+                if(in_array($v["id"],$value["tags"])){
+                    $tag[] = $v["name"];
+                };
             }
+
+            $value["unit_price"] = round(empty($value["unit_price"])?0:$value["unit_price"] * 10000);
+            $value["pictures"] = explode(",",$value["pictures"]);
+            $value["tags"] = $tag;
+            $value["select"] = false;
+            $value["thumd"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $value["pictures"][0] . "?x-oss-process=image/resize,w_500";
+        }
         return $collection;
     }
 
