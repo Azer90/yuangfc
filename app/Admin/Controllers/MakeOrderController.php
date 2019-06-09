@@ -120,6 +120,7 @@ class MakeOrderController extends Controller
             0 => '未看房',
             1 => '已看房',
             2 => '已取消',
+            3 => '已买房',
         ]);
         $grid->created_at('创建时间');
 
@@ -194,6 +195,7 @@ class MakeOrderController extends Controller
             0 => '未看房',
             1 => '已看房',
             2 => '已取消',
+            3 => '已买房',
         ]);
         $form->switch('add_schedule', 'Add schedule');
 
