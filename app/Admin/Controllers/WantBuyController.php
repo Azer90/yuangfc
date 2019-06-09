@@ -9,7 +9,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
-
+use App\Entrust;
 class WantBuyController extends Controller
 {
     use HasResourceActions;
@@ -23,7 +23,7 @@ class WantBuyController extends Controller
     public function index(Content $content)
     {
         return $content
-            ->header('求购信息')
+            ->header('求购求租')
             ->description('列表')
             ->body($this->grid());
     }
@@ -79,15 +79,22 @@ class WantBuyController extends Controller
      */
     protected function grid()
     {
-        $grid = new Grid(new WantBuy);
+        $grid = new Grid(new Entrust('wantbuy'));
 
         $grid->id('Id');
-        $grid->real_name('姓名');
-        $grid->mobile('手机号');
-        $grid->address('地址');
+        $grid->address('所在地');
+        $grid->cell_name('小区名');
+        $grid->addr('详细地址');
+        $grid->name('委托人称呼');
         $grid->area('面积');
-        $grid->price('价钱');
-        $grid->ament('房型');
+        $grid->price('价格');
+        $grid->mobile('联系电话');
+        $grid->rentsale('租售类型')->using([1 => '出售',2 => '出租',3 => '求购',4 => '求租']);
+        $grid->type('委托类型')->using([1 => '直接委托',2 => '代委托']);
+        $grid->is_buy('是否购买')->radio([
+            0 => '未购买',
+            3 => '已购买',
+        ]);
         $grid->created_at('创建时间');
         $grid->disableExport();//禁用导出
         $grid->disableCreateButton();
@@ -108,20 +115,8 @@ class WantBuyController extends Controller
      */
     protected function detail($id)
     {
-        $show = new Show(WantBuy::findOrFail($id));
+        $show = new Show(Entrust::findOrFail($id));
 
-        $show->id('Id');
-        $show->user_id('User id');
-        $show->province_id('Province id');
-        $show->city_id('City id');
-        $show->district_id('District id');
-        $show->real_name('Real name');
-        $show->mobile('Mobile');
-        $show->area('Area');
-        $show->price('Price');
-        $show->ament('Ament');
-        $show->created_at('Created at');
-        $show->updated_at('Updated at');
 
         return $show;
     }
@@ -133,17 +128,25 @@ class WantBuyController extends Controller
      */
     protected function form()
     {
-        $form = new Form(new WantBuy);
+        $form = new Form(new Entrust);
 
-        $form->number('user_id', 'User id');
         $form->number('province_id', 'Province id');
         $form->number('city_id', 'City id');
         $form->number('district_id', 'District id');
-        $form->text('real_name', 'Real name');
-        $form->mobile('mobile', 'Mobile');
+        $form->text('cell_name', 'Cell name');
+        $form->text('addr', 'Addr');
+        $form->text('name', 'Name');
         $form->decimal('area', 'Area')->default(0.00);
         $form->decimal('price', 'Price')->default(0.00);
-        $form->text('ament', 'Ament');
+        $form->mobile('mobile', 'Mobile');
+        $form->switch('rentsale', 'Rentsale');
+        $form->switch('state', 'State');
+        $form->radio('is_buy', 'is_buy')->options([
+            0 => '未购买',
+            3 => '已购买',
+
+        ]);
+        $form->text('reason', 'Reason');
 
         return $form;
     }
