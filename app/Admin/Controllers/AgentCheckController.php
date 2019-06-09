@@ -158,9 +158,9 @@ class AgentCheckController extends Controller
     public function agent_examine(Request $request){
 
         $data=$request->all();
-        $user_id=AgentCheck::where('id',$data['id'])->value('user_id');
+        $user=AgentCheck::where('id',$data['id'])->first();
         AgentCheck::where('id',$data['id'])->update(['state'=>1]);
-        User::where('id',$user_id)->update(['type'=>1]);
+        User::where('id',$user['user_id'])->update(['type'=>1,'name'=>$user['real_name']]);
         return Api_success('审核成功,已通过');
     }
 
