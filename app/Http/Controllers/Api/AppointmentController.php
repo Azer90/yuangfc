@@ -9,10 +9,12 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Entrust;
 use App\Http\Controllers\Controller;
 use App\MakeOrder;
 use App\Recommend;
 use App\User;
+use function foo\func;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -332,5 +334,45 @@ class AppointmentController extends Controller
         }else{
             return Api_error("删除失败");
         }
+    }
+
+    /**
+     * @param Request $request
+     * 我的客户
+     */
+    public function getClient(Request $request)
+    {
+
+        $data = $request->input();
+        if(empty($data["uid"])){
+            return Api_error("缺少参数");
+        }
+        $res = MakeOrder::from("make_order as m")
+            ->LeftJoin("users as u","u.id","=","m.make_id")
+            ->where(["agent_id"=>$data["uid"],"add_schedule"=>1])
+            ->orderBy("m.created_at","desc")
+            ->select(["avatar","make_name","make_mobile","state"])
+            ->union(Entrust::from("entrust as e")
+                ->where(["e.type"=>1,"bU_id"=>$data["uid"]])
+                ->LeftJoin("users as u","u.id","=","e.bU_id")
+                ->where(function($sql1){
+                $sql1->Orwhere("rentsale",3)
+                    ->Orwhere("rentsale",4);
+            })->select(["avatar","e.name as make_name","e.mobile as make_mobile","is_buy as state"])
+                ->orderBy("e.created_at","desc")
+            )
+            ->union(Entrust::from("entrust as e")
+                ->where(["e.type"=>2,"u_id"=>$data["uid"]])
+                ->LeftJoin("users as u","u.id","=","e.u_id")
+                ->where(function($sql2){
+                $sql2->Orwhere("rentsale",3)
+                    ->Orwhere("rentsale",4);
+            })
+            ->select(["avatar","e.name as make_name","e.mobile as make_mobile","is_buy as state"])
+            ->orderBy("e.created_at","desc")
+            )
+            ->simplePaginate(10);
+
+        return Api_success("获取成功",$res);
     }
 }

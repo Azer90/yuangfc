@@ -67,6 +67,7 @@ Route::group($attributes,function (Router $router) {
     $router->post('api_deleteWanBuy', "WanBuyController@deleteWanBuy")->name('api_deleteWanBuy');//hkz
     $router->post('api_getUserInfo', "UserController@getUserInfo")->name('api_getUserInfo');//hkz
     $router->post('api_getQr', "CreateQrController@getQr")->name('api_getQr');//hkz
+    $router->post('api_getClient', "AppointmentController@getClient")->name('api_getClient');//hkz
 
 
 });
