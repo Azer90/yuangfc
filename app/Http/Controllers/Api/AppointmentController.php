@@ -33,7 +33,7 @@ class AppointmentController extends Controller
             if(empty($data["house_id"])||empty($data["agent_id"])||empty($data["make_id"])){
                 return Api_error("缺少参数");
             }
-            $exist =MakeOrder::where(["house_id"=>$data["house_id"],"agent_id"=>$data["agent_id"],"make_id"=>$data["make_id"]])->count();
+            $exist =MakeOrder::where(["house_id"=>$data["house_id"],"agent_id"=>$data["agent_id"],"make_id"=>$data["make_id"],"state"=>0])->count();
 
             if($exist){
                 return Api_error("该房源已预约");
