@@ -80,7 +80,7 @@ class AppointmentController extends Controller
             }
 
             if($val["house"]["rentsale"]==1){
-                $val["house"]["unit_price"] =  round(($val["house"]["price"]/(empty($val["house"]["area"])?$val["house"]["area"]:1))*10000);
+                $val["house"]["unit_price"] =  round(($val["house"]["price"]/($val["house"]["area"]!="0.0"?$val["house"]["area"]:1))*10000);
             }
             $val["house"]["thumd"] = "";
             if($val["house"]["pictures"]){
@@ -207,7 +207,7 @@ class AppointmentController extends Controller
 
 
             if($val["house"]["rentsale"]==1){
-                $val["house"]["unit_price"] =  round(($val["house"]["price"]/(empty($val["house"]["area"])?$val["house"]["area"]:1))*10000);
+                $val["house"]["unit_price"] =  round(($val["house"]["price"]/($val["house"]["area"]!="0.0"?$val["house"]["area"]:1))*10000);
             }
             $val["house"]["thumd"] = "";
             if($val["house"]["pictures"]){
