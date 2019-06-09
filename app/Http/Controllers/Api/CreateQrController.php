@@ -55,7 +55,7 @@ class CreateQrController extends Controller
         if($info["errmsg"]=="ok"){
             return Api_success("生成成功",$info["buffer"]);
         }else{
-            return Api_error("生成失败");
+            return Api_error("生成失败","https://www.yuangfc.com/web/default/images/linshiQe.png");
         }
     }
 }
