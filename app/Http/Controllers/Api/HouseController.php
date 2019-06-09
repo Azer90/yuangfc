@@ -49,11 +49,12 @@ class HouseController extends Controller
     public function getHot($w)
     {
         $res = Housings::where($w)
-            ->select("id", "title", "type", "purpose", "room", "hall", "toilet", "floor_id", "district_id", "circle_id", "area", "direction", "price", DB::raw('price/area AS unit_price'), "pictures")
+            ->select("id", "title", "type", "purpose", "room", "hall", "toilet", "floor_id", "district_id", "circle_id", "area", "direction", "price", DB::raw('price/area AS unit_price'), "pictures","tags")
             ->limit(3)
             ->orderBy("created_at", "desc")
             ->get();
         $all_tag = Tags::get(["id","name"])->toArray();
+
         foreach ($res as $item) {
             $item["thumd"] = "https://" . config("filesystems.disks.oss.bucket") . "." . config("filesystems.disks.oss.endpoint") . "/" . $item["pictures"][0] . "?x-oss-process=image/resize,w_500";
             if ($w["rentsale"] != 2) {
@@ -67,6 +68,7 @@ class HouseController extends Controller
                     $tag[] = $v["name"];
                 };
             }
+
             $item["tag"] =$tag;
 
             //小区
@@ -95,6 +97,7 @@ class HouseController extends Controller
             unset($item["pictures"]);
             unset($item["floors"]);
         }
+
         return $res;
     }
 
