@@ -99,4 +99,24 @@ class EntrustController extends Controller
         Entrust::where("id",$data["id"])->delete();
         return  Api_success('删除成功');
     }
+
+    /**
+     *获取我的房源信息
+     */
+    public function getMyHouse(Request $request)
+    {
+        $data = $request->input();
+        if(empty($data["uid"])){
+            return Api_error("缺少参数");
+        }
+        $data=Entrust::where(["u_id"=>$data["uid"],"type"=>2])
+            ->orderBy('id','desc')
+            ->union(
+                Entrust::where(["bU_id"=>$data["uid"],"type"=>1])
+                ->orderBy('id','desc')
+            )
+            ->simplePaginate(10);
+        return  Api_success('请求成功',$data);
+    }
+
 }
