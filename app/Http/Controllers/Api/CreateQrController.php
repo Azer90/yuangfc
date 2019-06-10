@@ -48,14 +48,19 @@ class CreateQrController extends Controller
             "page"=>$data["pages"],
             "width"=>70
         ];
+
         $requst_data = json_encode($requst_data);
         $res = curl_post($url,$requst_data);
-        $info = json_decode($res,true);
+        $filename = "minQr.jpg";
 
-        if($info["errmsg"]=="ok"){
-            return Api_success("生成成功",$info["buffer"]);
+        $file = fopen($_SERVER['DOCUMENT_ROOT']."/web/qr/".$filename,"w");//打开文件准备写入
+        fwrite($file,$res);//写入
+        fclose($file);//关闭
+
+        if($file){
+            return Api_success("生成成功", $_SERVER['HTTP_HOST']."/web/qr/".$filename);
         }else{
-            return Api_error("生成失败","https://www.yuangfc.com/web/default/images/linshiQe.png");
+            return Api_error("生成失败");
         }
     }
 }
