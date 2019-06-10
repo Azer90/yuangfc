@@ -52,8 +52,9 @@ class CreateQrController extends Controller
         $requst_data = json_encode($requst_data);
         $res = curl_post($url,$requst_data);
         $filename = "minQr.jpg";
+
         if(!is_dir($_SERVER['DOCUMENT_ROOT']."/web/qr/")){
-            mkdir($_SERVER['DOCUMENT_ROOT']."/web/qr/");
+            mkdir($_SERVER['DOCUMENT_ROOT']."/web/qr/",777);
         }
 
         $file = fopen($_SERVER['DOCUMENT_ROOT']."/web/qr/".$filename,"w");//打开文件准备写入
