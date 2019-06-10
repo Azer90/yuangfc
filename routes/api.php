@@ -69,6 +69,8 @@ Route::group($attributes,function (Router $router) {
     $router->post('api_getQr', "CreateQrController@getQr")->name('api_getQr');//hkz
     $router->post('api_getClient', "AppointmentController@getClient")->name('api_getClient');//hkz
     $router->post('api_getMyHouse', "EntrustController@getMyHouse")->name('api_getMyHouse');//hkz
+    $router->post('api_getProvince', "DistrictController@getProvince")->name('api_getProvince');//hkz
+    $router->post('api_getCity', "DistrictController@getCity")->name('api_getCity');//hkz
 
 
 });
