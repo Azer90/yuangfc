@@ -57,7 +57,7 @@ class CreateQrController extends Controller
             mkdir($_SERVER['DOCUMENT_ROOT']."/web/qr/",777);
         }
 
-        $file = fopen($_SERVER['DOCUMENT_ROOT']."/web/qr/".$filename,"w");//打开文件准备写入
+        $file = fopen("https://".$_SERVER['DOCUMENT_ROOT']."/web/qr/".$filename,"w");//打开文件准备写入
         fwrite($file,$res);//写入
         fclose($file);//关闭
 
