@@ -425,6 +425,7 @@ class HouseController extends Controller
                     }
                 }
             }
+            $res["floor"] = $res["floor"]+2;
 
             //区
             $district = $res->district;

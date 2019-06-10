@@ -370,16 +370,16 @@ class AppointmentController extends Controller
         }
         $res = MakeOrder::from("make_order as m")
             ->LeftJoin("users as u","u.id","=","m.make_id")
-            ->where(["agent_id"=>$data["uid"],"add_schedule"=>1])
+            ->where(["agent_id"=>$data["uid"]])
             ->orderBy("m.created_at","desc")
-            ->select(["avatar","make_name","make_mobile","state"])
+            ->select(["avatar","make_name","wchat_name","make_mobile","state"])
             ->union(Entrust::from("entrust as e")
                 ->where(["e.type"=>1,"bU_id"=>$data["uid"]])
                 ->LeftJoin("users as u","u.id","=","e.bU_id")
                 ->where(function($sql1){
                 $sql1->Orwhere("rentsale",3)
                     ->Orwhere("rentsale",4);
-            })->select(["avatar","e.name as make_name","e.mobile as make_mobile","is_buy as state"])
+            })->select(["avatar","e.name as make_name","wchat_name","e.mobile as make_mobile","is_buy as state"])
                 ->orderBy("e.created_at","desc")
             )
             ->union(Entrust::from("entrust as e")
@@ -389,7 +389,7 @@ class AppointmentController extends Controller
                 $sql2->Orwhere("rentsale",3)
                     ->Orwhere("rentsale",4);
             })
-            ->select(["avatar","e.name as make_name","e.mobile as make_mobile","is_buy as state"])
+            ->select(["avatar","e.name as make_name","wchat_name","e.mobile as make_mobile","is_buy as state"])
             ->orderBy("e.created_at","desc")
             )
             ->simplePaginate(10);
