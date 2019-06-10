@@ -25,21 +25,21 @@ class MakeOrder extends Model
         $start = ($page-1)*$perPage;
         if(Admin::user()->isAdministrator()){
             // 运行sql获取数据数组
-            $result = self::from('make_order as mo')->where('mo.add_schedule',1)
+            $result = self::from('make_order as mo')
                 ->join('housings as h','h.id','=','mo.house_id')
                 ->join('users as u','u.id', '=', 'mo.agent_id')
                 ->join('users as u1','u1.id', '=', 'mo.make_id')
-                ->skip($start)->take($perPage)->orderBy('mo.id', 'desc')->get(['mo.*','h.title','u.name','u1.wchat_name'])->toArray();
-            $total =self::where('add_schedule',1)->count();
+                ->skip($start)->take($perPage)->orderBy('mo.id', 'desc')->get(['mo.*','h.title','u.name','u1.wchat_name','u1.mobile'])->toArray();
+            $total =self::count();
         }else{
             // 运行sql获取数据数组
             $district_id=Admin::user()->district_id;
-            $result = self::from('make_order as mo')->where(['mo.add_schedule'=>1,'h.district_id'=>$district_id])
+            $result = self::from('make_order as mo')->where(['h.district_id'=>$district_id])
                 ->join('housings as h','h.id','=','mo.house_id')
                 ->join('users as u','u.id', '=', 'mo.agent_id')
                 ->join('users as u1','u1.id', '=', 'mo.make_id')
-                ->skip($start)->take($perPage)->orderBy('mo.id', 'desc')->get(['mo.*','h.title','u.name','u1.wchat_name'])->toArray();
-            $total =self::where('add_schedule',1)->count();
+                ->skip($start)->take($perPage)->orderBy('mo.id', 'desc')->get(['mo.*','h.title','u.name','u1.wchat_name','u1.mobile'])->toArray();
+            $total =self::count();
         }
 
         //dd($result);

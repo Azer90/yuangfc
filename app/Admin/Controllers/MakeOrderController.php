@@ -82,7 +82,7 @@ class MakeOrderController extends Controller
     {
         $grid = new Grid(new MakeOrder);
         $grid->id('Id');
-        $grid->title('预约房源')->modal('房源信息', function ($model) {
+        $grid->title('预约房源')->limit(12)->modal('房源信息', function ($model) {
             $comments = Housings::where("id",$model->house_id)->take(1)->get()->map(function ($comment) {
                 $data=$comment->only(['id','title','address','type', 'rentsale','owner','phone']);
                 if($data['rentsale']==1){
@@ -107,7 +107,11 @@ class MakeOrderController extends Controller
         $grid->name('经纪人姓名');
         $grid->wchat_name('预约人微信名');
         $grid->make_name('称呼');
-        $grid->make_mobile('电话');
+        $grid->make_mobile('电话')->display(function ($mobile) {
+
+            return empty($mobile)? $this->mobile:$mobile;
+
+        });;
         $grid->time('预约日期');
         $grid->time_slot('时间段')->using([0 => '全天',1 => '上午',2 => '下午',3 => '晚上']);
         $grid->remark('备注');
