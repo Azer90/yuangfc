@@ -41,4 +41,29 @@ class DistrictController extends Controller{
 
         return User::where('type', 1)->get(['id', DB::raw('wchat_name as text')]);
     }
+
+    /**
+     * 获取所以省份
+     */
+    public function getProvince()
+    {
+        $res =  District::where('parent_id', 0)->get(['id', "name"]);
+
+        return Api_success("获取成功",$res);
+    }
+
+    /**
+     * @param Request $request
+     * @return District[]|\Illuminate\Database\Eloquent\Collection
+     * 获取指定省下市
+     */
+    public function getCity(Request $request)
+    {
+        $provinceId = $request->input('province_id');
+
+        $res = District::where('parent_id', $provinceId)->get(['id', DB::raw('name as text')]);
+
+        return  Api_success("获取成功",$res);
+    }
+
 }
