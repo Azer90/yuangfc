@@ -19,6 +19,10 @@ class Entrust extends Model
 
     public function paginate()
     {
+        $id = Request::get('id', 0);
+        $province_id = Request::get('province_id', 0);
+        $city_id = Request::get('city_id', 0);
+        $district_id = Request::get('district_id', 0);
 
         $perPage = Request::get('per_page', 20);
 
@@ -27,9 +31,26 @@ class Entrust extends Model
         $start = ($page-1)*$perPage;
         $rentsale=empty($this->is_type)?[1,2]:[3,4];
         if(Admin::user()->isAdministrator()){
+            if($id>0){
+                $where['id']=$id;
+            }
+            if($province_id>0){
+                $where['province_id']=$province_id;
+            }
+            if($city_id>0){
+                $where['city_id']=$city_id;
+            }
+            if($district_id>0){
+                $where['district_id']=$district_id;
+            }
+            if (isset($where)){
+                $result = self::skip($start)->whereBetween('rentsale',$rentsale)->where($where)->take($perPage)->orderBy('id', 'desc')->get()->toArray();
+            }else{
+                $result = self::skip($start)->whereBetween('rentsale',$rentsale)->take($perPage)->orderBy('id', 'desc')->get()->toArray();
+            }
             // 运行sql获取数据数组
-            $result = self::skip($start)->whereBetween('rentsale',$rentsale)->take($perPage)->orderBy('id', 'desc')->get()->toArray();
-            $total =self::whereBetween('rentsale',$rentsale)->count();
+
+            $total =count($result);
         }else{
             // 运行sql获取数据数组
             $district_id=Admin::user()->district_id;

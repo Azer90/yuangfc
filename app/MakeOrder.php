@@ -17,6 +17,10 @@ class MakeOrder extends Model
 
     public function paginate()
     {
+        $id = Request::get('id', 0);
+        $province_id = Request::get('province_id', 0);
+        $city_id = Request::get('city_id', 0);
+        $district_id = Request::get('district_id', 0);
 
         $perPage = Request::get('per_page', 20);
 
@@ -25,12 +29,35 @@ class MakeOrder extends Model
         $start = ($page-1)*$perPage;
         if(Admin::user()->isAdministrator()){
             // 运行sql获取数据数组
-            $result = self::from('make_order as mo')
-                ->join('housings as h','h.id','=','mo.house_id')
-                ->join('users as u','u.id', '=', 'mo.agent_id')
-                ->join('users as u1','u1.id', '=', 'mo.make_id')
-                ->skip($start)->take($perPage)->orderBy('mo.id', 'desc')->get(['mo.*','h.title','u.name','u1.wchat_name','u1.mobile'])->toArray();
-            $total =self::count();
+            if($id>0){
+                $where['mo.id']=$id;
+            }
+            if($province_id>0){
+                $where['h.province_id']=$province_id;
+            }
+            if($city_id>0){
+                $where['h.city_id']=$city_id;
+            }
+            if($district_id>0){
+                $where['h.district_id']=$district_id;
+            }
+            if(isset($where)){
+                $result = self::from('make_order as mo')
+                    ->join('housings as h','h.id','=','mo.house_id')
+                    ->join('users as u','u.id', '=', 'mo.agent_id')
+                    ->join('users as u1','u1.id', '=', 'mo.make_id')
+                    ->where($where)->skip($start)->take($perPage)->orderBy('mo.id', 'desc')->get(['mo.*','h.title','u.name','u1.wchat_name','u1.mobile'])->toArray();
+
+                $total =count($result);
+            }else{
+                $result = self::from('make_order as mo')
+                    ->join('housings as h','h.id','=','mo.house_id')
+                    ->join('users as u','u.id', '=', 'mo.agent_id')
+                    ->join('users as u1','u1.id', '=', 'mo.make_id')
+                    ->skip($start)->take($perPage)->orderBy('mo.id', 'desc')->get(['mo.*','h.title','u.name','u1.wchat_name','u1.mobile'])->toArray();
+                $total =self::count();
+            }
+
         }else{
             // 运行sql获取数据数组
             $district_id=Admin::user()->district_id;

@@ -11,6 +11,7 @@ use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
+use Encore\Admin\Facades\Admin;
 class MakeOrderController extends Controller
 {
     use HasResourceActions;
@@ -81,6 +82,16 @@ class MakeOrderController extends Controller
     protected function grid()
     {
         $grid = new Grid(new MakeOrder);
+        // 在这里添加字段过滤器
+        $grid->filter(function($filter){
+
+            if(Admin::user()->isAdministrator()){
+                $filter->equal('province_id', '省')->select('/api/province')->load('city_id', '/api/city');
+                $filter->equal('city_id', '市')->select()->load('district_id', '/api/city');
+                $filter->equal('district_id', '区')->select();
+            }
+
+        });
         $grid->id('Id');
         $grid->title('预约房源')->limit(12)->modal('房源信息', function ($model) {
             $comments = Housings::where("id",$model->house_id)->take(1)->get()->map(function ($comment) {

@@ -10,6 +10,7 @@ use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use App\Entrust;
+use Encore\Admin\Facades\Admin;
 class WantBuyController extends Controller
 {
     use HasResourceActions;
@@ -80,7 +81,16 @@ class WantBuyController extends Controller
     protected function grid()
     {
         $grid = new Grid(new Entrust('wantbuy'));
+        // 在这里添加字段过滤器
+        $grid->filter(function($filter){
 
+            if(Admin::user()->isAdministrator()){
+                $filter->equal('province_id', '省')->select('/api/province')->load('city_id', '/api/city');
+                $filter->equal('city_id', '市')->select()->load('district_id', '/api/city');
+                $filter->equal('district_id', '区')->select();
+            }
+
+        });
         $grid->id('Id');
         $grid->address('所在地');
         $grid->cell_name('小区名');
