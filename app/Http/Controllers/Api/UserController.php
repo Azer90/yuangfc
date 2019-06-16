@@ -27,7 +27,12 @@ class UserController extends Controller
                 return Api_error("缺少参数");
             }
             $info = User::where("id",$data["uId"])->first(["id","name","mobile","avatar"]);
-            return Api_success("获取成功",$info);
+            if(!empty($info)){
+                return Api_success("获取成功",$info);
+            }else{
+                return Api_error("获取失败");
+            }
+
     }
 
 
