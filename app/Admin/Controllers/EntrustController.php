@@ -127,6 +127,10 @@ class EntrustController extends Controller
 
             return new Table(['驳回理由'], $comments->toArray(),['table-hover']);
         });
+        $grid->is_buy('是否交易')->radio([
+            2 => '未交易',
+            3 => '已交易',
+        ]);
         $grid->created_at('创建时间');
 
         $grid->disableExport();//禁用导出
@@ -203,7 +207,11 @@ class EntrustController extends Controller
         $form->switch('rentsale', 'Rentsale');
         $form->switch('state', 'State');
         $form->text('reason', 'Reason');
+        $form->radio('is_buy', 'is_buy')->options([
+            2 => '未交易',
+            3 => '已交易',
 
+        ]);
         return $form;
     }
 

@@ -2,10 +2,12 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Extensions\Tools\AddUserCenter;
 use App\Admin\Extensions\Tools\FalseDelete;
 use App\Housings;
 use App\MakeOrder;
 use App\Http\Controllers\Controller;
+use App\UserCenter;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -153,6 +155,7 @@ class MakeOrderController extends Controller
             if($actions->row->is_delete==0){
                 $actions->append(new FalseDelete($actions->getKey(),route('f_delete_m')));
             }
+            $actions->append(new AddUserCenter($actions->getKey(),route('add_userCenter_m')));
         });
         $grid->tools(function ($tools) {
             $tools->batch(function ($batch) {
@@ -230,5 +233,14 @@ class MakeOrderController extends Controller
         $data=$request->all();
         MakeOrder::where('id',$data['id'])->update(['is_delete'=>1]);
         return Api_success('删除成功');
+    }
+
+    public function add_userCenter(Request $request){
+
+        $data=$request->all();
+        MakeOrder::where('id',$data['id'])->update(['is_zy'=>1]);
+        $makeOrder=MakeOrder::find($data['id']);
+        UserCenter::insert(['user_id'=>$makeOrder['make_id'],'name'=>$makeOrder['make_name'],'mobile'=>$makeOrder['make_mobile']]);
+        return Api_success('加入成功');
     }
 }

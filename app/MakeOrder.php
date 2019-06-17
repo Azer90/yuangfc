@@ -27,6 +27,7 @@ class MakeOrder extends Model
         $page = Request::get('page', 1);
 
         $start = ($page-1)*$perPage;
+        $where['mo.is_zy']=0;
         if(Admin::user()->isAdministrator()){
             // 运行sql获取数据数组
             if($id>0){
@@ -50,7 +51,7 @@ class MakeOrder extends Model
 
                 $total =count($result);
             }else{
-                $result = self::from('make_order as mo')
+                $result = self::from('make_order as mo')->where($where)
                     ->join('housings as h','h.id','=','mo.house_id')
                     ->join('users as u','u.id', '=', 'mo.agent_id')
                     ->join('users as u1','u1.id', '=', 'mo.make_id')
@@ -61,7 +62,7 @@ class MakeOrder extends Model
         }else{
             // 运行sql获取数据数组
             $district_id=Admin::user()->district_id;
-            $result = self::from('make_order as mo')->where(['h.district_id'=>$district_id])
+            $result = self::from('make_order as mo')->where(['h.district_id'=>$district_id,'mo.is_zy'=>0])
                 ->join('housings as h','h.id','=','mo.house_id')
                 ->join('users as u','u.id', '=', 'mo.agent_id')
                 ->join('users as u1','u1.id', '=', 'mo.make_id')

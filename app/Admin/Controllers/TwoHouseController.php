@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Extensions\HouseExporter;
 use App\Admin\Extensions\Tools\ImportTool;
+use App\Admin\Extensions\Tools\Finish;
 use App\Housings;
 use App\User;
 use App\Tags;
@@ -87,10 +88,10 @@ class TwoHouseController extends Controller
     {
         $grid = new Grid(new Housings);
         if(Admin::user()->isAdministrator()){
-            $where=['type'=>2];
+            $where=['type'=>2,'is_zy'=>0];
         }else{
             $district_id=Admin::user()->district_id;
-            $where=['type'=>2,'district_id'=>$district_id];
+            $where=['type'=>2,'is_zy'=>0,'district_id'=>$district_id];
         }
 
         $grid->model()->where($where)->orderBy('id','desc');
@@ -227,7 +228,7 @@ class TwoHouseController extends Controller
         $grid->exporter(new HouseExporter());
         $grid->actions(function ($actions) {
             $actions->disableView();
-            //$actions->append('<a href="' . LayerPhoto(url('admin/scenic/get/photo'),1) . '"><i class="fa fa-eye"></i>查看相册</a>');
+            $actions->append(new Finish($actions->getKey(),route('finish_center')));
         });
 
         $grid->tools(function ($tools) {

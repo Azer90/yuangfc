@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Extensions\Tools\FalseDelete;
+use App\Admin\Extensions\Tools\AddUserCenter;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
@@ -10,6 +11,7 @@ use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use App\Entrust;
+use App\UserCenter;
 use Encore\Admin\Facades\Admin;
 use Illuminate\Http\Request;
 
@@ -122,7 +124,7 @@ class WantBuyController extends Controller
             if($actions->row->is_delete==0){
                 $actions->append(new FalseDelete($actions->getKey(),route('f_delete_w')));
             }
-
+            $actions->append(new AddUserCenter($actions->getKey(),route('add_userCenter')));
 
         });
 
@@ -178,5 +180,14 @@ class WantBuyController extends Controller
         $data=$request->all();
         Entrust::where('id',$data['id'])->update(['is_delete'=>1]);
         return Api_success('删除成功');
+    }
+
+    public function add_userCenter(Request $request){
+
+        $data=$request->all();
+        Entrust::where('id',$data['id'])->update(['is_zy'=>1]);
+        $ent=Entrust::find($data['id']);
+        UserCenter::insert(['user_id'=>$ent['u_id'],'name'=>$ent['name'],'mobile'=>$ent['mobile']]);
+        return Api_success('加入成功');
     }
 }

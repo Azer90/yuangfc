@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Extensions\HouseExporter;
+use App\Admin\Extensions\Tools\Finish;
 use App\Admin\Extensions\Tools\ImportTool;
 use App\Housings;
 use App\Tags;
@@ -15,6 +16,7 @@ use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
+use Illuminate\Http\Request;
 use Illuminate\Support\MessageBag;
 class HouseController extends Controller
 {
@@ -88,10 +90,10 @@ class HouseController extends Controller
         $grid = new Grid(new Housings);
         //dd($grid);
         if(Admin::user()->isAdministrator()){
-            $where=['type'=>1];
+            $where=['type'=>1,'is_zy'=>0];
         }else{
             $district_id=Admin::user()->district_id;
-            $where=['type'=>1,'district_id'=>$district_id];
+            $where=['type'=>1,'is_zy'=>0,'district_id'=>$district_id];
         }
 
         $grid->model()->where($where)->orderBy('id','desc');
@@ -227,6 +229,8 @@ class HouseController extends Controller
         $grid->exporter(new HouseExporter());
         $grid->actions(function ($actions) {
             $actions->disableView();
+
+            $actions->append(new Finish($actions->getKey(),route('finish_center')));
         });
 
         $grid->tools(function ($tools) {
@@ -344,5 +348,11 @@ class HouseController extends Controller
             }
         });
         return $form;
+    }
+
+    public function finish_center(Request $request){
+        $data=$request->all();
+        Housings::where('id',$data['id'])->update(['is_zy'=>1]);
+        return Api_success('加入成功');
     }
 }

@@ -22,9 +22,11 @@ Route::group([
     $router->resource('users', 'UsersController',['only' => ['index','destroy']])->names('admin.users');//hkz
     $router->resource('agent', 'AgentController',['only' => ['index','destroy']])->names('admin.agent');//hkz
     $router->resource('agent_check', 'AgentCheckController',['only' => ['index','destroy']])->names('admin.agent_check');//hkz
-    $router->resource('entrust', 'EntrustController',['only' => ['index']])->names('admin.entrust');//hkz
+    $router->resource('entrust', 'EntrustController')->names('admin.entrust');//hkz
     $router->resource('makeorder', 'MakeOrderController')->names('admin.makeorder');//hkz
     $router->resource('wantbuy', 'WantBuyController')->names('admin.wantbuy');//hkz
+    $router->resource('finish', 'FinishController')->names('admin.finish');//hkz
+    $router->resource('userCenter', 'UserCenterController')->names('admin.userCenter');//hkz
 
     $router->post('import', 'ImportController@import')->name('import');
     $router->get('export', 'ImportController@export')->name('export');
@@ -42,5 +44,8 @@ Route::group([
     $router->post('f_delete_e', 'EntrustController@f_delete')->name('f_delete_e');
     $router->post('f_delete_m', 'MakeOrderController@f_delete')->name('f_delete_m');
     $router->post('f_delete_agent', 'AgentController@f_delete')->name('f_delete_agent');
+    $router->post('finish_center', 'HouseController@finish_center')->name('finish_center');
+    $router->post('add_userCenter', 'WantBuyController@add_userCenter')->name('add_userCenter');
+    $router->post('add_userCenter_m', 'MakeOrderController@add_userCenter')->name('add_userCenter_m');
 
 });

@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Extensions\Tools\FalseDelete;
 use App\AgentCheck;
+use App\Log;
 use App\User;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\HasResourceActions;
@@ -170,6 +171,7 @@ class AgentController extends Controller
         $data=$request->all();
         User::where('id',$data['id'])->update(['type'=>0]);
         AgentCheck::where('user_id',$data['id'])->delete();
+        Log::insert(['user_id'=>$data['id'],'title'=>'移除','content'=>'您被移除经济人','is_read'=>0,'created_at'=>date('Y-m-d H:i:s')]);
         return Api_success('删除成功');
     }
 }

@@ -30,6 +30,7 @@ class Entrust extends Model
 
         $start = ($page-1)*$perPage;
         $rentsale=empty($this->is_type)?[1,2]:[3,4];
+        $where['is_zy']=0;
         if(Admin::user()->isAdministrator()){
             if($id>0){
                 $where['id']=$id;
@@ -54,8 +55,8 @@ class Entrust extends Model
         }else{
             // 运行sql获取数据数组
             $district_id=Admin::user()->district_id;
-            $result = self::where('district_id',$district_id)->whereBetween('rentsale',$rentsale)->skip($start)->take($perPage)->orderBy('id', 'desc')->get()->toArray();
-            $total =self::where('district_id',$district_id)->whereBetween('rentsale',$rentsale)->count();
+            $result = self::where('district_id',$district_id)->where($where)->whereBetween('rentsale',$rentsale)->skip($start)->take($perPage)->orderBy('id', 'desc')->get()->toArray();
+            $total =self::where('district_id',$district_id)->where($where)->whereBetween('rentsale',$rentsale)->count();
         }
 
         if(!empty($result)){
