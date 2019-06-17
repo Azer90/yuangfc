@@ -71,6 +71,8 @@ Route::group($attributes,function (Router $router) {
     $router->post('api_getMyHouse', "EntrustController@getMyHouse")->name('api_getMyHouse');//hkz
     $router->post('api_getProvince', "DistrictController@getProvince")->name('api_getProvince');//hkz
     $router->post('api_getCity', "DistrictController@getCity")->name('api_getCity');//hkz
+    $router->post('api_getLog', "LogController@getLog")->name('api_getLog');//hkz
+    $router->post('api_delete', "LogController@delete")->name('api_delete');//hkz
 
 
 });
