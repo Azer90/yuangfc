@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Extensions\Tools\FalseDelete;
 use App\Housings;
 use App\MakeOrder;
 use App\Http\Controllers\Controller;
@@ -12,6 +13,8 @@ use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
 use Encore\Admin\Facades\Admin;
+use Illuminate\Http\Request;
+
 class MakeOrderController extends Controller
 {
     use HasResourceActions;
@@ -115,6 +118,7 @@ class MakeOrderController extends Controller
 
             return new Table(['ID','标题','地址', '房源类型', '租售类型', '业主', '联系方式'], $comments->toArray(),['table-hover']);
         });
+        $grid->is_delete('删除')->using([1 => '已删除']);
         $grid->name('经纪人姓名');
         $grid->wchat_name('预约人微信名');
         $grid->make_name('称呼');
@@ -145,6 +149,10 @@ class MakeOrderController extends Controller
             $actions->disableEdit();
             $actions->disableView();
             $actions->disableDelete();
+            // 添加操作
+            if($actions->row->is_delete==0){
+                $actions->append(new FalseDelete($actions->getKey(),route('f_delete_m')));
+            }
         });
         $grid->tools(function ($tools) {
             $tools->batch(function ($batch) {
@@ -215,5 +223,12 @@ class MakeOrderController extends Controller
         $form->switch('add_schedule', 'Add schedule');
 
         return $form;
+    }
+
+    public function f_delete(Request $request){
+
+        $data=$request->all();
+        MakeOrder::where('id',$data['id'])->update(['is_delete'=>1]);
+        return Api_success('删除成功');
     }
 }

@@ -86,7 +86,7 @@ class HouseController extends Controller
     protected function grid()
     {
         $grid = new Grid(new Housings);
-
+        //dd($grid);
         if(Admin::user()->isAdministrator()){
             $where=['type'=>1];
         }else{
@@ -144,7 +144,9 @@ class HouseController extends Controller
 
             return new Table(['标题','地址', '描述', '备注'], $comments->toArray(),['table-hover']);
         });
-
+        $grid->providers('房源提供者')->display(function ($providers) {
+         return   User::where('id',$providers)->value('name');
+        });
         $grid->rentsale('租售')->display(function ($released) {
             switch ($released){
                 case 1:
@@ -276,6 +278,7 @@ class HouseController extends Controller
             $form->select('circle_id','商圈')->load('floor_id', '/api/floor',$floor_id);
             $form->select('floor_id','楼盘');
             $form->select('agent_id','经纪人')->options('/api/agent')->rules('required');
+
         }else{
             $form->hidden('province_id')->default(Admin::user()->province_id);
             $form->hidden('city_id')->default(Admin::user()->city_id);
@@ -284,6 +287,7 @@ class HouseController extends Controller
             $form->select('floor_id','楼盘')->rules('required');
             $form->select('agent_id','经纪人')->options('/api/agent');
         }
+        $form->select('providers','房源提供者')->options('/api/agent')->rules('required');
         $form->text('title', '标题')->rules('required|min:3');
         $form->radio('rentsale', '租售类型')->options([1 => '出售', 2 => '出租'])->rules('required');
         $form->radio('type', '房源类型')->options([1 => '新房', 2 => '二手房'])->rules('required');

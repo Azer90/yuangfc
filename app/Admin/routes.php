@@ -38,5 +38,9 @@ Route::group([
     $router->post('rebut', 'EntrustController@rebut')->name('rebut');
     $router->post('agent_examine', 'AgentCheckController@agent_examine')->name('agent_examine');
     $router->post('agent_rebut', 'AgentCheckController@agent_rebut')->name('agent_rebut');
+    $router->post('f_delete_w', 'WantBuyController@f_delete')->name('f_delete_w');
+    $router->post('f_delete_e', 'EntrustController@f_delete')->name('f_delete_e');
+    $router->post('f_delete_m', 'MakeOrderController@f_delete')->name('f_delete_m');
+    $router->post('f_delete_agent', 'AgentController@f_delete')->name('f_delete_agent');
 
 });

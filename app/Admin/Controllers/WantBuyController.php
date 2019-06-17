@@ -2,7 +2,7 @@
 
 namespace App\Admin\Controllers;
 
-use App\WantBuy;
+use App\Admin\Extensions\Tools\FalseDelete;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
@@ -11,6 +11,9 @@ use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use App\Entrust;
 use Encore\Admin\Facades\Admin;
+use Illuminate\Http\Request;
+
+
 class WantBuyController extends Controller
 {
     use HasResourceActions;
@@ -93,6 +96,7 @@ class WantBuyController extends Controller
         });
         $grid->id('Id');
         $grid->address('所在地');
+        $grid->is_delete('删除')->using([1 => '已删除']);
         $grid->cell_name('小区名');
         $grid->addr('详细地址');
         $grid->name('委托人称呼');
@@ -106,11 +110,19 @@ class WantBuyController extends Controller
             3 => '已购买',
         ]);
         $grid->created_at('创建时间');
+
+
         $grid->disableExport();//禁用导出
         $grid->disableCreateButton();
         $grid->actions(function ($actions) {
             $actions->disableEdit();
             $actions->disableView();
+            $actions->disableDelete();
+            // 添加操作
+            if($actions->row->is_delete==0){
+                $actions->append(new FalseDelete($actions->getKey(),route('f_delete_w')));
+            }
+
 
         });
 
@@ -159,5 +171,12 @@ class WantBuyController extends Controller
         $form->text('reason', 'Reason');
 
         return $form;
+    }
+
+    public function f_delete(Request $request){
+
+        $data=$request->all();
+        Entrust::where('id',$data['id'])->update(['is_delete'=>1]);
+        return Api_success('删除成功');
     }
 }

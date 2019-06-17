@@ -2,6 +2,8 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Extensions\Tools\FalseDelete;
+use App\AgentCheck;
 use App\User;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\HasResourceActions;
@@ -10,6 +12,8 @@ use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use Encore\Admin\Facades\Admin;
+use Illuminate\Http\Request;
+
 class AgentController extends Controller
 {
     use HasResourceActions;
@@ -103,6 +107,9 @@ class AgentController extends Controller
         $grid->actions(function ($actions) {
             $actions->disableEdit();
             $actions->disableView();
+            $actions->disableDelete();
+            // 添加操作
+             $actions->append(new FalseDelete($actions->getKey(),route('f_delete_agent')));
         });
         return $grid;
     }
@@ -155,5 +162,14 @@ class AgentController extends Controller
         $form->switch('sex', 'Sex');
 
         return $form;
+    }
+
+
+    public function f_delete(Request $request){
+
+        $data=$request->all();
+        User::where('id',$data['id'])->update(['type'=>0]);
+        AgentCheck::where('user_id',$data['id'])->delete();
+        return Api_success('删除成功');
     }
 }

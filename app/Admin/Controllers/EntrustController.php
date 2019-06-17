@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Extensions\GetPast;
 use App\Admin\Extensions\Rebut;
+use App\Admin\Extensions\Tools\FalseDelete;
 use App\Entrust;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\HasResourceActions;
@@ -96,6 +97,7 @@ class EntrustController extends Controller
         });
         $grid->id('Id');
         $grid->address('所在地');
+        $grid->is_delete('删除')->using([1 => '已删除']);
         $grid->cell_name('小区名');
         $grid->addr('详细地址');
         $grid->name('委托人称呼');
@@ -138,7 +140,10 @@ class EntrustController extends Controller
                 $actions->append(new  GetPast($actions->getKey(),route('to_examine')));
                 $actions->append(new  Rebut($actions->getKey(),route('rebut')));
             }
-
+            // 添加操作
+            if($actions->row->is_delete==0){
+                $actions->append(new FalseDelete($actions->getKey(),route('f_delete_e')));
+            }
         });
         $grid->tools(function ($tools) {
             $tools->batch(function ($batch) {
@@ -218,5 +223,12 @@ class EntrustController extends Controller
         return Api_success('驳回成功');
     }
 
+
+    public function f_delete(Request $request){
+
+        $data=$request->all();
+        Entrust::where('id',$data['id'])->update(['is_delete'=>1]);
+        return Api_success('删除成功');
+    }
 
 }
