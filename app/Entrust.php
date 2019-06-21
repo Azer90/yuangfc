@@ -20,6 +20,8 @@ class Entrust extends Model
     public function paginate()
     {
         $id = Request::get('id', 0);
+        $_scope_ = Request::get('_scope_', '');
+
         $province_id = Request::get('province_id', 0);
         $city_id = Request::get('city_id', 0);
         $district_id = Request::get('district_id', 0);
@@ -31,6 +33,12 @@ class Entrust extends Model
         $start = ($page-1)*$perPage;
         $rentsale=empty($this->is_type)?[1,2]:[3,4];
         $where['is_zy']=0;
+        if(empty($_scope_)){
+            $where['is_delete']=0;
+        }else{
+            $where['is_delete']=1;
+        }
+
         if(Admin::user()->isAdministrator()){
             if($id>0){
                 $where['id']=$id;
@@ -44,11 +52,9 @@ class Entrust extends Model
             if($district_id>0){
                 $where['district_id']=$district_id;
             }
-            if (isset($where)){
-                $result = self::skip($start)->whereBetween('rentsale',$rentsale)->where($where)->take($perPage)->orderBy('id', 'desc')->get()->toArray();
-            }else{
-                $result = self::skip($start)->whereBetween('rentsale',$rentsale)->take($perPage)->orderBy('id', 'desc')->get()->toArray();
-            }
+
+             $result = self::skip($start)->whereBetween('rentsale',$rentsale)->where($where)->take($perPage)->orderBy('id', 'desc')->get()->toArray();
+
             // 运行sql获取数据数组
 
             $total =count($result);

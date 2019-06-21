@@ -89,7 +89,7 @@ class MakeOrderController extends Controller
         $grid = new Grid(new MakeOrder);
         // 在这里添加字段过滤器
         $grid->filter(function($filter){
-
+            $filter->scope('is_delete', '已处理');
             if(Admin::user()->isAdministrator()){
                 $filter->equal('province_id', '省')->select('/api/province')->load('city_id', '/api/city');
                 $filter->equal('city_id', '市')->select()->load('district_id', '/api/city');
@@ -120,7 +120,7 @@ class MakeOrderController extends Controller
 
             return new Table(['ID','标题','地址', '房源类型', '租售类型', '业主', '联系方式'], $comments->toArray(),['table-hover']);
         });
-        $grid->is_delete('删除')->using([1 => '已删除']);
+        $grid->is_delete('是否处理')->using([1 => '已处理']);
         $grid->name('经纪人姓名');
         $grid->wchat_name('预约人微信名');
         $grid->make_name('称呼');
@@ -155,7 +155,7 @@ class MakeOrderController extends Controller
             if($actions->row->is_delete==0){
                 $actions->append(new FalseDelete($actions->getKey(),route('f_delete_m')));
             }
-            $actions->append(new AddUserCenter($actions->getKey(),route('add_userCenter_m')));
+            //$actions->append(new AddUserCenter($actions->getKey(),route('add_userCenter_m')));
         });
         $grid->tools(function ($tools) {
             $tools->batch(function ($batch) {

@@ -47,5 +47,6 @@ Route::group([
     $router->post('finish_center', 'HouseController@finish_center')->name('finish_center');
     $router->post('add_userCenter', 'WantBuyController@add_userCenter')->name('add_userCenter');
     $router->post('add_userCenter_m', 'MakeOrderController@add_userCenter')->name('add_userCenter_m');
+    $router->post('f_delete_uc', 'UserCenterController@f_delete')->name('f_delete_uc');
 
 });

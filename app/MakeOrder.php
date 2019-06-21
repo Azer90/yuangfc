@@ -18,6 +18,7 @@ class MakeOrder extends Model
     public function paginate()
     {
         $id = Request::get('id', 0);
+        $_scope_ = Request::get('_scope_', '');
         $province_id = Request::get('province_id', 0);
         $city_id = Request::get('city_id', 0);
         $district_id = Request::get('district_id', 0);
@@ -28,6 +29,11 @@ class MakeOrder extends Model
 
         $start = ($page-1)*$perPage;
         $where['mo.is_zy']=0;
+        if(empty($_scope_)){
+            $where['mo.is_delete']=0;
+        }else{
+            $where['mo.is_delete']=1;
+        }
         if(Admin::user()->isAdministrator()){
             // 运行sql获取数据数组
             if($id>0){
@@ -42,7 +48,7 @@ class MakeOrder extends Model
             if($district_id>0){
                 $where['h.district_id']=$district_id;
             }
-            if(isset($where)){
+
                 $result = self::from('make_order as mo')
                     ->join('housings as h','h.id','=','mo.house_id')
                     ->join('users as u','u.id', '=', 'mo.agent_id')
@@ -50,24 +56,16 @@ class MakeOrder extends Model
                     ->where($where)->skip($start)->take($perPage)->orderBy('mo.id', 'desc')->get(['mo.*','h.title','u.name','u1.wchat_name','u1.mobile'])->toArray();
 
                 $total =count($result);
-            }else{
-                $result = self::from('make_order as mo')->where($where)
-                    ->join('housings as h','h.id','=','mo.house_id')
-                    ->join('users as u','u.id', '=', 'mo.agent_id')
-                    ->join('users as u1','u1.id', '=', 'mo.make_id')
-                    ->skip($start)->take($perPage)->orderBy('mo.id', 'desc')->get(['mo.*','h.title','u.name','u1.wchat_name','u1.mobile'])->toArray();
-                $total =self::count();
-            }
 
         }else{
             // 运行sql获取数据数组
             $district_id=Admin::user()->district_id;
-            $result = self::from('make_order as mo')->where(['h.district_id'=>$district_id,'mo.is_zy'=>0])
+            $result = self::from('make_order as mo')->where(['h.district_id'=>$district_id])->where($where)
                 ->join('housings as h','h.id','=','mo.house_id')
                 ->join('users as u','u.id', '=', 'mo.agent_id')
                 ->join('users as u1','u1.id', '=', 'mo.make_id')
                 ->skip($start)->take($perPage)->orderBy('mo.id', 'desc')->get(['mo.*','h.title','u.name','u1.wchat_name','u1.mobile'])->toArray();
-            $total =self::count();
+            $total =count($result);
         }
 
         //dd($result);

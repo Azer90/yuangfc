@@ -87,7 +87,7 @@ class EntrustController extends Controller
         $grid = new Grid(new Entrust);
         // 在这里添加字段过滤器
         $grid->filter(function($filter){
-
+            $filter->scope('is_delete', '已处理');
                 if(Admin::user()->isAdministrator()){
                     $filter->equal('province_id', '省')->select('/api/province')->load('city_id', '/api/city');
                     $filter->equal('city_id', '市')->select()->load('district_id', '/api/city');
@@ -97,7 +97,7 @@ class EntrustController extends Controller
         });
         $grid->id('Id');
         $grid->address('所在地');
-        $grid->is_delete('删除')->using([1 => '已删除']);
+        $grid->is_delete('是否处理')->using([1 => '已处理']);
         $grid->cell_name('小区名');
         $grid->addr('详细地址');
         $grid->name('委托人称呼');
