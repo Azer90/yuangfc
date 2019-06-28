@@ -134,6 +134,10 @@ class HouseController extends Controller
                     2 => '简装',
                     3 => '清水房'
                 ]);
+                $filter->equal('is_display','是否显示')->radio([
+                    0 => '否',
+                    1 => '是',
+                ]);
             });
 
 
