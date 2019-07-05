@@ -127,9 +127,24 @@ class HouseController extends Controller
                 return Api_error("缺少参数");
             }
             $circle = Circle::where("district_id", $area_code)->select("id", "name")->get();
-            return Api_success("区域获取成功", $circle);
+            return Api_success("商圈获取成功", $circle);
         }
     }
+    /**
+     * 获取指定楼盘列表
+     */
+    public function getFloorList(Request $request)
+    {
+        if ($request->isMethod("post")) {
+            $circle_code = $request->input("circle_code");
+            if (empty($circle_code)) {
+                return Api_error("缺少参数");
+            }
+            $circle = Floor::where("district_id", $circle_code)->select("id", "name")->get();
+            return Api_success("楼盘获取成功", $circle);
+        }
+    }
+
 
     /**
      * list_type 列表类型 1：二手房  2：新房  3：租房
