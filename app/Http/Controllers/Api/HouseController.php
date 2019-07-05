@@ -140,7 +140,7 @@ class HouseController extends Controller
             if (empty($circle_code)) {
                 return Api_error("缺少参数");
             }
-            $circle = Floor::where("district_id", $circle_code)->select("id", "name")->get();
+            $circle = Floor::where("circle_id", $circle_code)->select("id", "name")->get();
             return Api_success("楼盘获取成功", $circle);
         }
     }
