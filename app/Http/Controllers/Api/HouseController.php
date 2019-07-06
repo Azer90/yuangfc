@@ -488,12 +488,15 @@ class HouseController extends Controller
             //推荐  条件：区、室、面积
             $recommend_where=[
                 "district_id"=>$res["district_id"],
-                "room"=>$res["room"],
+//                "room"=>$res["room"],
             ];
-            $recommend_where[] = ["area",">=",$res["area"]-20];
-            $recommend_where[] = ["area","<=",$res["area"]+20];
+//            $recommend_where[] = ["area",">=",$res["area"]-20];
+//            $recommend_where[] = ["area","<=",$res["area"]+20];
             $recommend_where[] = ["id","!=",$data["house_id"]];
-            $recommend = Housings::where($recommend_where)->select(["id","title","area","price","room","hall","floor_id", DB::raw('price/area AS rec_unit_price'),"pictures"])->paginate(10);
+            $recommend = Housings::where($recommend_where)
+                ->select(["id","title","area","price","room","hall","floor_id", DB::raw('price/area AS rec_unit_price'),"pictures"])
+                ->inRandomOrder()
+                ->paginate(10);
 
             if($recommend){
                 foreach ($recommend as $item){
