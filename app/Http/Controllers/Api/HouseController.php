@@ -50,7 +50,7 @@ class HouseController extends Controller
     {
         $res = Housings::where($w)
             ->select("id", "title", "type", "purpose", "room", "hall", "toilet", "floor_id", "district_id", "circle_id", "area", "direction", "price", DB::raw('price/area AS unit_price'), "pictures","tags")
-            ->limit(3)
+            ->limit(9)
             ->orderBy("created_at", "desc")
             ->get();
         $all_tag = Tags::get(["id","name"])->toArray();
