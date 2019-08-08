@@ -364,7 +364,7 @@ class HouseController extends Controller
 
     public function finish_center(Request $request){
         $data=$request->all();
-        Housings::where('id',$data['id'])->update(['is_zy'=>1]);
+        Housings::where('id',$data['id'])->update(['is_zy'=>1,'is_display'=>0]);
         return Api_success('加入成功');
     }
 }
