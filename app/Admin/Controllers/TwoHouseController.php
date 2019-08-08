@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Extensions\HouseExporter;
 use App\Admin\Extensions\Tools\ImportTool;
 use App\Admin\Extensions\Tools\Finish;
+use App\Circle;
 use App\Housings;
 use App\User;
 use App\Tags;
@@ -102,7 +103,13 @@ class TwoHouseController extends Controller
                 if(Admin::user()->isAdministrator()){
                     $filter->equal('province_id', '省')->select('/api/province')->load('city_id', '/api/city');
                     $filter->equal('city_id', '市')->select()->load('district_id', '/api/city');
-                    $filter->equal('district_id', '区')->select();
+                    $filter->equal('district_id', '区')->select()->load('circle_id', '/api/get_circle');
+                    $filter->equal('circle_id', '商圈')->select()->load('floor_id', '/api/get_floor');
+                    $filter->equal('floor_id', '楼盘')->select();
+                }else{
+                    $circle_data=Circle::where('district_id', Admin::user()->district_id)->get(['id','name'])->pluck('name','id')->toArray();
+                    $filter->equal('circle_id', '商圈')->select($circle_data)->load('floor_id', '/api/get_floor');
+                    $filter->equal('floor_id', '楼盘')->select();
                 }
                 $filter->equal('owner', '业主');
                 $filter->equal('phone', '联系方式')->mobile();

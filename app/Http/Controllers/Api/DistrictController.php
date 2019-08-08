@@ -43,6 +43,26 @@ class DistrictController extends Controller{
     }
 
     /**
+     * 获取商圈
+     * @param Request $request
+     * @return District[]|\Illuminate\Database\Eloquent\Collection
+     *
+     */
+    public function get_circle(Request $request)
+    {
+        $provinceId = $request->get('q');
+
+        return Circle::where('district_id', $provinceId)->get(['id', DB::raw('name as text')]);
+    }
+
+    public function get_floor(Request $request)
+    {
+        $provinceId = $request->get('q');
+
+        return Floor::where('circle_id', $provinceId)->get(['id', DB::raw('name as text')]);
+    }
+
+    /**
      * 获取所以省份
      */
     public function getProvince()

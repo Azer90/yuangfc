@@ -59,7 +59,11 @@ class LoginAuthController extends Controller
             }
         }
          $admin_user=Administrator::where($where)->first();
-
+            if(empty($admin_user)){
+                return back()->withInput()->withErrors([
+                    $this->username() => '用户名不存在'
+                ]);
+            }
          $check_pwd=Hash::check($credentials['password'], $admin_user->getAuthPassword());
         if($admin_user&&$check_pwd){
             $wecode_id= WechatCode::insertGetId([

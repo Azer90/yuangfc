@@ -26,6 +26,8 @@ Route::group($attributes, function (Router $router) {
     $router->get('circle', 'DistrictController@circle')->name('circle');
     $router->get('floor', 'DistrictController@floor')->name('floor');
     $router->get('agent', 'DistrictController@agent')->name('agent');
+    $router->get('get_circle', 'DistrictController@get_circle')->name('get_circle');
+    $router->get('get_floor', 'DistrictController@get_floor')->name('get_floor');
 
 });
 
