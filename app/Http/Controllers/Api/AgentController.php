@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Api;
 
 
 use App\AgentCheck;
+use App\Agreement;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
@@ -97,4 +98,11 @@ class AgentController extends Controller
         }
         return Api_success("获取成功",$state);
     }
+
+
+    public function get_agreement(){
+
+        $data=Agreement::first(['content'])->toArray();
+        return Api_success("获取成功",$data);
+     }
 }

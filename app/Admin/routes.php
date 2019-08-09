@@ -27,6 +27,7 @@ Route::group([
     $router->resource('wantbuy', 'WantBuyController')->names('admin.wantbuy');//hkz
     $router->resource('finish', 'FinishController')->names('admin.finish');//hkz
     $router->resource('userCenter', 'UserCenterController')->names('admin.userCenter');//hkz
+    $router->resource('agreement', 'AgreementController')->names('admin.agreement');//hkz
 
     $router->post('import', 'ImportController@import')->name('import');
     $router->get('export', 'ImportController@export')->name('export');
